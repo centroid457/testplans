@@ -19,23 +19,27 @@ class DutPs:
     # TODO: FINISH!!!
 
 
+class _Base:
+    DUT: DutPs
+
+
 # TC_STEPS ============================================================================================================
-class PsQcd_Tc1(TestCase):
+class PsQcd_Tc1(TestCase, _Base):
     def run_wrapped(self) -> bool:
         pass
 
 
-class PsQcd_Tc2(TestCase):
+class PsQcd_Tc2(TestCase, _Base):
     def run_wrapped(self) -> bool:
         pass
 
 
-class PsQcd_Tc3(TestCase):
+class PsQcd_Tc3(TestCase, _Base):
     def run_wrapped(self) -> bool:
         pass
 
 
-class PsQcd_Tc4(TestCase):
+class PsQcd_Tc4(TestCase, _Base):
     def run_wrapped(self) -> bool:
         pass
 
@@ -56,7 +60,7 @@ class PsQcd_Tc4(TestCase):
 
 
 # TP ==================================================================================================================
-class PsQcd_Tp(TestPlan):
+class PsQcd_Tp(TestPlan, _Base):
     details = {
         PsQcd_Tc1: True,
         PsQcd_Tc2: True,
