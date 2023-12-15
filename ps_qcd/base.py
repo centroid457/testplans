@@ -47,6 +47,18 @@ class _Base:
 class TestCase(_Base):
     details: Dict[str, Any] = {}
     result: Optional[bool] = None
+    IN_PARALLEL: Optional[bool] = True
+    # TODO: FINISH PARALLEL
+    # TODO: FINISH PARALLEL
+    # TODO: FINISH PARALLEL
+    # TODO: FINISH PARALLEL
+    # TODO: FINISH PARALLEL
+    # TODO: FINISH PARALLEL
+    # TODO: FINISH PARALLEL
+    # TODO: FINISH PARALLEL
+    # TODO: FINISH PARALLEL
+    # TODO: FINISH PARALLEL
+    # TODO: FINISH PARALLEL
 
     def run(self) -> None:
         if self.startup():

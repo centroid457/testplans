@@ -77,3 +77,17 @@ class ATF(SingletonByCallMeta):
 
 
 # =====================================================================================================================
+class Manager:
+    ITEMS: Dict[int, Optional[PsQcd_Tp]] = {
+        1: None,
+        2: None,
+    }
+
+    def __init__(self):
+        for port in self.ITEMS:
+            self.ITEMS[port] = PsQcd_Tp(DutPs(port))
+
+
+
+
+# =====================================================================================================================
