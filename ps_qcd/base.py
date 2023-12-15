@@ -6,6 +6,7 @@ from typing import *
 class _Base:
     DUT: Any = None
     DESCRIPTION: str = None
+    PROGRESS: int = 0
 
     def __init__(self, DUT: Any):
         self.DUT = DUT
@@ -16,10 +17,11 @@ class _Base:
         return cls.__name__
 
     def startup(self) -> bool:
+        self.PROGRESS = 1
         return True
 
     def teardown(self):
-        pass
+        self.PROGRESS = 100
 
 
 # =====================================================================================================================
@@ -43,13 +45,15 @@ class TestCaseStep(_Base):
 # =====================================================================================================================
 class TestCase(_Base):
     details: Dict[Type[TestCaseStep], Union[bool, TestCaseStep]] = {
-        # TCS1: True
+        # TCS1: True,
         # TCS2: True
     }
 
     @property
-    def result(self):
-        for detail in self.details:
+    def result(self) -> bool:
+        for detail in self.details.values():
+            if detail in [False, None]:
+                continue
             if not detail.result:
                 return False
         return True
@@ -68,13 +72,15 @@ class TestCase(_Base):
 # =====================================================================================================================
 class TestPlan(_Base):
     details: Dict[Type[TestCase], Union[bool, TestCase]] = {
-        # TC1: True
+        # TC1: True,
         # TC2: True
     }
 
     @property
-    def result(self):
-        for detail in self.details:
+    def result(self) -> bool:
+        for detail in self.details.values():
+            if detail in [False, None]:
+                continue
             if not detail.result:
                 return False
         return True
