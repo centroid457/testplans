@@ -10,7 +10,7 @@ from ps_qcd import *
 
 
 # =====================================================================================================================
-class Test__888888888888:
+class Test__1:
     VICTIM: Type[NEW_CLASS____] = type("VICTIM", (NEW_CLASS____,), {})
 
     @classmethod

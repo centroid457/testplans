@@ -89,6 +89,9 @@ class TestPlan(_Base):
         return True
 
     def run(self) -> None:
+        if not self.DUT.check_present():
+            return
+
         if self.startup():
             for detail, start in self.details.items():
                 if start:

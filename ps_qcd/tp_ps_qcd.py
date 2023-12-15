@@ -8,6 +8,9 @@ class DutPs:
     def __init__(self, position: int):
         self.POSITION = position
 
+    def check_present(self) -> bool:
+        return True
+
     # TODO: FINISH!!!
     # TODO: FINISH!!!
     # TODO: FINISH!!!
