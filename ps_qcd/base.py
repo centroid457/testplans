@@ -3,6 +3,10 @@ from typing import *
 
 # =====================================================================================================================
 class _Base:
+    details: Dict
+    result: bool
+    is_testcase: Optional[bool] = None
+
     DUT: Any = None
     DESCRIPTION: str = ""
     PROGRESS: int = 0
@@ -23,11 +27,26 @@ class _Base:
     def teardown(self):
         self.PROGRESS = 100
 
+    def dump_results(self):
+        if self.is_testcase:
+            print(f"\t{self.name}: result={self.result}")
+            for name, value in self.details.items():
+                print(f"\t\t|{name}: {value}")
+        else:
+            print("=" * 80)
+            for tc, tc_object in self.details.items():
+                if tc_object:
+                    print(f"{tc_object.name}:result={tc_object.result}")
+                    tc_object.dump_results()
+            print("="*80)
+
 
 # =====================================================================================================================
 class TestCase(_Base):
     details: Dict[str, Any] = {}
     result: Optional[bool] = None
+
+    is_testcase = True
 
     def run(self) -> None:
         if self.startup():
