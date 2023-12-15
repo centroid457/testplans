@@ -8,8 +8,9 @@ from typing import *
 # =====================================================================================================================
 class TestCaseStep:
     DESCRIPTION: str = None
-    result: Optional[bool] = None
     details: Dict[str, Any] = {}
+
+    result: Optional[bool] = None
 
     @classmethod
     @property
@@ -58,9 +59,6 @@ class TestCase:
     def run(self):
         pass
 
-    def add_details(self, details: Dict[str, Any]):
-        pass
-
 
 # =====================================================================================================================
 class TestPlan:
@@ -89,12 +87,6 @@ class TestPlan:
         pass
 
     def run(self):
-        pass
-
-    def add_result(self, tc_result: TestCase):
-        pass
-
-    def check_summary_result(self):
         pass
 
 
