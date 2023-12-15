@@ -17,8 +17,8 @@ class TestCaseStep:
     def name(cls):
         return cls.__name__
 
-    def startup(self):
-        pass
+    def startup(self) -> bool:
+        return True
 
     def teardown(self):
         pass
@@ -50,14 +50,17 @@ class TestCase:
     def name(cls):
         return cls.__name__
 
-    def startup(self):
-        pass
+    def startup(self) -> bool:
+        return True
 
     def teardown(self):
         pass
 
     def run(self):
-        pass
+        for detail in self.details:
+            if detail.startup():
+                detail.run()
+            detail.teardown()
 
 
 # =====================================================================================================================
@@ -80,14 +83,17 @@ class TestPlan:
     def name(cls):
         return cls.__name__
 
-    def startup(self):
-        pass
+    def startup(self) -> bool:
+        return True
 
     def teardown(self):
         pass
 
     def run(self):
-        pass
+        for detail in self.details:
+            if detail.startup():
+                detail.run()
+            detail.teardown()
 
 
 # =====================================================================================================================
