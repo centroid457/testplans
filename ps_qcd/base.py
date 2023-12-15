@@ -5,8 +5,9 @@ from typing import *
 # =====================================================================================================================
 class _Base:
     DUT: Any = None
-    DESCRIPTION: str = None
+    DESCRIPTION: str = ""
     PROGRESS: int = 0
+    STOP_IF_FALSE_RESULT: Optional[bool] = None
 
     def __init__(self, DUT: Any):
         self.DUT = DUT
@@ -29,13 +30,13 @@ class TestCaseStep(_Base):
     details: Dict[str, Any] = {}
     result: Optional[bool] = None
 
-    def run(self):
+    def run(self) -> None:
         if self.startup():
             self.result = self.run_wrapped()
         self.teardown()
 
-    def add_details(self, details: Dict[str, Any]):
-        pass
+    def add_details(self, details: Dict[str, Any]) -> None:
+        self.details.update(details)
 
     # -----------------------------------------------------------------------------------------------------------------
     def run_wrapped(self) -> bool:
@@ -58,12 +59,14 @@ class TestCase(_Base):
                 return False
         return True
 
-    def run(self):
+    def run(self) -> None:
         if self.startup():
             for detail, start in self.details.items():
-                self.details[detail] = detail(self.DUT)
                 if start:
+                    self.details[detail] = detail(self.DUT)
                     self.details[detail].run()
+                    if self.details[detail].STOP_IF_FALSE_RESULT and not self.details[detail].result:
+                        break
         self.teardown()
 
     # -----------------------------------------------------------------------------------------------------------------
@@ -85,12 +88,14 @@ class TestPlan(_Base):
                 return False
         return True
 
-    def run(self):
+    def run(self) -> None:
         if self.startup():
             for detail, start in self.details.items():
-                self.details[detail] = detail(self.DUT)
                 if start:
+                    self.details[detail] = detail(self.DUT)
                     self.details[detail].run()
+                    if self.details[detail].STOP_IF_FALSE_RESULT and not self.details[detail].result:
+                        break
         self.teardown()
 
     # -----------------------------------------------------------------------------------------------------------------
