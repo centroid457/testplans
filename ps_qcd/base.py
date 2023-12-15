@@ -3,14 +3,12 @@ from typing import *
 
 
 # =====================================================================================================================
-
-
-# =====================================================================================================================
-class TestCaseStep:
+class _Base:
+    DUT: Any = None
     DESCRIPTION: str = None
-    details: Dict[str, Any] = {}
 
-    result: Optional[bool] = None
+    def __init__(self, DUT: Any):
+        self.DUT = DUT
 
     @classmethod
     @property
@@ -22,6 +20,12 @@ class TestCaseStep:
 
     def teardown(self):
         pass
+
+
+# =====================================================================================================================
+class TestCaseStep(_Base):
+    details: Dict[str, Any] = {}
+    result: Optional[bool] = None
 
     def run(self):
         if self.startup():
@@ -37,9 +41,8 @@ class TestCaseStep:
 
 
 # =====================================================================================================================
-class TestCase:
-    DESCRIPTION: str = None
-    details: Dict[Type[TestCaseStep], bool] = {
+class TestCase(_Base):
+    details: Dict[Type[TestCaseStep], Union[bool, TestCaseStep]] = {
         # TCS1: True
         # TCS2: True
     }
@@ -51,31 +54,20 @@ class TestCase:
                 return False
         return True
 
-    @classmethod
-    @property
-    def name(cls):
-        return cls.__name__
-
-    def startup(self) -> bool:
-        return True
-
-    def teardown(self):
-        pass
-
     def run(self):
         if self.startup():
             for detail, start in self.details.items():
+                self.details[detail] = detail(self.DUT)
                 if start:
-                    detail().run()
+                    self.details[detail].run()
         self.teardown()
 
     # -----------------------------------------------------------------------------------------------------------------
 
 
 # =====================================================================================================================
-class TestPlan:
-    DESCRIPTION: str = None
-    details: Dict[Type[TestCase], bool] = {
+class TestPlan(_Base):
+    details: Dict[Type[TestCase], Union[bool, TestCase]] = {
         # TC1: True
         # TC2: True
     }
@@ -87,22 +79,12 @@ class TestPlan:
                 return False
         return True
 
-    @classmethod
-    @property
-    def name(cls):
-        return cls.__name__
-
-    def startup(self) -> bool:
-        return True
-
-    def teardown(self):
-        pass
-
     def run(self):
         if self.startup():
             for detail, start in self.details.items():
+                self.details[detail] = detail(self.DUT)
                 if start:
-                    detail().run()
+                    self.details[detail].run()
         self.teardown()
 
     # -----------------------------------------------------------------------------------------------------------------

@@ -11,7 +11,9 @@ from .base import *
 class Tp_PsQcd(TestPlan):
     POSITION: int = None
 
-    def __init__(self, position: int):
+    def __init__(self, position: int, DUT: Any):
+        super().__init__(DUT)
+
         self.POSITION = position
 
 
