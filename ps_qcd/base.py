@@ -1,4 +1,3 @@
-import pathlib
 from typing import *
 
 
@@ -26,7 +25,7 @@ class _Base:
 
 
 # =====================================================================================================================
-class TestCaseStep(_Base):
+class TestCase(_Base):
     details: Dict[str, Any] = {}
     result: Optional[bool] = None
 
@@ -44,32 +43,32 @@ class TestCaseStep(_Base):
 
 
 # =====================================================================================================================
-class TestCase(_Base):
-    details: Dict[Type[TestCaseStep], Union[bool, TestCaseStep]] = {
-        # TCS1: True,
-        # TCS2: True
-    }
-
-    @property
-    def result(self) -> bool:
-        for detail in self.details.values():
-            if detail in [False, None]:
-                continue
-            if not detail.result:
-                return False
-        return True
-
-    def run(self) -> None:
-        if self.startup():
-            for detail, start in self.details.items():
-                if start:
-                    self.details[detail] = detail(self.DUT)
-                    self.details[detail].run()
-                    if self.details[detail].STOP_IF_FALSE_RESULT and not self.details[detail].result:
-                        break
-        self.teardown()
-
-    # -----------------------------------------------------------------------------------------------------------------
+# class TestCase(_Base):
+#     details: Dict[Type[TestCaseStep], Union[bool, TestCaseStep]] = {
+#         # TCS1: True,
+#         # TCS2: True
+#     }
+#
+#     @property
+#     def result(self) -> bool:
+#         for detail in self.details.values():
+#             if detail in [False, None]:
+#                 continue
+#             if not detail.result:
+#                 return False
+#         return True
+#
+#     def run(self) -> None:
+#         if self.startup():
+#             for detail, start in self.details.items():
+#                 if start:
+#                     self.details[detail] = detail(self.DUT)
+#                     self.details[detail].run()
+#                     if self.details[detail].STOP_IF_FALSE_RESULT and not self.details[detail].result:
+#                         break
+#         self.teardown()
+#
+#     # ---------------------------------------------------------------------------------------------------------------
 
 
 # =====================================================================================================================
