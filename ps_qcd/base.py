@@ -24,19 +24,25 @@ class TestCaseStep:
         pass
 
     def run(self):
-        pass
+        if self.startup():
+            self.result = self.run_wrapped()
+        self.teardown()
 
     def add_details(self, details: Dict[str, Any]):
+        pass
+
+    # -----------------------------------------------------------------------------------------------------------------
+    def run_wrapped(self) -> bool:
         pass
 
 
 # =====================================================================================================================
 class TestCase:
     DESCRIPTION: str = None
-    details: List[TestCaseStep] = [
-        # TCS1
-        # TCS2
-    ]
+    details: Dict[Type[TestCaseStep], bool] = {
+        # TCS1: True
+        # TCS2: True
+    }
 
     @property
     def result(self):
@@ -57,19 +63,22 @@ class TestCase:
         pass
 
     def run(self):
-        for detail in self.details:
-            if detail.startup():
-                detail.run()
-            detail.teardown()
+        if self.startup():
+            for detail, start in self.details.items():
+                if start:
+                    detail().run()
+        self.teardown()
+
+    # -----------------------------------------------------------------------------------------------------------------
 
 
 # =====================================================================================================================
 class TestPlan:
     DESCRIPTION: str = None
-    details: List[TestCase] = [
-        # TC1
-        # TC2
-    ]
+    details: Dict[Type[TestCase], bool] = {
+        # TC1: True
+        # TC2: True
+    }
 
     @property
     def result(self):
@@ -90,10 +99,13 @@ class TestPlan:
         pass
 
     def run(self):
-        for detail in self.details:
-            if detail.startup():
-                detail.run()
-            detail.teardown()
+        if self.startup():
+            for detail, start in self.details.items():
+                if start:
+                    detail().run()
+        self.teardown()
+
+    # -----------------------------------------------------------------------------------------------------------------
 
 
 # =====================================================================================================================
