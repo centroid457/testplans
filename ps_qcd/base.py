@@ -5,7 +5,6 @@ from typing import *
 class _Base:
     details: Dict
     result: bool
-    LEVEL: int
 
     DUT: Any = None
     DESCRIPTION: str = ""
@@ -43,7 +42,6 @@ class _Base:
 
 # =====================================================================================================================
 class TestCase(_Base):
-    LEVEL = 1
     details: Dict[str, Any] = {}
     result: Optional[bool] = None
 
@@ -91,7 +89,6 @@ class TestCase(_Base):
 
 # =====================================================================================================================
 class TestPlan(_Base):
-    LEVEL = 1
     details: Dict[Type[TestCase], Union[bool, TestCase]] = {
         # TC1: True,
         # TC2: True
