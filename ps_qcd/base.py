@@ -5,7 +5,7 @@ from typing import *
 class _Base:
     details: Dict
     result: bool
-    is_testcase: Optional[bool] = None
+    LEVEL: int
 
     DUT: Any = None
     DESCRIPTION: str = ""
@@ -28,11 +28,11 @@ class _Base:
         self.PROGRESS = 100
 
     def dump_results(self):
-        if self.is_testcase:
+        if TestCase in self.__class__.__mro__:
             print(f"\t{self.name}: result={self.result}")
             for name, value in self.details.items():
                 print(f"\t\t|{name}: {value}")
-        else:
+        elif TestPlan in self.__class__.__mro__:
             print("=" * 80)
             for tc, tc_object in self.details.items():
                 if tc_object:
@@ -43,10 +43,9 @@ class _Base:
 
 # =====================================================================================================================
 class TestCase(_Base):
+    LEVEL = 1
     details: Dict[str, Any] = {}
     result: Optional[bool] = None
-
-    is_testcase = True
 
     def run(self) -> None:
         if self.startup():
@@ -92,6 +91,7 @@ class TestCase(_Base):
 
 # =====================================================================================================================
 class TestPlan(_Base):
+    LEVEL = 1
     details: Dict[Type[TestCase], Union[bool, TestCase]] = {
         # TC1: True,
         # TC2: True
