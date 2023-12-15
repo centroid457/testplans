@@ -28,14 +28,17 @@ class _Base:
 
     def dump_results(self):
         if TestCase in self.__class__.__mro__:
-            print(f"\t{self.name}: result={self.result}")
+            print(f"{self.name}: result={self.result}")
             for name, value in self.details.items():
-                print(f"\t\t|{name}: {value}")
+                print(f"\t|{name}: {value}")
+                for name2, value2 in value.details.items():
+                    print(f"\t\t|{name2}: {value2}")
+
         elif TestPlan in self.__class__.__mro__:
             print("=" * 80)
             for tc, tc_object in self.details.items():
                 if tc_object:
-                    print(f"{tc_object.name}:result={tc_object.result}")
+                    # print(f"{tc_object.name}:result={tc_object.result}")
                     tc_object.dump_results()
             print("="*80)
 
