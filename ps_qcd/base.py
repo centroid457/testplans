@@ -1,4 +1,5 @@
 from typing import *
+import abc
 
 
 # =====================================================================================================================
@@ -11,8 +12,8 @@ class _Base:
     PROGRESS: int = 0
     STOP_IF_FALSE_RESULT: Optional[bool] = None
 
-    def __init__(self, DUT: Any):
-        self.DUT = DUT
+    def __init__(self, dut: Any):
+        self.DUT = dut
 
     @classmethod
     @property
@@ -44,10 +45,10 @@ class _Base:
 
 
 # =====================================================================================================================
-class TestCase(_Base):
+class TestCase(_Base, abc.ABC):
     details: Dict[str, Any] = {}
     result: Optional[bool] = None
-    IN_PARALLEL: Optional[bool] = True
+    PARALLEL: Optional[bool] = True
     # TODO: FINISH PARALLEL
     # TODO: FINISH PARALLEL
     # TODO: FINISH PARALLEL
@@ -69,6 +70,7 @@ class TestCase(_Base):
         self.details.update(details)
 
     # -----------------------------------------------------------------------------------------------------------------
+    @abc.abstractmethod
     def run_wrapped(self) -> bool:
         pass
 
@@ -93,7 +95,7 @@ class TestCase(_Base):
 #         if self.startup():
 #             for detail, start in self.details.items():
 #                 if start:
-#                     self.details[detail] = detail(self.DUT)
+#                     self.details[detail] = detail(self.dut)
 #                     self.details[detail].run()
 #                     if self.details[detail].STOP_IF_FALSE_RESULT and not self.details[detail].result:
 #                         break
@@ -132,6 +134,31 @@ class TestPlan(_Base):
         self.teardown()
 
     # -----------------------------------------------------------------------------------------------------------------
+
+
+# =====================================================================================================================
+class ManagerTs(abc.ABC):
+    ITEMS: Dict[TestPlan, Any] = {
+        # PsQcd_Tp(1): None,
+        # PsQcd_Tp(2): None,
+    }
+
+    def __init__(self):
+        self.items_generate()
+        self.items_check_present()
+
+    @abc.abstractmethod
+    def items_generate(self) -> None:
+        pass
+
+    @abc.abstractmethod
+    def items_check_present(self) -> None:
+        pass
+
+    def run(self):
+        for item in self.ITEMS:
+            # item.
+            pass
 
 
 # =====================================================================================================================

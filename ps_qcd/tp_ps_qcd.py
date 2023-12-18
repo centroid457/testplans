@@ -3,7 +3,7 @@ from .base import *
 from singleton_meta import *
 
 
-# DUT =================================================================================================================
+# dut =================================================================================================================
 class DutPs:
     POSITION: int = None
 
@@ -21,27 +21,27 @@ class DutPs:
     # TODO: FINISH!!!
 
 
-class _Base:
+class _BasePs:
     DUT: DutPs
 
 
 # TC_STEPS ============================================================================================================
-class PsQcd_Tc1(TestCase, _Base):
+class PsQcd_Tc1(TestCase, _BasePs):
     def run_wrapped(self) -> bool:
         pass
 
 
-class PsQcd_Tc2(TestCase, _Base):
+class PsQcd_Tc2(TestCase, _BasePs):
     def run_wrapped(self) -> bool:
         pass
 
 
-class PsQcd_Tc3(TestCase, _Base):
+class PsQcd_Tc3(TestCase, _BasePs):
     def run_wrapped(self) -> bool:
         pass
 
 
-class PsQcd_Tc4(TestCase, _Base):
+class PsQcd_Tc4(TestCase, _BasePs):
     def run_wrapped(self) -> bool:
         pass
 
@@ -62,7 +62,7 @@ class PsQcd_Tc4(TestCase, _Base):
 
 
 # TP ==================================================================================================================
-class PsQcd_Tp(TestPlan, _Base):
+class PsQcd_Tp(TestPlan, _BasePs):
     details = {
         PsQcd_Tc1: True,
         PsQcd_Tc2: True,
@@ -77,17 +77,16 @@ class ATF(SingletonByCallMeta):
 
 
 # =====================================================================================================================
-class Manager:
-    ITEMS: Dict[int, Optional[PsQcd_Tp]] = {
-        1: None,
-        2: None,
+class Manager_PsQcd(ManagerTs):
+    COUNT: int = 10
+    ITEMS: Dict[PsQcd_Tp, Any] = {
+        # PsQcd_Tp(1): None,
+        # PsQcd_Tp(2): None,
     }
 
-    def __init__(self):
-        for port in self.ITEMS:
-            self.ITEMS[port] = PsQcd_Tp(DutPs(port))
-
-
+    def items_generate(self):
+        for port in range(self.COUNT):
+            self.ITEMS.update({PsQcd_Tp(DutPs(port)): None})
 
 
 # =====================================================================================================================
