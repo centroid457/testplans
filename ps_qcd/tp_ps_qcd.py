@@ -77,7 +77,7 @@ class ATF(SingletonByCallMeta):
 
 
 # =====================================================================================================================
-class Manager_PsQcd(ManagerTs):
+class Manager_PsQcd(ManagerTp):
     COUNT: int = 10
     ITEMS: Dict[PsQcd_Tp, Any] = {
         # PsQcd_Tp(1): None,

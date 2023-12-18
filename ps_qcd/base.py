@@ -163,7 +163,8 @@ class ManagerTp(abc.ABC):
         for tc in self.tps_presented()[0].tcs:
             if tc.PARALLEL:
                 for tp in self.tps_presented():
-                    if tp.
+                    # if tp.
+                    pass
 
 
 
