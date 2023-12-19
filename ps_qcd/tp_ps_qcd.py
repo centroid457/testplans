@@ -4,7 +4,7 @@ from singleton_meta import *
 
 
 # duts =================================================================================================================
-class DutPs:
+class DutPs(DutWithTp):
     POSITION: int = None
 
     def __init__(self, position: int):
