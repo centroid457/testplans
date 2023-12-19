@@ -26,6 +26,7 @@ class Test__1:
 
     # -----------------------------------------------------------------------------------------------------------------
     def test__simple(self):
+        # -------------------------------------------
         class M1_Dut(DutWithTp):
             def __init__(self, value: Any):
                 self.VALUE = value
@@ -33,28 +34,44 @@ class Test__1:
             def check_present(self) -> bool:
                 return True
 
+        # -------------------------------------------
         class Tc1(TestCase):
             def run_wrapped(self) -> bool:
                 return self.DUT.VALUE
 
-        class Tc2(TestCase):
+        class Tc1_reverce(TestCase):
             def run_wrapped(self) -> bool:
-                return self.DUT.VALUE
+                return not self.DUT.VALUE
 
+        # -------------------------------------------
         class Tp1_ManagerTp(ManagerTp):
             TCS = {
                 Tc1: True,
-                Tc2: False
+                Tc1_reverce: False
             }
-
             def duts_generate(self) -> None:
-                for value in [True, True]:
+                for value in [True, ]:
                     self.DUTS.append(M1_Dut(value))
 
         Tp_obj = Tp1_ManagerTp()
         Tp_obj.run()
-        for dut in Tp_obj.DUTS:
-            assert dut.check_result_final() is True
+        assert Tp_obj.DUTS[0].check_result_final() is True
+
+        # -------------------------------------------
+        class Tp2_ManagerTp(ManagerTp):
+            TCS = {
+                Tc1: True,
+                Tc1_reverce: False
+            }
+            def duts_generate(self) -> None:
+                for value in [False, ]:
+                    self.DUTS.append(M1_Dut(value))
+
+        Tp_obj = Tp2_ManagerTp()
+        Tp_obj.run()
+        assert Tp_obj.DUTS[0].check_result_final() is False
+
+        # -------------------------------------------
 
 
 # =====================================================================================================================
