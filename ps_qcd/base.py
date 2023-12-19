@@ -39,7 +39,6 @@ class TestCase(abc.ABC):
     def __init__(self, dut: Any):
         self.details = {}
         self.DUT = dut
-        self.DUT.TP_RESULTS.append(self)
 
     @classmethod
     @property
@@ -104,10 +103,10 @@ class ManagerTp(abc.ABC):
         # TC1: True,
         # TC2: True
     }
-    DUTS: List[DutWithTp] = {
+    DUTS: List[DutWithTp] = [
         # Dut1,
         # Dut2
-    }
+    ]
 
     def __init__(self):
         self.TCS_apply_skipped()
