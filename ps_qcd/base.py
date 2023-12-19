@@ -6,6 +6,7 @@ from threading_manager import ThreadsManager
 
 # =====================================================================================================================
 """
+мысли
 ===TC
 СТРУКТУРА ДОЛЖНА БЫТЬ СТРОГОЙ!!!
 1. должны быть либо зависимыми либо независимыми!
@@ -20,20 +21,36 @@ from threading_manager import ThreadsManager
 """
 
 
+TP_RESULTS: str = "TP_RESULTS"
+
+
 # =====================================================================================================================
-class _Base:
+class TestCase(abc.ABC):
+    SKIP: Optional[bool] = None
+    details: Dict[str, Any] = None
+    result: Optional[bool] = None
+    PARALLEL: Optional[bool] = True
+
     DUT: Any = None
     DESCRIPTION: str = ""
     PROGRESS: int = 0
     STOP_IF_FALSE_RESULT: Optional[bool] = None
 
     def __init__(self, dut: Any):
+        self.details = {}
         self.DUT = dut
+        self.DUT.TP_RESULTS.append(self)
 
     @classmethod
     @property
     def name(cls):
         return cls.__name__
+
+    @classmethod
+    def startup_all(cls) -> bool:
+        """before batch work
+        """
+        return True
 
     def startup(self) -> bool:
         self.PROGRESS = 1
@@ -42,41 +59,20 @@ class _Base:
     def teardown(self):
         self.PROGRESS = 100
 
-    def dump_results(self):
+    @classmethod
+    def teardown_all(cls):
         pass
 
-
-# =====================================================================================================================
-class TestCase(_Base, abc.ABC):
-    details: Dict[str, Any] = {}
-    result: Optional[bool] = None
-    PARALLEL: Optional[bool] = True
-    # TODO: FINISH PARALLEL
-    # TODO: FINISH PARALLEL
-    # TODO: FINISH PARALLEL
-    # TODO: FINISH PARALLEL
-    # TODO: FINISH PARALLEL
-    # TODO: FINISH PARALLEL
-    # TODO: FINISH PARALLEL
-    # TODO: FINISH PARALLEL
-    # TODO: FINISH PARALLEL
-    # TODO: FINISH PARALLEL
-    # TODO: FINISH PARALLEL
+    def dump_results(self):
+        pass
 
     def run(self) -> None:
         if self.startup():
             self.result = self.run_wrapped()
         self.teardown()
-    #
-    # def add_details(self, details: Dict[str, Any]) -> None:
-    #     self.details.update(details)
-    #
-    # def dump_results(self):
-    #     print(f"{self.name}: result={self.result}")
-    #     for name, value in self.details.items():
-    #         print(f"\t|{name}: {value}")
-    #         for name2, value2 in value.details.items():
-    #             print(f"\t\t|{name2}: {value2}")
+
+    def add_details(self, details: Dict[str, Any]) -> None:
+        self.details.update(details)
 
     # -----------------------------------------------------------------------------------------------------------------
     @abc.abstractmethod
@@ -85,101 +81,74 @@ class TestCase(_Base, abc.ABC):
 
 
 # =====================================================================================================================
-# class TestCase(_Base):
-#     details: Dict[Type[TestCaseStep], Union[bool, TestCaseStep]] = {
-#         # TCS1: True,
-#         # TCS2: True
-#     }
-#
-#     @property
-#     def result(self) -> bool:
-#         for detail in self.details.values():
-#             if detail in [False, None]:
-#                 continue
-#             if not detail.result:
-#                 return False
-#         return True
-#
-#     def run(self) -> None:
-#         if self.startup():
-#             for detail, start in self.details.items():
-#                 if start:
-#                     self.details[detail] = detail(self.duts)
-#                     self.details[detail].run()
-#                     if self.details[detail].STOP_IF_FALSE_RESULT and not self.details[detail].result:
-#                         break
-#         self.teardown()
-#
-#     # ---------------------------------------------------------------------------------------------------------------
+class DutWithTp:
+    PRESENT: Optional[bool] = None
+    TP_RESULTS: Dict[Type[TestCase], TestCase] = None   # dict is convenient!!!
 
+    check_present: Callable[..., bool]
 
-# =====================================================================================================================
-class TestPlan(_Base):
-    tcs: Dict[Type[TestCase], Union[None, bool, TestCase]] = {
-        # TC1: True,
-        # TC2: True
-    }
+    def mark_present(self) -> None:
+        self.PRESENT = self.check_present()
 
-    # @property
-    # def result(self) -> bool:
-    #     for tc in self.tcs.values():
-    #         if tc in [False, None]:
-    #             continue
-    #         if not tc.result:
-    #             return False
-    #     return True
-    #
-    # def run(self) -> None:
-    #     if not self.DUT.check_present():
-    #         return
-    #
-    #     if self.startup():
-    #         for tc, start in self.tcs.items():
-    #             if start:
-    #                 self.tcs[tc] = tc(self.DUT)
-    #                 self.tcs[tc].run()
-    #                 if self.tcs[tc].STOP_IF_FALSE_RESULT and not self.tcs[tc].result:
-    #                     break
-    #     self.teardown()
-    #
-    # def dump_results(self):
-    #     print("=" * 80)
-    #     for tc, tc_object in self.tcs.items():
-    #         if tc_object:
-    #             # print(f"{tc_object.name}:result={tc_object.result}")
-    #             tc_object.dump_results()
-    #     print("="*80)
-
-    # -----------------------------------------------------------------------------------------------------------------
+    def check_result_final(self) -> bool:
+        for tc in self.TP_RESULTS.values():
+            if not tc.SKIP and not tc.result:
+                return False
+        return True
 
 
 # =====================================================================================================================
 class ManagerTp(abc.ABC):
-    TP: TestPlan = TestPlan
-    DUTS: Dict[Any, bool] = {
-        # Dut1: None,
-        # Dut2: None,
+    TCS: Dict[Type[TestCase], Optional[bool]] = {
+        # TC1: True,
+        # TC2: True
+    }
+    DUTS: List[DutWithTp] = {
+        # Dut1,
+        # Dut2
     }
 
     def __init__(self):
+        self.TCS_apply_skipped()
+
         self.duts_generate()
         self.duts_mark_presented()
+        self.duts_results_init()
 
+    # TCS -----------------------------------------------------------
+    def TCS_apply_skipped(self):
+        for tc, using in self.TCS.items():
+            tc.SKIP = not using
+
+    # DUTS -----------------------------------------------------------
     @abc.abstractmethod
     def duts_generate(self) -> None:
         pass
 
     def duts_mark_presented(self) -> None:
         for dut in self.DUTS:
-            self.DUTS[dut] = dut.check_present()
+            dut.mark_present()
 
+    def duts_results_init(self) -> None:
+        for dut in self.DUTS:
+            dut.TP_RESULTS = dict()
+            for tc in self.TCS:
+                dut.TP_RESULTS.update({tc: tc(dut)})
+
+    # RUN -----------------------------------------------------------
     def run(self) -> None:
-        for tc in self.TP.tcs:
+        for tc in self.TCS:
+            if tc.SKIP:
+                continue
+            if not tc.startup_all():
+                continue
+
             ThreadsManager().thread_items__clear()
-            for dut, present in self.DUTS.items():
-                if present:
-                    ThreadsManager().decorator__to_thread(tc(dut).run)(nothread=not tc.PARALLEL)
+            for dut in self.DUTS:
+                if dut.PRESENT:
+                    ThreadsManager().decorator__to_thread(dut.TP_RESULTS[tc].run)(nothread=not tc.PARALLEL)
             ThreadsManager().wait_all()
+            tc.teardown_all()
 
 
 # =====================================================================================================================
