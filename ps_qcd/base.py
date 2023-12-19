@@ -90,10 +90,11 @@ class DutWithTp:
     def mark_present(self) -> None:
         self.PRESENT = self.check_present()
 
-    def check_result_final(self) -> bool:
+    def check_result_final(self) -> Optional[bool]:
         for tc in self.TP_RESULTS.values():
-            if not tc.SKIP and not tc.result:
-                return False
+            if not tc.SKIP:
+                if not tc.result:
+                    return tc.result
         return True
 
 
