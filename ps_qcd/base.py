@@ -5,7 +5,7 @@ from threading_manager import ThreadsManager
 
 
 # =====================================================================================================================
-TP_RESULTS: str = "TP_RESULTS"
+pass
 
 
 # =====================================================================================================================
@@ -134,8 +134,13 @@ class ManagerTp(abc.ABC):
             ThreadsManager().thread_items__clear()
             for dut in self.DUTS:
                 if dut.PRESENT:
-                    ThreadsManager().decorator__to_thread(dut.TP_RESULTS[tc].run)(nothread=not tc.PARALLEL)
-            ThreadsManager().wait_all()
+                    if tc.PARALLEL:
+                        ThreadsManager().decorator__to_thread(dut.TP_RESULTS[tc].run)()
+                    else:
+                        dut.TP_RESULTS[tc].run()
+
+            if tc.PARALLEL:
+                ThreadsManager().wait_all()
             tc.teardown_all()
 
 
