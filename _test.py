@@ -41,7 +41,7 @@ class Test__1:
             def run_wrapped(self) -> bool:
                 return self.DUT.VALUE
 
-        class Tc1_reverce(TestCase):
+        class Tc1_reverse(TestCase):
             def run_wrapped(self) -> bool:
                 return not self.DUT.VALUE
 
@@ -49,7 +49,7 @@ class Test__1:
         class Tp1_ManagerTp(ManagerTp):
             TCS = {
                 Tc1: True,
-                Tc1_reverce: False
+                Tc1_reverse: False
             }
             def duts_generate(self) -> None:
                 for value in [True, ]:
@@ -65,7 +65,7 @@ class Test__1:
         class Tp2_ManagerTp(ManagerTp):
             TCS = {
                 Tc1: True,
-                Tc1_reverce: False
+                Tc1_reverse: False
             }
             def duts_generate(self) -> None:
                 for value in [False, ]:
