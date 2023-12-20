@@ -33,18 +33,18 @@ class MyTableModel(QAbstractTableModel):
 
 # =====================================================================================================================
 class MyWindow(QWidget):
+    tv: QTableView = None
+
     def __init__(self):
         super().__init__()
+        self.data = [('apple', 'red', 'small'),
+                     ('apple', 'red', 'medium'),
+                     ('apple', 'green', 'small'),
+                     ('banana', 'yellow', 'large')]
+        self.tv_create()
 
-        # data
-        self.tabledata = [('apple', 'red', 'small'),
-                          ('apple', 'red', 'medium'),
-                          ('apple', 'green', 'small'),
-                          ('banana', 'yellow', 'large')]
-        self.createTable()
-
-    def createTable(self):
-        tm = MyTableModel(self.tabledata)
+    def tv_create(self):
+        tm = MyTableModel(self.data)
 
         self.tv = QTableView(self)
         self.tv.setStyleSheet("gridline-color: rgb(255, 0, 0)")
@@ -52,6 +52,8 @@ class MyWindow(QWidget):
         self.tv.setMinimumSize(400, 300)
         self.tv.setShowGrid(True)
         self.tv.setFont(QFont("Calibri (Body)", 12))
+        self.tv.setSortingEnabled(True)     # enable sorting
+        self.tv.resizeColumnsToContents()   # set column width to fit contents
 
         vh = self.tv.verticalHeader()
         vh.setVisible(True)
@@ -59,13 +61,8 @@ class MyWindow(QWidget):
         hh = self.tv.horizontalHeader()
         hh.setStretchLastSection(True)
 
-        self.tv.resizeColumnsToContents()   # set column width to fit contents
-
-        nrows = len(self.tabledata)
-        for row in range(nrows):
+        for row in range(len(self.data)):
             self.tv.setRowHeight(row, 18)
-
-        self.tv.setSortingEnabled(True)     # enable sorting
 
 
 # =====================================================================================================================
