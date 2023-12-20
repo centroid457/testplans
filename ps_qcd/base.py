@@ -96,12 +96,19 @@ class ManagerTp(abc.ABC):
     # ]
 
     def __init__(self):
+        self.reinit()
+
+    def reinit(self) -> None:
         self.DUTS = []
         self.TCS_apply_skipped()
 
         self.duts_generate()
         self.duts_mark_presented()
         self.duts_results_init()
+
+    def reinit_new_TCS(self, tcs: Dict[Type[TestCase], Optional[bool]]) -> None:
+        self.TCS = tcs
+        self.reinit()
 
     # TCS -----------------------------------------------------------
     def TCS_apply_skipped(self):

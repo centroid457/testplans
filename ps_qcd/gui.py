@@ -33,7 +33,8 @@ class MyTableModel(QAbstractTableModel):
 
 # =====================================================================================================================
 class MyWindow(QWidget):
-    tv: QTableView = None
+    DATA: Any
+    QTV: QTableView = None
 
     def __init__(self):
         super().__init__()
@@ -46,23 +47,23 @@ class MyWindow(QWidget):
     def tv_create(self):
         tm = MyTableModel(self.data)
 
-        self.tv = QTableView(self)
-        self.tv.setStyleSheet("gridline-color: rgb(255, 0, 0)")
-        self.tv.setModel(tm)
-        self.tv.setMinimumSize(400, 300)
-        self.tv.setShowGrid(True)
-        self.tv.setFont(QFont("Calibri (Body)", 12))
-        self.tv.setSortingEnabled(True)     # enable sorting
-        self.tv.resizeColumnsToContents()   # set column width to fit contents
+        self.QTV = QTableView(self)
+        self.QTV.setStyleSheet("gridline-color: rgb(255, 0, 0)")
+        self.QTV.setModel(tm)
+        self.QTV.setMinimumSize(400, 300)
+        self.QTV.setShowGrid(True)
+        self.QTV.setFont(QFont("Calibri (Body)", 12))
+        self.QTV.setSortingEnabled(True)     # enable sorting
+        self.QTV.resizeColumnsToContents()   # set column width to fit contents
 
-        vh = self.tv.verticalHeader()
+        vh = self.QTV.verticalHeader()
         vh.setVisible(True)
 
-        hh = self.tv.horizontalHeader()
+        hh = self.QTV.horizontalHeader()
         hh.setStretchLastSection(True)
 
         for row in range(len(self.data)):
-            self.tv.setRowHeight(row, 18)
+            self.QTV.setRowHeight(row, 18)
 
 
 # =====================================================================================================================
