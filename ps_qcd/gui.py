@@ -18,37 +18,82 @@ class MyTableModel(QAbstractTableModel):
         return len(self.DATA.TCS)
 
     def columnCount(self, parent: QModelIndex = None) -> int:
-        return len(self.DATA.DUTS) + 2
+        return len(self.DATA.DUTS) + 1
 
     def headerData(self, col: Any, orientation: Qt.Orientation, role: int = None) -> str:
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
                 if col == 0:
-                    return "USE"
-                elif col == 1:
                     return "NAME"
-                elif col > 1:
-                    return f"dut{col - 1}"
+                if col > 0:
+                    return f"{col}"
             elif orientation == Qt.Vertical:
                 return col + 1
         return QVariant()
 
+    def flags(self, index):
+        flags = super().flags(index)
+
+        if index.column() == 0:
+            flags |= Qt.ItemIsUserCheckable
+        return flags
+
     def data(self, index: QModelIndex, role: int = None) -> Any:
+        if not index.isValid():
+            return QVariant()
+
         col = index.column()
         row = index.row()
 
         tc = list(self.DATA.TCS)[row]
-        dut = self.DATA.DUTS[col - 2]
+        if col > 0:
+            dut = self.DATA.DUTS[col-1]
+        else:
+            dut = None
 
-        if not index.isValid():
-            return QVariant()
-        elif role != Qt.DisplayRole:
+        if role == Qt.DisplayRole:
             if col == 0:
-                return QVariant()
-            elif col == 1:
                 return f'{tc.name}\n{tc.DESCRIPTION}'
-            elif col > 1:
+            if col > 0:
                 return f'{dut.TP_RESULTS[tc].result}'
+
+        elif role == Qt.ForegroundRole:
+            if tc.SKIP:
+                return QColor('#a2a2a2')
+
+        elif role == Qt.BackgroundRole:
+            if tc.SKIP:
+                return QColor('#f2f2f2')
+
+            if col > 0:
+                if tc.result is True:
+                    return QColor("green")
+                if tc.result is False:
+                    return QColor("red")
+
+        if role == Qt.CheckStateRole:
+            if col == 0:
+                if tc.SKIP:
+                    return Qt.Unchecked
+                else:
+                    return Qt.Checked
+
+    def setData(self, index: QModelIndex, value: Any, role: int = None):
+        if not index.isValid():
+            return
+
+        row = index.row()
+        col = index.column()
+
+        tc = list(self.DATA.TCS)[row]
+        if col > 0:
+            dut = self.DATA.DUTS[col-1]
+        else:
+            dut = None
+
+        if role == Qt.CheckStateRole and col == 0:
+            tc.SKIP = value == Qt.Unchecked
+            return True
 
 
 # =====================================================================================================================
@@ -70,7 +115,7 @@ class Gui(QWidget):
 
     def wgt_create(self):
         self.setWindowTitle("[TestPlan] Universal")
-        self.setMinimumWidth(600)
+        self.setMinimumSize(600, 300)
         self.qtv_create()
 
     def qtv_create(self):
@@ -79,15 +124,16 @@ class Gui(QWidget):
         self.QTV = QTableView(self)
         self.QTV.setModel(tm)
 
-        self.QTV.setStyleSheet("gridline-color: rgb(255, 0, 0)")
-        self.QTV.setMinimumSize(400, 300)
-        self.QTV.setShowGrid(True)
-        self.QTV.setFont(QFont("Calibri (Body)", 12))
-        self.QTV.setSortingEnabled(True)     # enable sorting
+        # self.QTV.setStyleSheet("gridline-color: rgb(255, 0, 0)")
+        # self.QTV.setMinimumSize(400, 300)
+        # self.QTV.setShowGrid(True)
+        # self.QTV.setFont(QFont("Calibri (Body)", 12))
+        # self.QTV.setSortingEnabled(True)     # enable sorting
         self.QTV.resizeColumnsToContents()   # set column width to fit contents
+        # self.QTV.setColumnWidth(0, 100)
 
-        hh = self.QTV.horizontalHeader()
-        hh.setStretchLastSection(True)
+        # hh = self.QTV.horizontalHeader()
+        # hh.setStretchLastSection(True)
 
     def slots_connect(self):
         pass

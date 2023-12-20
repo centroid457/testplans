@@ -10,7 +10,7 @@ pass
 
 # =====================================================================================================================
 class TestCase(abc.ABC):
-    SKIP: Optional[bool] = None
+    SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!
     details: Dict[str, Any] = None
     result: Optional[bool] = None
     PARALLEL: Optional[bool] = True
