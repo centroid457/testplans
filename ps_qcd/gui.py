@@ -143,6 +143,7 @@ class Gui(QWidget):
         # hh.setStretchLastSection(True)
 
     def slots_connect(self):
+        TestCase.signals.signal__result_updated.connect(lambda z=None: self.QTV.model().endResetModel() or print("signal__result_updated.emit"))
         pass
 
 

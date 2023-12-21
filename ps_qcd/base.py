@@ -1,18 +1,21 @@
 from typing import *
 import abc
+from PyQt5.QtCore import pyqtSignal, QObject
 
 from threading_manager import ThreadsManager
 
 
 # =====================================================================================================================
-pass
+class Signals(QObject):
+    signal__result_updated = pyqtSignal()
 
 
 # =====================================================================================================================
 class TestCase(abc.ABC):
+    signals: Signals = Signals()
+
     SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!
     details: Dict[str, Any] = None
-    result: Optional[bool] = None
     PARALLEL: Optional[bool] = True
 
     DUT: Any = None
@@ -20,9 +23,21 @@ class TestCase(abc.ABC):
     PROGRESS: int = 0
     STOP_IF_FALSE_RESULT: Optional[bool] = None
 
+    __result: Optional[bool] = None
+
     def __init__(self, dut: Any):
+        super().__init__()
         self.details = {}
         self.DUT = dut
+
+    @property
+    def result(self) -> Optional[bool]:
+        return self.__result
+
+    @result.setter
+    def result(self, value: Optional[bool]) -> None:
+        self.__result = value
+        self.signals.signal__result_updated.emit()
 
     @classmethod
     @property
