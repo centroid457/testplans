@@ -78,9 +78,9 @@ class MyTableModel(QAbstractTableModel):
                 else:
                     return Qt.Checked
 
-    def setData(self, index: QModelIndex, value: Any, role: int = None):
+    def setData(self, index: QModelIndex, value: Any, role: int = None) -> bool:
         if not index.isValid():
-            return
+            return False
 
         row = index.row()
         col = index.column()
@@ -93,7 +93,14 @@ class MyTableModel(QAbstractTableModel):
 
         if role == Qt.CheckStateRole and col == 0:
             tc.SKIP = value == Qt.Unchecked
-            return True
+            self.data_reread()
+        return True
+
+    def data_reread(self) -> None:
+        """
+        just redraw model by reread all data!
+        """
+        self.endResetModel()
 
 
 # =====================================================================================================================
