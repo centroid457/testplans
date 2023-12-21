@@ -14,10 +14,10 @@ class MyTableModel(QAbstractTableModel):
         super().__init__()
         self.DATA = data
 
-    def rowCount(self, parent: QModelIndex = None) -> int:
+    def rowCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.TCS)
 
-    def columnCount(self, parent: QModelIndex = None) -> int:
+    def columnCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.DUTS) + 1
 
     def headerData(self, col: Any, orientation: Qt.Orientation, role: int = None) -> str:
