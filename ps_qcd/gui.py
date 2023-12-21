@@ -24,7 +24,7 @@ class MyTableModel(QAbstractTableModel):
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
                 if col == 0:
-                    return "NAME"
+                    return "Тесткейс"
                 if col > 0:
                     return f"{col}"
             elif orientation == Qt.Vertical:
