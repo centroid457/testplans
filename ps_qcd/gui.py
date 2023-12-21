@@ -143,8 +143,10 @@ class Gui(QWidget):
         # hh.setStretchLastSection(True)
 
     def slots_connect(self):
-        TestCase.signals.signal__result_updated.connect(lambda z=None: self.QTV.model().endResetModel() or print("signal__result_updated.emit"))
-        pass
+        TestCase.signals.signal__tc_result_updated.connect(lambda z=None: self.QTV.model().endResetModel() or print("signal__tc_result_updated.emit"))
+
+        # fixme: change object for redraw
+        TestCase.signals.signal__tc_details_updated.connect(lambda z=None: self.QTV.model().endResetModel() or print("signal__tc_details_updated.emit"))
 
 
 # =====================================================================================================================

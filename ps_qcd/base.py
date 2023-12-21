@@ -7,7 +7,8 @@ from threading_manager import ThreadsManager
 
 # =====================================================================================================================
 class Signals(QObject):
-    signal__result_updated = pyqtSignal()
+    signal__tc_result_updated = pyqtSignal()
+    signal__tc_details_updated = pyqtSignal()
 
 
 # =====================================================================================================================
@@ -37,7 +38,7 @@ class TestCase(abc.ABC):
     @result.setter
     def result(self, value: Optional[bool]) -> None:
         self.__result = value
-        self.signals.signal__result_updated.emit()
+        self.signals.signal__tc_result_updated.emit()
 
     @classmethod
     @property
@@ -71,6 +72,7 @@ class TestCase(abc.ABC):
 
     def add_details(self, details: Dict[str, Any]) -> None:
         self.details.update(details)
+        self.signals.signal__tc_result_updated.emit()
 
     # -----------------------------------------------------------------------------------------------------------------
     @abc.abstractmethod
