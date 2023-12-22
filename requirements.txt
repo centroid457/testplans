@@ -1,3 +1,6 @@
 pip
 pytest
 PyQt5
+
+threading_manager
+singleton_meta
