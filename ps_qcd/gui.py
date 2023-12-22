@@ -122,7 +122,12 @@ class Gui(QWidget):
         self.slots_connect()
 
         self.show()
-        sys.exit(self._QAPP.exec_())
+        exit_code = self._QAPP.exec_()
+        if exit_code == 0:
+            print(f"[OK]GUI({exit_code=})closed correctly")
+        else:
+            print(f"[FAIL]GUI({exit_code=})closed INCORRECTLY")
+        sys.exit(exit_code)
 
     def wgt_create(self):
         self.setWindowTitle("[TestPlan] Universal")

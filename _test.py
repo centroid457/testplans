@@ -184,7 +184,11 @@ class Test__1:
                     self.DUTS.append(M1_Dut(value))
 
         Tp_obj = Tp1_ManagerTp()
-        Gui(Tp_obj)
+
+        with pytest.raises(SystemExit) as exx:
+            Gui(Tp_obj)
+        assert exx.type == SystemExit
+        assert exx.value.code == 0
 
 
 # =====================================================================================================================
