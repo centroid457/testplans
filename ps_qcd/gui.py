@@ -31,11 +31,15 @@ class MyTableModel(QAbstractTableModel):
                 return col + 1
         return QVariant()
 
-    def flags(self, index):
+    def flags(self, index: QModelIndex) -> Qt.ItemFlags:
         flags = super().flags(index)
 
         if index.column() == 0:
             flags |= Qt.ItemIsUserCheckable
+            flags |= Qt.ItemIsSelectable
+        else:
+            # flags -= Qt.ItemIsSelectable
+            pass
         return flags
 
     def data(self, index: QModelIndex, role: int = None) -> Any:
