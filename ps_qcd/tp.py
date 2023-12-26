@@ -1,89 +1,15 @@
-from typing import *
 import abc
-from PyQt5.QtCore import pyqtSignal, QObject
+from typing import *
 
 from threading_manager import ThreadsManager
 
-
-# =====================================================================================================================
-class Signals(QObject):
-    signal__tc_result_updated = pyqtSignal()
-    signal__tc_details_updated = pyqtSignal()
-
-
-# =====================================================================================================================
-class TestCase(abc.ABC):
-    signals: Signals = Signals()
-
-    SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!
-    details: Dict[str, Any] = None
-    PARALLEL: Optional[bool] = True
-
-    DUT: Any = None
-    DESCRIPTION: str = ""
-    PROGRESS: int = 0
-    STOP_IF_FALSE_RESULT: Optional[bool] = None
-
-    __result: Optional[bool] = None
-
-    def __init__(self, dut: Any):
-        super().__init__()
-        self.details = {}
-        self.DUT = dut
-
-    @property
-    def result(self) -> Optional[bool]:
-        return self.__result
-
-    @result.setter
-    def result(self, value: Optional[bool]) -> None:
-        self.__result = value
-        self.signals.signal__tc_result_updated.emit()
-
-    @classmethod
-    @property
-    def name(cls):
-        return cls.__name__
-
-    @classmethod
-    def startup_all(cls) -> bool:
-        """before batch work
-        """
-        return True
-
-    def startup(self) -> bool:
-        self.PROGRESS = 1
-        return True
-
-    def teardown(self):
-        self.PROGRESS = 100
-
-    @classmethod
-    def teardown_all(cls):
-        pass
-
-    def dump_results(self):
-        pass
-
-    def run(self) -> None:
-        if self.startup():
-            self.result = self.run_wrapped()
-        self.teardown()
-
-    def add_details(self, details: Dict[str, Any]) -> None:
-        self.details.update(details)
-        self.signals.signal__tc_result_updated.emit()
-
-    # -----------------------------------------------------------------------------------------------------------------
-    @abc.abstractmethod
-    def run_wrapped(self) -> bool:
-        pass
+from . import *
 
 
 # =====================================================================================================================
 class DutWithTp:
     PRESENT: Optional[bool] = None
-    TP_RESULTS: Dict[Type[TestCase], TestCase] = None   # dict is convenient!!!
+    TP_RESULTS: Dict[Type[TestCase], TestCase] = None   # dict is very convenient!!!
 
     check_present: Callable[..., bool]
 

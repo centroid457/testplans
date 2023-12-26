@@ -1,11 +1,6 @@
-import sys
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-
 from pyqt_templates import *
 
-from .base import *
+from . import *
 
 
 # =====================================================================================================================

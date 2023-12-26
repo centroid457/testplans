@@ -1,6 +1,9 @@
-from .base import *
+from . import ManagerTp
+from .tc import *
 
 from singleton_meta import *
+
+from .tp import DutWithTp
 
 
 # duts =================================================================================================================

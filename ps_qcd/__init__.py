@@ -1,2 +1,3 @@
-from .base import *
+from .tc import *
+from .tp import *
 from .gui import *
