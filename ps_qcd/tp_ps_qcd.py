@@ -3,11 +3,11 @@ from .tc import *
 
 from singleton_meta import *
 
-from .tp import DutWithTp
+from .tp import Dut
 
 
 # duts =================================================================================================================
-class DutPs(DutWithTp):
+class DutPs(Dut):
     POSITION: int = None
 
     def __init__(self, position: int):

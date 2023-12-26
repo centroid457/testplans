@@ -1,9 +1,9 @@
 from ps_qcd import *
-from ps_qcd.tp import DutWithTp, ManagerTp
+from ps_qcd.tp import Dut, ManagerTp
 
 # =====================================================================================================================
 if __name__ == "__main__":
-    class M1_Dut(DutWithTp):
+    class M1_Dut(Dut):
         def __init__(self, value: Any):
             self.VALUE = value
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
 
     Tp_obj = Tp1_ManagerTp()
-    GuiTP(Tp_obj)
+    TpGui(Tp_obj)
 
 
 # =====================================================================================================================

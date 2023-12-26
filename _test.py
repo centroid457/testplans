@@ -3,7 +3,7 @@ import time
 import pytest
 
 from ps_qcd import *
-from ps_qcd.tp import DutWithTp, ManagerTp
+from ps_qcd.tp import Dut, ManagerTp
 
 
 # =====================================================================================================================
@@ -24,7 +24,7 @@ class Test__1:
     # -----------------------------------------------------------------------------------------------------------------
     def test__simple(self):
         # -------------------------------------------
-        class M1_Dut(DutWithTp):
+        class M1_Dut(Dut):
             def __init__(self, value: Any):
                 self.VALUE = value
 
@@ -75,7 +75,7 @@ class Test__1:
 
     def test__parallel(self):
         # -------------------------------------------
-        class M1_Dut(DutWithTp):
+        class M1_Dut(Dut):
             def __init__(self, value: Any):
                 self.VALUE = value
 
@@ -123,7 +123,7 @@ class Test__1:
 
     def test__skip(self):
         # -------------------------------------------
-        class M1_Dut(DutWithTp):
+        class M1_Dut(Dut):
             def __init__(self, value: Any):
                 self.VALUE = value
 
@@ -154,7 +154,7 @@ class Test__1:
 
     def test__GUI(self):
         # -------------------------------------------
-        class M1_Dut(DutWithTp):
+        class M1_Dut(Dut):
             def __init__(self, value: Any):
                 self.VALUE = value
 
@@ -181,7 +181,7 @@ class Test__1:
         Tp_obj = Tp1_ManagerTp()
 
         with pytest.raises(SystemExit) as exx:
-            GuiTP(Tp_obj)
+            TpGui(Tp_obj)
         assert exx.type == SystemExit
         assert exx.value.code == 0
 

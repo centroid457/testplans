@@ -5,7 +5,7 @@ from . import ManagerTp, TestCase
 
 
 # =====================================================================================================================
-class MyTableModel(QAbstractTableModel):
+class TpTableModel(QAbstractTableModel):
     DATA: ManagerTp
 
     def __init__(self, data: ManagerTp):
@@ -106,7 +106,7 @@ class MyTableModel(QAbstractTableModel):
 
 
 # =====================================================================================================================
-class GuiTP(Gui):
+class TpGui(Gui):
     # OVERWRITTEN -----------------------------------
     TITLE = "[TestPlan] Universal"
     SIZE = (600, 300)
@@ -123,7 +123,7 @@ class GuiTP(Gui):
         self.qtv_create()
 
     def qtv_create(self):
-        tm = MyTableModel(self.DATA)
+        tm = TpTableModel(self.DATA)
 
         self.QTV = QTableView(self)
         self.QTV.setModel(tm)
