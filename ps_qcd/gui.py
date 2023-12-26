@@ -3,6 +3,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+from pyqt_templates import *
+
 from .base import *
 
 
@@ -108,30 +110,20 @@ class MyTableModel(QAbstractTableModel):
 
 
 # =====================================================================================================================
-class Gui(QWidget):
-    _QAPP: QApplication = QApplication([])
+class GuiTP(Gui):
+    # OVERWRITTEN -----------------------------------
+    TITLE = "[TestPlan] Universal"
+    SIZE = (600, 300)
 
+    # NEW -------------------------------------------
     DATA: ManagerTp
     QTV: QTableView = None
 
     def __init__(self, data: ManagerTp):
-        super().__init__()
         self.DATA = data
-
-        self.wgt_create()
-        self.slots_connect()
-
-        self.show()
-        exit_code = self._QAPP.exec_()
-        if exit_code == 0:
-            print(f"[OK]GUI({exit_code=})closed correctly")
-        else:
-            print(f"[FAIL]GUI({exit_code=})closed INCORRECTLY")
-        sys.exit(exit_code)
+        super().__init__()
 
     def wgt_create(self):
-        self.setWindowTitle("[TestPlan] Universal")
-        self.setMinimumSize(600, 300)
         self.qtv_create()
 
     def qtv_create(self):

@@ -186,7 +186,7 @@ class Test__1:
         Tp_obj = Tp1_ManagerTp()
 
         with pytest.raises(SystemExit) as exx:
-            Gui(Tp_obj)
+            GuiTP(Tp_obj)
         assert exx.type == SystemExit
         assert exx.value.code == 0
 
