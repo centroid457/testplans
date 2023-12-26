@@ -4,6 +4,7 @@ from typing import *
 from threading_manager import ThreadsManager
 
 from . import *
+from . import TestCase
 
 
 # =====================================================================================================================

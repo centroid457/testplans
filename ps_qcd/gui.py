@@ -1,6 +1,7 @@
 from pyqt_templates import *
 
 from . import *
+from . import ManagerTp, TestCase
 
 
 # =====================================================================================================================
