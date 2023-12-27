@@ -1,4 +1,4 @@
-# prj_name
+# testplan-simple
 Descr short (git/prg descr).  
 Designed for ....  
 
@@ -23,13 +23,13 @@ See the [HISTORY.md](HISTORY.md) file for release history.
 
 ## Installation
 ```commandline
-pip install prj-name
+pip install testplan-simple
 ```
 
 
 ## Import
 ```python
-from prj_name import *
+from testplan_simple import *
 ```
 
 

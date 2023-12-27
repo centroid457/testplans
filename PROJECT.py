@@ -9,19 +9,21 @@ class PROJECT:
     AUTHOR_HOMEPAGE: str = "https://github.com/centroid457/"
 
     # ------------------------------------------------------
-    NAME_INSTALL: str = "prj-name"
-    NAME_IMPORT: str = "prj_name"
+    NAME_INSTALL: str = "testplan-simple"
+    NAME_IMPORT: str = "testplan_simple"
     KEYWORDS: List[str] = [
-        "kw1",
+        "testplan",
+        "testplan structure",
+        "testplan gui",
     ]
 
-    DESCRIPTION_SHORT: str = "descr short (git/prg descr)"
-    DESCRIPTION_LONG: str = "designed for ..."
+    DESCRIPTION_SHORT: str = "just a simple testplan structure for several DUTs"
+    DESCRIPTION_LONG: str = "designed to apply testplan(testcase lists) for several DUTs"
     FEATURES: List[str] = [
-        "feat1",
-        "feat2",
-        ["feat3", "block1", "block2"],
-        "feat4",
+        # "feat1",
+        # ["feat2", "block1", "block2"],
+
+
     ]
     WISHES: List[str] = [
         "add ..."
