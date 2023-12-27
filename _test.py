@@ -2,8 +2,8 @@ import time
 
 import pytest
 
-from testplan import *
-from testplan.tp import Dut, TpManager
+from testplan_simple import *
+from testplan_simple.tp import Dut, TpManager
 
 
 # =====================================================================================================================
