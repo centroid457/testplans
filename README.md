@@ -21,7 +21,7 @@ pip install ps_qcd
 ## Import
 
 ```python
-from ps_qcd import *
+from testplan import *
 ```
 
 
@@ -31,7 +31,7 @@ from ps_qcd import *
 *
 
 ```python
-from ps_qcd import *
+from testplan import *
 
 
 class Cls:

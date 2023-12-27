@@ -2,8 +2,8 @@ import time
 
 import pytest
 
-from ps_qcd import *
-from ps_qcd.tp import Dut, TpManager
+from testplan import *
+from testplan.tp import Dut, TpManager
 
 
 # =====================================================================================================================

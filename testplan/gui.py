@@ -1,7 +1,10 @@
-from pyqt_templates import *
+import pytest
 
 from . import *
 from . import TpManager, TestCase
+
+from pyqt_templates import *
+from object_info import ObjectInfo
 
 
 # =====================================================================================================================
@@ -166,7 +169,29 @@ class TpGui(Gui):
         # fixme: change object for redraw
         # TestCase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.QPTE)
 
-        # self.QPTE.clicked.connect()
+        self.QTV.selectionModel().selectionChanged.connect(self.selection_apply)
+
+    def selection_apply(self, first: QItemSelection, last: QItemSelection) -> None:
+        # print("selectionChanged")
+        # print(f"{first=}")  # first=<PyQt5.QtCore.QItemSelection object at 0x000001C79A107460>
+        # ObjectInfo(first.indexes()[0]).print(_log_iter=True, skip_fullnames=["takeFirst", "takeLast"])
+
+        index: QModelIndex = first.indexes()[0]
+
+        row = index.row()
+        col = index.column()
+
+        if not col > 0:
+            return
+
+        tc = list(self.DATA.TCS)[row]
+        if col > 0:
+            dut = self.DATA.DUTS[col-1]
+        else:
+            dut = None
+        self.QPTE.setPlainText(str(dut.TP_RESULTS[tc].details))
+
+        # print(f"{row=}/{col=}/{dut=}/{tc=}")
 
 
 # =====================================================================================================================

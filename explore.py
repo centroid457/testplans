@@ -1,5 +1,6 @@
-from ps_qcd import *
-from ps_qcd.tp import Dut, TpManager
+from testplan import *
+from testplan.tp import Dut, TpManager
+
 
 # =====================================================================================================================
 if __name__ == "__main__":
@@ -10,17 +11,14 @@ if __name__ == "__main__":
         def check_present(self) -> bool:
             return True
 
-
     # -------------------------------------------
     class Tc1(TestCase):
         def run_wrapped(self) -> bool:
             return self.DUT.VALUE
 
-
     class Tc1_reverse(TestCase):
         def run_wrapped(self) -> bool:
             return not self.DUT.VALUE
-
 
     class TpManager1(TpManager):
         TCS = {
