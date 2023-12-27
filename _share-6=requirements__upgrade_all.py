@@ -7,7 +7,9 @@ from setuptools import find_packages
 
 
 pip.main(["install", "--upgrade", "pip"])
+
 pip.main(["install", "-r", "requirements.txt"])
+pip.main(["install", "-r", "requirements__AST.txt"])
 
 
 for item in find_packages():
