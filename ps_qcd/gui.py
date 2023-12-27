@@ -144,6 +144,7 @@ class TpGui(Gui):
     def qtv_create(self):
         self.QTV = QTableView(self)
         self.QTV.setModel(TpTableModel(self.DATA))
+        self.QTV.setSelectionMode(QTableView.SingleSelection)
 
         # self.QTV.setStyleSheet("gridline-color: rgb(255, 0, 0)")
         # self.QTV.setMinimumSize(400, 300)
