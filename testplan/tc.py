@@ -5,13 +5,18 @@ from PyQt5.QtCore import pyqtSignal, QObject
 
 
 # =====================================================================================================================
-class Signals(QObject):
-    signal__tc_result_updated = pyqtSignal()
-    signal__tc_details_updated = pyqtSignal()
+class TestCaseBase:
+    pass
 
 
 # =====================================================================================================================
-class TestCase(abc.ABC):
+class Signals(QObject):
+    signal__tc_result_updated = pyqtSignal()
+    signal__tc_details_updated = pyqtSignal(TestCaseBase)
+
+
+# =====================================================================================================================
+class TestCase(TestCaseBase, abc.ABC):
     # SETTINGS ------------------------------------
     DESCRIPTION: str = ""
     SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!
@@ -39,7 +44,7 @@ class TestCase(abc.ABC):
     @result.setter
     def result(self, value: Optional[bool]) -> None:
         self.__result = value
-        self.signals.signal__tc_result_updated.emit()
+        self.signals.signal__tc_result_updated.emit(self)
 
     @classmethod
     @property
@@ -71,7 +76,7 @@ class TestCase(abc.ABC):
             self.result = self.run_wrapped()
         self.teardown()
 
-    def add_details(self, details: Dict[str, Any]) -> None:
+    def details_update(self, details: Dict[str, Any]) -> None:
         self.details.update(details)
         self.signals.signal__tc_result_updated.emit()
 

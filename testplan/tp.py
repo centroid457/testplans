@@ -14,7 +14,7 @@ class Dut:
 
     check_present: Callable[..., bool]
 
-    def mark_present(self) -> None:
+    def _mark_present(self) -> None:
         self.PRESENT = self.check_present()
 
     def check_result_final(self) -> Optional[bool]:
@@ -66,7 +66,7 @@ class TpManager(abc.ABC):
 
     def duts_mark_presented(self) -> None:
         for dut in self.DUTS:
-            dut.mark_present()
+            dut._mark_present()
 
     def duts_results_init(self) -> None:
         for dut in self.DUTS:

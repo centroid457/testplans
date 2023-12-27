@@ -4,7 +4,7 @@ from testplan.tp import Dut, TpManager
 
 # =====================================================================================================================
 if __name__ == "__main__":
-    class M1_Dut(Dut):
+    class Dut1(Dut):
         def __init__(self, value: Any):
             self.VALUE = value
 
@@ -27,8 +27,8 @@ if __name__ == "__main__":
         }
 
         def duts_generate(self) -> None:
-            for value in [False, False, ]:
-                self.DUTS.append(M1_Dut(value))
+            for value in [True, False, ]:
+                self.DUTS.append(Dut1(value))
 
 
     Tp_obj = TpManager1()

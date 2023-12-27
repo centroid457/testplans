@@ -71,10 +71,10 @@ class TpTableModel(QAbstractTableModel):
                 return QColor('#f2f2f2')
 
             if col > 0:
-                if tc.result is True:
-                    return QColor("green")
-                if tc.result is False:
-                    return QColor("red")
+                if dut.TP_RESULTS[tc].result is True:
+                    return QColor("#00FF00")
+                if dut.TP_RESULTS[tc].result is False:
+                    return QColor("#FF5050")
 
         if role == Qt.CheckStateRole:
             if col == 0:
@@ -163,7 +163,8 @@ class TpGui(Gui):
     def slots_connect(self):
         # super().slots_connect()
 
-        self.btn_start.toggled.connect(self._wgt_main__center)
+        self.btn_start.clicked.connect(self._wgt_main__center)
+        self.btn_start.clicked.connect(self.DATA.run)
         TestCase.signals.signal__tc_result_updated.connect(lambda z=None: print("signal__tc_result_updated.emit") or self.QTV.model().endResetModel())
 
         # fixme: change object for redraw
