@@ -114,6 +114,7 @@ class TpGui(Gui):
     # NEW -------------------------------------------
     DATA: TpManager
     QTV: QTableView = None
+    PTE: QPlainTextEdit = None
 
     def __init__(self, data: TpManager):
         self.DATA = data
@@ -122,11 +123,26 @@ class TpGui(Gui):
     def wgt_create(self):
         self.qtv_create()
 
-    def qtv_create(self):
-        tm = TpTableModel(self.DATA)
+        # DETAILS -----------------------------------------------------------------------------------------------------
+        self.btn_start = QPushButton("START")
+        self.btn_start.setCheckable(True)
 
+        self.PTE = QPlainTextEdit()
+
+        # layout_details ----------------------------------------------------------------------------------------------
+        layout_details = QVBoxLayout()
+        layout_details.addWidget(self.btn_start)
+        layout_details.addWidget(self.PTE)
+
+        # layout_main -------------------------------------------------------------------------------------------------
+        layout_main = QHBoxLayout()
+        layout_main.addWidget(self.QTV)
+        layout_main.addLayout(layout_details)
+        self.setLayout(layout_main)
+
+    def qtv_create(self):
         self.QTV = QTableView(self)
-        self.QTV.setModel(tm)
+        self.QTV.setModel(TpTableModel(self.DATA))
 
         # self.QTV.setStyleSheet("gridline-color: rgb(255, 0, 0)")
         # self.QTV.setMinimumSize(400, 300)
@@ -140,10 +156,11 @@ class TpGui(Gui):
         # hh.setStretchLastSection(True)
 
     def slots_connect(self):
-        TestCase.signals.signal__tc_result_updated.connect(lambda z=None: self.QTV.model().endResetModel() or print("signal__tc_result_updated.emit"))
+        # super().slots_connect()
+        TestCase.signals.signal__tc_result_updated.connect(lambda z=None: print("signal__tc_result_updated.emit") or self.QTV.model().endResetModel())
 
         # fixme: change object for redraw
-        TestCase.signals.signal__tc_details_updated.connect(lambda z=None: self.QTV.model().endResetModel() or print("signal__tc_details_updated.emit"))
+        TestCase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit"))
 
 
 # =====================================================================================================================
