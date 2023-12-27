@@ -113,8 +113,9 @@ class TpGui(Gui):
 
     # NEW -------------------------------------------
     DATA: TpManager
+
     QTV: QTableView = None
-    PTE: QPlainTextEdit = None
+    QPTE: QPlainTextEdit = None
 
     def __init__(self, data: TpManager):
         self.DATA = data
@@ -127,12 +128,12 @@ class TpGui(Gui):
         self.btn_start = QPushButton("START")
         self.btn_start.setCheckable(True)
 
-        self.PTE = QPlainTextEdit()
+        self.QPTE = QPlainTextEdit()
 
         # layout_details ----------------------------------------------------------------------------------------------
         layout_details = QVBoxLayout()
         layout_details.addWidget(self.btn_start)
-        layout_details.addWidget(self.PTE)
+        layout_details.addWidget(self.QPTE)
 
         # layout_main -------------------------------------------------------------------------------------------------
         layout_main = QHBoxLayout()
@@ -157,10 +158,14 @@ class TpGui(Gui):
 
     def slots_connect(self):
         # super().slots_connect()
+
+        self.btn_start.toggled.connect(self._wgt_main__center)
         TestCase.signals.signal__tc_result_updated.connect(lambda z=None: print("signal__tc_result_updated.emit") or self.QTV.model().endResetModel())
 
         # fixme: change object for redraw
-        TestCase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit"))
+        # TestCase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.QPTE)
+
+        # self.QPTE.clicked.connect()
 
 
 # =====================================================================================================================
