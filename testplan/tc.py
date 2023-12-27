@@ -76,9 +76,16 @@ class TestCase(TestCaseBase, abc.ABC):
             self.result = self.run_wrapped()
         self.teardown()
 
+    # DETAILS ---------------------------------------------------------------------------------------------------------
     def details_update(self, details: Dict[str, Any]) -> None:
         self.details.update(details)
         self.signals.signal__tc_result_updated.emit()
+
+    def details_pretty(self) -> str:
+        result = ""
+        for name, value in self.details.items():
+            result += f"{name}: {value}"
+        return result
 
     # -----------------------------------------------------------------------------------------------------------------
     @abc.abstractmethod

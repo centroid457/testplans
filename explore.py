@@ -14,6 +14,7 @@ if __name__ == "__main__":
     # -------------------------------------------
     class Tc1(TestCase):
         def run_wrapped(self) -> bool:
+            self.details_update({"detail_value": self.DUT.VALUE})
             return self.DUT.VALUE
 
     class Tc1_reverse(TestCase):

@@ -132,6 +132,7 @@ class TpGui(Gui):
         self.btn_start.setCheckable(True)
 
         self.QPTE = QPlainTextEdit()
+        self.QPTE.setFont(QFont("Calibri (Body)", 7))
 
         # layout_details ----------------------------------------------------------------------------------------------
         layout_details = QVBoxLayout()
@@ -152,13 +153,17 @@ class TpGui(Gui):
         # self.QTV.setStyleSheet("gridline-color: rgb(255, 0, 0)")
         # self.QTV.setMinimumSize(400, 300)
         # self.QTV.setShowGrid(True)
-        # self.QTV.setFont(QFont("Calibri (Body)", 12))
+        # self.QTV.setFont(QFont("Calibri (Body)", 7))
         # self.QTV.setSortingEnabled(True)     # enable sorting
         self.QTV.resizeColumnsToContents()   # set column width to fit contents
         # self.QTV.setColumnWidth(0, 100)
 
         # hh = self.QTV.horizontalHeader()
         # hh.setStretchLastSection(True)
+
+        # self.QTV.selectRow(1)
+        # self.QTV.selectColumn(2)
+        # self.QTV.setSelectionModel(QItemSelection().select())
 
     def slots_connect(self):
         # super().slots_connect()
@@ -190,7 +195,7 @@ class TpGui(Gui):
             dut = self.DATA.DUTS[col-1]
         else:
             dut = None
-        self.QPTE.setPlainText(str(dut.TP_RESULTS[tc].details))
+        self.QPTE.setPlainText(dut.TP_RESULTS[tc].details_pretty())
 
         # print(f"{row=}/{col=}/{dut=}/{tc=}")
 
