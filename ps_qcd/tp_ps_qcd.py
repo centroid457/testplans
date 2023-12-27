@@ -1,4 +1,4 @@
-from . import ManagerTp
+from . import TpManager
 from .tc import *
 
 from singleton_meta import *
@@ -80,7 +80,7 @@ class ATF(SingletonByCallMeta):
 
 
 # =====================================================================================================================
-class Manager_PsQcd(ManagerTp):
+class Manager_PsQcd(TpManager):
     COUNT: int = 10
     ITEMS: Dict[PsQcd_Tp, Any] = {
         # PsQcd_Tp(1): None,

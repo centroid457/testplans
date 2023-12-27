@@ -3,12 +3,12 @@ import time
 import pytest
 
 from ps_qcd import *
-from ps_qcd.tp import Dut, ManagerTp
+from ps_qcd.tp import Dut, TpManager
 
 
 # =====================================================================================================================
 class Test__1:
-    VICTIM: Type[ManagerTp] = type("VICTIM", (ManagerTp,), {})
+    VICTIM: Type[TpManager] = type("VICTIM", (TpManager,), {})
 
     @classmethod
     def setup_class(cls):
@@ -19,7 +19,7 @@ class Test__1:
         pass
 
     def setup_method(self, method):
-        self.VICTIM = type("VICTIM", (ManagerTp,), {})
+        self.VICTIM = type("VICTIM", (TpManager,), {})
 
     # -----------------------------------------------------------------------------------------------------------------
     def test__simple(self):
@@ -41,7 +41,7 @@ class Test__1:
                 return not self.DUT.VALUE
 
         # -------------------------------------------
-        class Tp1_ManagerTp(ManagerTp):
+        class TpManager1(TpManager):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False
@@ -50,14 +50,14 @@ class Test__1:
                 for value in [True, ]:
                     self.DUTS.append(M1_Dut(value))
 
-        Tp_obj = Tp1_ManagerTp()
+        Tp_obj = TpManager1()
         Tp_obj.run()
         assert Tp_obj.DUTS[0].check_result_final() is True
 
         assert len(Tp_obj.DUTS) == 1
 
         # -------------------------------------------
-        class Tp2_ManagerTp(ManagerTp):
+        class TpManager2(TpManager):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False
@@ -66,7 +66,7 @@ class Test__1:
                 for value in [False, ]:
                     self.DUTS.append(M1_Dut(value))
 
-        Tp_obj = Tp2_ManagerTp()
+        Tp_obj = TpManager2()
         Tp_obj.run()
         assert Tp_obj.DUTS[0].check_result_final() is False
 
@@ -90,7 +90,7 @@ class Test__1:
                 return self.DUT.VALUE
 
         # -------------------------------------------
-        class Tp1_ManagerTp(ManagerTp):
+        class TpManager1(TpManager):
             TCS = {
                 Tc1: True,
             }
@@ -98,7 +98,7 @@ class Test__1:
                 for value in [True, True, ]:
                     self.DUTS.append(M1_Dut(value))
 
-        Tp_obj = Tp1_ManagerTp()
+        Tp_obj = TpManager1()
         time_start = time.time()
         Tp_obj.run()
         time_passed = time.time() - time_start
@@ -110,7 +110,7 @@ class Test__1:
         # -------------------------------------------
         Tc1.PARALLEL = False
 
-        Tp_obj = Tp1_ManagerTp()
+        Tp_obj = TpManager1()
         time_start = time.time()
         Tp_obj.run()
         time_passed = time.time() - time_start
@@ -135,7 +135,7 @@ class Test__1:
             def run_wrapped(self) -> bool:
                 time.sleep(0.5)
                 return self.DUT.VALUE
-        class Tp1_ManagerTp(ManagerTp):
+        class TpManager1(TpManager):
             TCS = {
                 Tc1: False,
             }
@@ -143,7 +143,7 @@ class Test__1:
                 for value in [False, False, ]:
                     self.DUTS.append(M1_Dut(value))
 
-        Tp_obj = Tp1_ManagerTp()
+        Tp_obj = TpManager1()
         time_start = time.time()
         Tp_obj.run()
         time_passed = time.time() - time_start
@@ -169,7 +169,7 @@ class Test__1:
         class Tc1_reverse(TestCase):
             def run_wrapped(self) -> bool:
                 return not self.DUT.VALUE
-        class Tp1_ManagerTp(ManagerTp):
+        class TpManager1(TpManager):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False,
@@ -178,7 +178,7 @@ class Test__1:
                 for value in [False, False, ]:
                     self.DUTS.append(M1_Dut(value))
 
-        Tp_obj = Tp1_ManagerTp()
+        Tp_obj = TpManager1()
 
         with pytest.raises(SystemExit) as exx:
             TpGui(Tp_obj)

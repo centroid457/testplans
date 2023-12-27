@@ -1,14 +1,14 @@
 from pyqt_templates import *
 
 from . import *
-from . import ManagerTp, TestCase
+from . import TpManager, TestCase
 
 
 # =====================================================================================================================
 class TpTableModel(QAbstractTableModel):
-    DATA: ManagerTp
+    DATA: TpManager
 
-    def __init__(self, data: ManagerTp):
+    def __init__(self, data: TpManager):
         super().__init__()
         self.DATA = data
 
@@ -112,10 +112,10 @@ class TpGui(Gui):
     SIZE = (600, 300)
 
     # NEW -------------------------------------------
-    DATA: ManagerTp
+    DATA: TpManager
     QTV: QTableView = None
 
-    def __init__(self, data: ManagerTp):
+    def __init__(self, data: TpManager):
         self.DATA = data
         super().__init__()
 

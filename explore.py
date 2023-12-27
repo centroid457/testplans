@@ -1,5 +1,5 @@
 from ps_qcd import *
-from ps_qcd.tp import Dut, ManagerTp
+from ps_qcd.tp import Dut, TpManager
 
 # =====================================================================================================================
 if __name__ == "__main__":
@@ -22,7 +22,7 @@ if __name__ == "__main__":
             return not self.DUT.VALUE
 
 
-    class Tp1_ManagerTp(ManagerTp):
+    class TpManager1(TpManager):
         TCS = {
             Tc1: True,
             Tc1_reverse: False,
@@ -33,7 +33,7 @@ if __name__ == "__main__":
                 self.DUTS.append(M1_Dut(value))
 
 
-    Tp_obj = Tp1_ManagerTp()
+    Tp_obj = TpManager1()
     TpGui(Tp_obj)
 
 

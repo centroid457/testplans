@@ -27,7 +27,7 @@ class Dut:
 
 
 # =====================================================================================================================
-class ManagerTp(abc.ABC):
+class TpManager(abc.ABC):
     TCS: Dict[Type[TestCase], Optional[bool]] = None    # settings
     # {
     #     TC1: True,
