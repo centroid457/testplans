@@ -1,19 +1,15 @@
 import pytest
 
+from object_info import ObjectInfo
+from pyqt_templates import *
+
 from . import *
 from . import TpManager, TestCase
 
-from pyqt_templates import *
-from object_info import ObjectInfo
-
 
 # =====================================================================================================================
-class TpTableModel(QAbstractTableModel):
+class TpTableModel(TableModelTemplate):
     DATA: TpManager
-
-    def __init__(self, data: TpManager):
-        super().__init__()
-        self.DATA = data
 
     def rowCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.TCS)
@@ -21,18 +17,19 @@ class TpTableModel(QAbstractTableModel):
     def columnCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.DUTS) + 1
 
-    def headerData(self, col: Any, orientation: Qt.Orientation, role: int = None) -> str:
+    def headerData(self, section: Any, orientation: Qt.Orientation, role: int = Qt.DisplayRole) -> str:
         if role == Qt.DisplayRole:
+            # ------------------------------
             if orientation == Qt.Horizontal:
-                if col == 0:
+                if section == 0:
                     return "Тесткейс"
-                if col > 0:
-                    return f"{col}"
-            elif orientation == Qt.Vertical:
-                return col + 1
-        return QVariant()
+                if section > 0:
+                    return f"{section}"
+            # ------------------------------
+            if orientation == Qt.Vertical:
+                return section + 1
 
-    def flags(self, index: QModelIndex) -> Qt.ItemFlags:
+    def flags(self, index: QModelIndex) -> int:
         flags = super().flags(index)
 
         if index.column() == 0:
@@ -43,10 +40,8 @@ class TpTableModel(QAbstractTableModel):
             pass
         return flags
 
-    def data(self, index: QModelIndex, role: int = None) -> Any:
-        if not index.isValid():
-            return QVariant()
-
+    def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
+        # PREPARE -----------------------------------------------------------------------------------------------------
         col = index.column()
         row = index.row()
 
@@ -56,17 +51,51 @@ class TpTableModel(QAbstractTableModel):
         else:
             dut = None
 
+        # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:
             if col == 0:
                 return f'{tc.name}\n{tc.DESCRIPTION}'
             if col > 0:
                 return f'{dut.TP_RESULTS[tc].result}'
 
-        elif role == Qt.ForegroundRole:
+        # -------------------------------------------------------------------------------------------------------------
+        if role == Qt.TextAlignmentRole:
+            """
+            VARIANTS ALIGN
+            --------------
+            not exists NAME!!!} = 0         # (LEFT+TOP) [[[[[[[[DEFAULT IS [LEFT+TOP]]]]]]]]]
+            
+            AlignLeft=AlignLeading = 1      # LEFT(+TOP)
+            AlignRight=AlignTrailing = 2    # RIGHT(+TOP)
+
+            AlignTop = 32       # TOP(+LEFT)
+            AlignBottom = 64    # BOT(+LEFT)
+
+            AlignHCenter = 4    # HCENTER(+TOP)
+            AlignVCenter = 128  # VCENTER(+LEFT)
+            AlignCenter = 132   # VCENTER+HCENTER
+
+            # =====MAYBE DID NOT FIGURED OUT!!!
+            AlignAbsolute = 16      # (LEFT+TOP) == asDEFAULT
+            AlignBaseline = 256     # (LEFT+TOP) == asDEFAULT
+
+            AlignJustify = 8        # (LEFT+TOP) == asDEFAULT
+
+            AlignHorizontal_Mask = 31   # TOP+RIGHT
+            AlignVertical_Mask = 480    # LEFT+VCENTER
+            """
+            if col == 0:
+                return Qt.AlignVCenter
+            if col > 0:
+                return Qt.AlignCenter
+
+        # -------------------------------------------------------------------------------------------------------------
+        if role == Qt.TextColorRole:
             if tc.SKIP:
                 return QColor('#a2a2a2')
 
-        elif role == Qt.BackgroundRole:
+        # -------------------------------------------------------------------------------------------------------------
+        if role == Qt.BackgroundColorRole:
             if tc.SKIP:
                 return QColor('#f2f2f2')
 
@@ -76,6 +105,7 @@ class TpTableModel(QAbstractTableModel):
                 if dut.TP_RESULTS[tc].result is False:
                     return QColor("#FF5050")
 
+        # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
             if col == 0:
                 if tc.SKIP:
@@ -84,9 +114,7 @@ class TpTableModel(QAbstractTableModel):
                     return Qt.Checked
 
     def setData(self, index: QModelIndex, value: Any, role: int = None) -> bool:
-        if not index.isValid():
-            return False
-
+        # PREPARE -----------------------------------------------------------------------------------------------------
         row = index.row()
         col = index.column()
 
@@ -96,16 +124,14 @@ class TpTableModel(QAbstractTableModel):
         else:
             dut = None
 
-        if role == Qt.CheckStateRole and col == 0:
-            tc.SKIP = value == Qt.Unchecked
-            self.data_reread()
-        return True
+        # -------------------------------------------------------------------------------------------------------------
+        if role == Qt.CheckStateRole:
+            if col == 0:
+                tc.SKIP = value == Qt.Unchecked
 
-    def data_reread(self) -> None:
-        """
-        just redraw model by reread all data!
-        """
-        self.endResetModel()
+        # FINAL -------------------------------------------------------------------------------------------------------
+        self._data_reread()
+        return True
 
 
 # =====================================================================================================================
@@ -117,22 +143,17 @@ class TpGui(Gui):
     # NEW -------------------------------------------
     DATA: TpManager
 
-    QTV: QTableView = None
-    QPTE: QPlainTextEdit = None
-
     def __init__(self, data: TpManager):
         self.DATA = data
         super().__init__()
 
     def wgt_create(self):
-        self.qtv_create()
+        self.QTV_create()
+        self.QPTE_create()
 
         # DETAILS -----------------------------------------------------------------------------------------------------
         self.btn_start = QPushButton("START")
         self.btn_start.setCheckable(True)
-
-        self.QPTE = QPlainTextEdit()
-        self.QPTE.setFont(QFont("Calibri (Body)", 7))
 
         # layout_details ----------------------------------------------------------------------------------------------
         layout_details = QVBoxLayout()
@@ -145,9 +166,30 @@ class TpGui(Gui):
         layout_main.addLayout(layout_details)
         self.setLayout(layout_main)
 
-    def qtv_create(self):
-        self.QTV = QTableView(self)
-        self.QTV.setModel(TpTableModel(self.DATA))
+    def QPTE_create(self) -> None:
+        self.QPTE = QPlainTextEdit()
+
+        # METHODS ORIGINAL ---------------------------------
+        # self.QPTE.setEnabled(True)
+        # self.QPTE.setUndoRedoEnabled(True)
+        # self.QPTE.setReadOnly(True)
+        # self.QPTE.setMaximumBlockCount(15)
+
+        # self.QPTE.clear()
+        self.QPTE.setPlainText("setPlainText")
+        self.QPTE.appendPlainText("appendPlainText")
+        # self.QPTE.appendHtml("")
+        # self.QPTE.anchorAt(#)
+        # self.QPTE.setSizeAdjustPolicy(#)
+
+        # METHODS COMMON -----------------------------------
+        self.QPTE.setFont(QFont("Calibri (Body)", 7))
+
+    def QTV_create(self):
+        self.QTM = TpTableModel(self.DATA)
+
+        self.QTV = QTableView()
+        self.QTV.setModel(self.QTM)
         self.QTV.setSelectionMode(QTableView.SingleSelection)
 
         # self.QTV.setStyleSheet("gridline-color: rgb(255, 0, 0)")
@@ -170,7 +212,7 @@ class TpGui(Gui):
 
         self.btn_start.clicked.connect(self._wgt_main__center)
         self.btn_start.clicked.connect(self.DATA.run)
-        TestCase.signals.signal__tc_result_updated.connect(lambda z=None: print("signal__tc_result_updated.emit") or self.QTV.model().endResetModel())
+        TestCase.signals.signal__tc_result_updated.connect(lambda z=None: print("signal__tc_result_updated.emit") or self.QTM._data_reread())
 
         # fixme: change object for redraw
         # TestCase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.QPTE)
@@ -197,7 +239,7 @@ class TpGui(Gui):
             dut = None
         self.QPTE.setPlainText(dut.TP_RESULTS[tc].details_pretty())
 
-        # print(f"{row=}/{col=}/{dut=}/{tc=}")
+        # print(f"{row=}/{section=}/{dut=}/{tc=}")
 
 
 # =====================================================================================================================
