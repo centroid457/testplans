@@ -217,12 +217,16 @@ class TpGui(Gui):
         # fixme: change object for redraw
         # TestCase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.QPTE)
 
-        self.QTV.selectionModel().selectionChanged.connect(self.selection_apply)
+        self.QTV.selectionModel().selectionChanged.connect(self.QTV_selection_changed)
 
-    def selection_apply(self, first: QItemSelection, last: QItemSelection) -> None:
+    def QTV_selection_changed(self, first: QItemSelection, last: QItemSelection) -> None:
         # print("selectionChanged")
         # print(f"{first=}")  # first=<PyQt5.QtCore.QItemSelection object at 0x000001C79A107460>
         # ObjectInfo(first.indexes()[0]).print(_log_iter=True, skip_fullnames=["takeFirst", "takeLast"])
+
+        if not first:
+            # when item with noFlag IsSelectable
+            return
 
         index: QModelIndex = first.indexes()[0]
 
