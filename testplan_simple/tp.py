@@ -2,6 +2,7 @@ from typing import *
 import abc
 
 from threading_manager import ThreadsManager
+from threading import Thread
 
 # from . import *
 from .tc import TestCase
@@ -9,7 +10,7 @@ from .dut import Dut
 
 
 # =====================================================================================================================
-class TpManager(abc.ABC):
+class TpManager:
     TCS: Dict[Type[TestCase], Optional[bool]] = None    # settings
     # {
     #     TC1: True,
@@ -22,6 +23,7 @@ class TpManager(abc.ABC):
     # ]
 
     def __init__(self):
+        # super().__init__()
         self.reinit()
 
     def reinit(self) -> None:
@@ -42,8 +44,8 @@ class TpManager(abc.ABC):
             tc.SKIP = not using
 
     # DUTS -----------------------------------------------------------
-    @abc.abstractmethod
     def duts_generate(self) -> None:
+        # raise NotImplemented
         pass
 
     def duts_mark_presented(self) -> None:
@@ -61,7 +63,11 @@ class TpManager(abc.ABC):
             dut.results_tc_clear()
 
     # RUN -----------------------------------------------------------
+    @ThreadsManager().decorator__to_thread
     def run(self) -> None:
+        # TODO: ADD THREAD!!!
+        # TODO: ADD THREAD!!!
+        # TODO: ADD THREAD!!!
         for tc in self.TCS:
             if tc.SKIP:
                 continue
