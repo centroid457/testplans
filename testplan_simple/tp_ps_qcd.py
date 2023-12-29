@@ -1,5 +1,4 @@
-from . import TpManager, Dut
-from .tc import *
+from . import *
 
 from singleton_meta import *
 
@@ -63,7 +62,7 @@ class PsQcd_Tc4(TestCase, _BasePs):
 
 
 # TP ==================================================================================================================
-class PsQcd_Tp(TestPlan, _BasePs):
+class PsQcd_Tp(TpManager, _BasePs):
     details = {
         PsQcd_Tc1: True,
         PsQcd_Tc2: True,
