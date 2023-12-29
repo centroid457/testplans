@@ -5,18 +5,19 @@ from PyQt5.QtCore import pyqtSignal, QObject
 
 
 # =====================================================================================================================
-class TestCaseBase:
+class _TestCaseBase:
+    # just to use in Signals before defining exact
     pass
 
 
 # =====================================================================================================================
 class Signals(QObject):
     signal__tc_result_updated = pyqtSignal()
-    signal__tc_details_updated = pyqtSignal(TestCaseBase)
+    signal__tc_details_updated = pyqtSignal(_TestCaseBase)
 
 
 # =====================================================================================================================
-class TestCase(TestCaseBase, abc.ABC):
+class TestCase(_TestCaseBase, abc.ABC):
     # SETTINGS ------------------------------------
     DESCRIPTION: str = ""
     SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!

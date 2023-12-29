@@ -1,9 +1,7 @@
-from . import TpManager
+from . import TpManager, Dut
 from .tc import *
 
 from singleton_meta import *
-
-from .tp import Dut
 
 
 # duts =================================================================================================================

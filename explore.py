@@ -1,6 +1,6 @@
 from testplan_simple import *
-from testplan_simple.tp import Dut, TpManager
-
+from testplan_simple.tp import TpManager
+from testplan_simple.dut import Dut
 
 # =====================================================================================================================
 if __name__ == "__main__":
