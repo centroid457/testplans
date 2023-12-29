@@ -21,5 +21,10 @@ class Dut:
                 return tc.result
         return True
 
+    def results_tc_clear(self) -> None:
+        for tc in self.TP_RESULTS.values():
+            if tc is not None:
+                tc.clear()
+
 
 # =====================================================================================================================

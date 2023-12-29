@@ -30,7 +30,7 @@ class TpManager(abc.ABC):
 
         self.duts_generate()
         self.duts_mark_presented()
-        self.duts_results_init()
+        self.duts_results_tp_init()
 
     def reinit_new_TCS(self, tcs: Dict[Type[TestCase], Optional[bool]]) -> None:
         self.TCS = tcs
@@ -50,11 +50,15 @@ class TpManager(abc.ABC):
         for dut in self.DUTS:
             dut._mark_present()
 
-    def duts_results_init(self) -> None:
+    def duts_results_tp_init(self) -> None:
         for dut in self.DUTS:
             dut.TP_RESULTS = dict()
             for tc in self.TCS:
                 dut.TP_RESULTS.update({tc: tc(dut)})
+
+    def duts_results_tc_clear(self) -> None:
+        for dut in self.DUTS:
+            dut.results_tc_clear()
 
     # RUN -----------------------------------------------------------
     def run(self) -> None:

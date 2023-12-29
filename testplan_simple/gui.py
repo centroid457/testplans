@@ -3,6 +3,8 @@ from .tc import TestCase
 from .tp import TpManager
 from .tm import TpTableModel
 
+import time
+
 from pyqt_templates import *
 
 
@@ -76,16 +78,22 @@ class TpGui(Gui):
         # self.TV.setSelectionModel(QItemSelection().select())
 
     def slots_connect(self):
-        # super().slots_connect()
-
-        self.BTN.clicked.connect(self._wgt_main__center)
-        self.BTN.clicked.connect(self.DATA.run)
-        TestCase.signals.signal__tc_result_updated.connect(lambda z=None: print("signal__tc_result_updated.emit") or self.TM._data_reread())
+        self.BTN.toggled.connect(self.BTN__toggled)
+        TestCase.SIGNALS.signal__tc_result_updated.connect(lambda z=None: print("signal__tc_result_updated.emit") or self.TM._data_reread())
 
         # fixme: change object for redraw
-        # TestCase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.PTE)
+        # TestCase.SIGNALS.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.PTE)
 
         self.TV.selectionModel().selectionChanged.connect(self.TV_selection_changed)
+
+    def BTN__toggled(self, state: Optional[bool] = None) -> None:
+        print(f"btn {state=}")
+        self._wgt_main__center()
+        if state:
+            self.DATA.duts_results_tc_clear()
+            self.TM._data_reread()
+            time.sleep(0.5)
+            self.DATA.run()
 
     def TV_selection_changed(self, first: QItemSelection, last: QItemSelection) -> None:
         # print("selectionChanged")

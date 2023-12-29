@@ -25,13 +25,14 @@ class TestCase(_TestCaseBase, abc.ABC):
     STOP_IF_FALSE_RESULT: Optional[bool] = None
 
     # AUXILIARY -----------------------------------
-    signals: Signals = Signals()
+    SIGNALS: Signals = Signals()
 
     # VALUES --------------------------------------
     __result: Optional[bool] = None
     details: Dict[str, Any] = None
+    progress: int = 0
+
     DUT: Any = None
-    PROGRESS: int = 0
 
     def __init__(self, dut: Any):
         super().__init__()
@@ -45,7 +46,7 @@ class TestCase(_TestCaseBase, abc.ABC):
     @result.setter
     def result(self, value: Optional[bool]) -> None:
         self.__result = value
-        self.signals.signal__tc_result_updated.emit(self)
+        self.SIGNALS.signal__tc_result_updated.emit()
 
     @classmethod
     @property
@@ -59,11 +60,11 @@ class TestCase(_TestCaseBase, abc.ABC):
         return True
 
     def startup(self) -> bool:
-        self.PROGRESS = 1
+        self.progress = 1
         return True
 
     def teardown(self):
-        self.PROGRESS = 100
+        self.progress = 100
 
     @classmethod
     def teardown_all(cls):
@@ -77,10 +78,15 @@ class TestCase(_TestCaseBase, abc.ABC):
             self.result = self.run_wrapped()
         self.teardown()
 
+    def clear(self) -> None:
+        self.details.clear()
+        self.result = None
+        # self.SIGNALS.signal__tc_result_updated.emit()
+
     # DETAILS ---------------------------------------------------------------------------------------------------------
     def details_update(self, details: Dict[str, Any]) -> None:
         self.details.update(details)
-        self.signals.signal__tc_result_updated.emit()
+        self.SIGNALS.signal__tc_details_updated.emit(self)
 
     def details_pretty(self) -> str:
         result = ""
