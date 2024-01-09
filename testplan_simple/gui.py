@@ -17,13 +17,13 @@ class TpGui(Gui):
     # NEW -------------------------------------------
     DATA: TpManager
 
+    # WINDOW ==========================================================================================================
     def wgt_create(self):
         self.TV_create()
         self.PTE_create()
+        self.BTN_create()
 
         # DETAILS -----------------------------------------------------------------------------------------------------
-        self.BTN = QPushButton("START")
-        self.BTN.setCheckable(True)
 
         # layout_details ----------------------------------------------------------------------------------------------
         layout_details = QVBoxLayout()
@@ -35,6 +35,11 @@ class TpGui(Gui):
         layout_main.addWidget(self.TV)
         layout_main.addLayout(layout_details)
         self.setLayout(layout_main)
+
+    # WGTS ============================================================================================================
+    def BTN_create(self) -> None:
+        self.BTN = QPushButton("START")
+        self.BTN.setCheckable(True)
 
     def PTE_create(self) -> None:
         self.PTE = QPlainTextEdit()
@@ -77,6 +82,7 @@ class TpGui(Gui):
         # self.TV.selectColumn(2)
         # self.TV.setSelectionModel(QItemSelection().select())
 
+    # SLOTS ===========================================================================================================
     def slots_connect(self):
         self.BTN.toggled.connect(self.BTN__toggled)
         TestCase.SIGNALS.signal__tc_result_updated.connect(lambda z=None: print("signal__tc_result_updated.emit") or self.TM._data_reread())
