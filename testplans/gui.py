@@ -102,7 +102,8 @@ class TpGui(Gui):
             self.TM._data_reread()
             self.DATA.start()
         elif state is False:
-            self.DATA.terminate()
+            if not self.DATA.isFinished():
+                self.DATA.terminate()
 
     def TV_selection_changed(self, first: QItemSelection, last: QItemSelection) -> None:
         # print("selectionChanged")
@@ -123,7 +124,7 @@ class TpGui(Gui):
 
         tc = list(self.DATA.TCS)[row]
         if col > 0:
-            dut = self.DATA.DUTS[col-1]
+            dut = self.DATA.DUTS[col-2]
         else:
             dut = None
         self.PTE.setPlainText(dut.TP_RESULTS[tc].details_pretty())
