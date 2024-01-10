@@ -53,24 +53,6 @@ class TestCase(_TestCaseBase, QThread):
     def name(cls):
         return cls.__name__
 
-    # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
-    @classmethod
-    def startup_all(cls) -> bool:
-        """before batch work
-        """
-        return True
-
-    def startup(self) -> bool:
-        self.progress = 1
-        return True
-
-    def teardown(self):
-        self.progress = 100
-
-    @classmethod
-    def teardown_all(cls):
-        pass
-
     # RESULT ----------------------------------------------------------------------------------------------------------
     @property
     def result(self) -> Optional[bool]:
@@ -107,7 +89,28 @@ class TestCase(_TestCaseBase, QThread):
                 self.exx = exx
         self.teardown()
 
-    # REDEFINE --------------------------------------------------------------------------------------------------------
+    # REDEFINE ========================================================================================================
+    pass
+
+    # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
+    @classmethod
+    def startup_all(cls) -> bool:
+        """before batch work
+        """
+        return True
+
+    def startup(self) -> bool:
+        self.progress = 1
+        return True
+
+    def teardown(self):
+        self.progress = 100
+
+    @classmethod
+    def teardown_all(cls):
+        pass
+
+    # RUN -------------------------------------------------------------------------------------------------------------
     def run_wrapped(self) -> bool:
         pass
 
