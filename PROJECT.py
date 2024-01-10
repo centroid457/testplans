@@ -22,8 +22,6 @@ class PROJECT:
     FEATURES: List[str] = [
         # "feat1",
         # ["feat2", "block1", "block2"],
-
-
     ]
     WISHES: List[str] = [
         "add ..."
