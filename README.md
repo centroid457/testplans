@@ -1,4 +1,4 @@
-# testplan-simple
+# testplans
 Descr short (git/prg descr).  
 Designed for ....  
 
@@ -23,13 +23,14 @@ See the [HISTORY.md](HISTORY.md) file for release history.
 
 ## Installation
 ```commandline
-pip install testplan-simple
+pip install testplans
 ```
 
 
 ## Import
+
 ```python
-from testplan_simple import *
+from testplans import *
 ```
 
 

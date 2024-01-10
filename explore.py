@@ -1,6 +1,6 @@
-from testplan_simple import *
-from testplan_simple.tp import TpManager
-from testplan_simple.dut import Dut
+from testplans import *
+from testplans.tp import TpManager
+from testplans.dut import Dut
 
 import time
 

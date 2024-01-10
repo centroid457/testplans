@@ -9,8 +9,8 @@ class PROJECT:
     AUTHOR_HOMEPAGE: str = "https://github.com/centroid457/"
 
     # ------------------------------------------------------
-    NAME_INSTALL: str = "testplan-simple"
-    NAME_IMPORT: str = "testplan_simple"
+    NAME_INSTALL: str = "testplans"
+    NAME_IMPORT: str = "testplans"
     KEYWORDS: List[str] = [
         "testplan",
         "testplan structure",
