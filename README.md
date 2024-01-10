@@ -1,15 +1,9 @@
 # testplans
-Descr short (git/prg descr).  
-Designed for ....  
+Just a simple testplan structure for several duts.  
+Designed to apply testplan(testcase lists) for several duts.  
 
 
 ## Features
-1. feat1  
-2. feat2  
-3. feat3:  
-	- block1  
-	- block2  
-4. feat4  
 
 
 ********************************************************************************
@@ -28,7 +22,6 @@ pip install testplans
 
 
 ## Import
-
 ```python
 from testplans import *
 ```
@@ -52,12 +45,6 @@ if __name__ == "__main__":
 # =====================================================================================================================
 
 print(NEW_CLASS____())
-```
-
-******************************
-### 2. example2.py
-```python
-
 ```
 
 ********************************************************************************
