@@ -88,15 +88,14 @@ class TpManager(QThread):
             if not tc.startup_all():
                 continue
 
-            for dut in self.DUTS:
-                if tc.PARALLEL:
-                    dut.TP_RESULTS[tc].start()
-                else:
-                    dut.TP_RESULTS[tc].run()
-
             if tc.PARALLEL:
                 for dut in self.DUTS:
+                    dut.TP_RESULTS[tc].start()
+                for dut in self.DUTS:
                     dut.TP_RESULTS[tc].wait()
+            else:
+                for dut in self.DUTS:
+                    dut.TP_RESULTS[tc].run()
 
             # FINISH TCase ----------------------------------------------
             tc.teardown_all()
