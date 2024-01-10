@@ -16,6 +16,7 @@ if __name__ == "__main__":
     # -------------------------------------------
     class Tc1(TestCase):
         PARALLEL = False
+        DESCRIPTION = "DESCRIPTION"
         def run_wrapped(self) -> bool:
             time.sleep(0.5)
             self.details_update({"detail_value": self.DUT.VALUE})

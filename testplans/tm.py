@@ -16,24 +16,31 @@ class TpTableModel(TableModelTemplate):
         return len(self.DATA.TCS)
 
     def columnCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
-        return len(self.DATA.DUTS) + 1
+        return len(self.DATA.DUTS) + 2
 
     def headerData(self, section: Any, orientation: Qt.Orientation, role: int = Qt.DisplayRole) -> str:
         if role == Qt.DisplayRole:
             # ------------------------------
             if orientation == Qt.Horizontal:
                 if section == 0:
-                    return "Тесткейс"
-                if section > 0:
-                    return f"{section}"
+                    return "ТЕСТКЕЙС"
+                if section == 1:
+                    return "PARALLEL"
+                if section > 1:
+                    return f"{section-1}"
             # ------------------------------
             if orientation == Qt.Vertical:
                 return section + 1
 
     def flags(self, index: QModelIndex) -> int:
+        # PREPARE -----------------------------------------------------------------------------------------------------
+        col = index.column()
+        row = index.row()
+
+        # -------------------------------------------------------------------------------------------------------------
         flags = super().flags(index)
 
-        if index.column() == 0:
+        if col <= 1:
             flags |= Qt.ItemIsUserCheckable
             # flags |= Qt.ItemIsSelectable
         else:
@@ -47,8 +54,8 @@ class TpTableModel(TableModelTemplate):
         row = index.row()
 
         tc = list(self.DATA.TCS)[row]
-        if col > 0:
-            dut = self.DATA.DUTS[col-1]
+        if col > 1:
+            dut = self.DATA.DUTS[col-2]
         else:
             dut = None
 
@@ -56,7 +63,9 @@ class TpTableModel(TableModelTemplate):
         if role == Qt.DisplayRole:
             if col == 0:
                 return f'{tc.name}\n{tc.DESCRIPTION}'
-            if col > 0:
+            if col == 1:
+                return '+' if tc.PARALLEL else '-'
+            if col > 1:
                 result = dut.TP_RESULTS[tc].result
                 if result is None:
                     return ""
@@ -104,7 +113,7 @@ class TpTableModel(TableModelTemplate):
             if tc.SKIP:
                 return QColor('#f2f2f2')
 
-            if col > 0:
+            if col > 1:
                 if dut.TP_RESULTS[tc].result is True:
                     return QColor("#00FF00")
                 if dut.TP_RESULTS[tc].result is False:
@@ -124,8 +133,8 @@ class TpTableModel(TableModelTemplate):
         col = index.column()
 
         tc = list(self.DATA.TCS)[row]
-        if col > 0:
-            dut = self.DATA.DUTS[col-1]
+        if col > 1:
+            dut = self.DATA.DUTS[col-2]
         else:
             dut = None
 
