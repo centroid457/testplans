@@ -100,7 +100,6 @@ class TpGui(Gui):
         if state:
             self.DATA.duts_results_tc_clear()
             self.TM._data_reread()
-            # time.sleep(0.5)
             self.DATA.start()
         elif state is False:
             self.DATA.terminate()
