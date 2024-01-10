@@ -85,6 +85,8 @@ class TpGui(Gui):
     # SLOTS ===========================================================================================================
     def slots_connect(self):
         self.BTN.toggled.connect(self.BTN__toggled)
+        self.DATA.SIGNALS.signal__tp_finished.connect(self.BTN.setChecked)
+
         TestCase.SIGNALS.signal__tc_result_updated.connect(lambda z=None: print("signal__tc_result_updated.emit") or self.TM._data_reread())
 
         # fixme: change object for redraw
@@ -98,7 +100,7 @@ class TpGui(Gui):
         if state:
             self.DATA.duts_results_tc_clear()
             self.TM._data_reread()
-            time.sleep(0.5)
+            # time.sleep(0.5)
             self.DATA.run()
 
     def TV_selection_changed(self, first: QItemSelection, last: QItemSelection) -> None:

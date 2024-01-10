@@ -1,7 +1,7 @@
 import abc
 from typing import *
 
-from PyQt5.QtCore import pyqtSignal, QObject
+from pyqt_templates import *
 
 
 # =====================================================================================================================
@@ -11,7 +11,7 @@ class _TestCaseBase:
 
 
 # =====================================================================================================================
-class Signals(QObject):
+class Signals(SignalsTemplate):
     signal__tc_result_updated = pyqtSignal()
     signal__tc_details_updated = pyqtSignal(_TestCaseBase)
 

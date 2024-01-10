@@ -4,9 +4,17 @@ import abc
 from threading_manager import ThreadsManager
 from threading import Thread
 
+from pyqt_templates import *
+
 # from . import *
 from .tc import TestCase
 from .dut import Dut
+
+
+# =====================================================================================================================
+class Signals(QObject):
+    signal__tp_finished = pyqtSignal()
+    signal__tp_stop = pyqtSignal()
 
 
 # =====================================================================================================================
@@ -21,6 +29,9 @@ class TpManager:
     #     Dut1,
     #     Dut2
     # ]
+
+    # AUXILIARY -----------------------------------
+    SIGNALS: Signals = Signals()
 
     def __init__(self):
         # super().__init__()
@@ -85,6 +96,7 @@ class TpManager:
             if tc.PARALLEL:
                 ThreadsManager().wait_all()
             tc.teardown_all()
+        self.SIGNALS.signal__tp_finished.emit()
 
 
 # =====================================================================================================================

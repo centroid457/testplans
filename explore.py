@@ -17,14 +17,14 @@ if __name__ == "__main__":
     class Tc1(TestCase):
         PARALLEL = False
         def run_wrapped(self) -> bool:
-            time.sleep(0.5)
+            time.sleep(0.1)
             self.details_update({"detail_value": self.DUT.VALUE})
             return self.DUT.VALUE
 
     class Tc1_reverse(TestCase):
         PARALLEL = True
         def run_wrapped(self) -> bool:
-            time.sleep(0.5)
+            time.sleep(0.1)
             return not self.DUT.VALUE
 
     class Tc2(Tc1):
