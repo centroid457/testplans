@@ -85,7 +85,7 @@ class TpGui(Gui):
     # SLOTS ===========================================================================================================
     def slots_connect(self):
         self.BTN.toggled.connect(self.BTN__toggled)
-        self.DATA.SIGNALS.signal__tp_finished.connect(lambda: self.BTN.setChecked(False))
+        self.DATA.signal__tp_finished.connect(lambda: self.BTN.setChecked(False))
 
         TestCase.SIGNALS.signal__tc_result_updated.connect(lambda z=None: print("signal__tc_result_updated.emit") or self.TM._data_reread())
 

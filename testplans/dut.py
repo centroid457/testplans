@@ -10,7 +10,7 @@ class Dut:
 
     check_present: Callable[..., bool]
 
-    def _mark_present(self) -> None:
+    def mark_present(self) -> None:
         self.PRESENT = self.check_present()
 
     def check_result_final(self) -> Optional[bool]:

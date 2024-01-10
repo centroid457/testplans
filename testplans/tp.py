@@ -3,21 +3,20 @@ from .tc import TestCase
 from .dut import Dut
 
 from typing import *
-import abc
 from PyQt5.QtCore import QThread
 
-from threading_manager import ThreadsManager
 from pyqt_templates import *
 
 
 # =====================================================================================================================
-class Signals(QObject):
-    signal__tp_finished = pyqtSignal()
-    signal__tp_stop = pyqtSignal()
+pass
 
 
 # =====================================================================================================================
 class TpManager(QThread):
+    signal__tp_finished = pyqtSignal()
+    signal__tp_stop = pyqtSignal()
+
     TCS: Dict[Type[TestCase], Optional[bool]] = None    # settings
     # {
     #     TC1: True,
@@ -29,8 +28,7 @@ class TpManager(QThread):
     #     Dut2
     # ]
 
-    # AUXILIARY -----------------------------------
-    SIGNALS: Signals = Signals()
+    tc_active: Optional[Type[TestCase]] = None
 
     def __init__(self):
         super().__init__()
@@ -60,7 +58,7 @@ class TpManager(QThread):
 
     def duts_mark_presented(self) -> None:
         for dut in self.DUTS:
-            dut._mark_present()
+            dut.mark_present()
 
     def duts_results_tp_init(self) -> None:
         for dut in self.DUTS:
@@ -72,26 +70,40 @@ class TpManager(QThread):
         for dut in self.DUTS:
             dut.results_tc_clear()
 
-    # RUN -----------------------------------------------------------
+    # --------------------------------------------------------------------
+    def terminate(self):
+        if self.tc_active:
+            self.tc_active.teardown_all()
+            self.tc_active = None
+
+        self.signal__tp_finished.emit()
+        super().terminate()
+
+    # RUN ----------------------------------------------------------------
     def run(self) -> None:
         for tc in self.TCS:
+            self.tc_active = tc
             if tc.SKIP:
                 continue
             if not tc.startup_all():
                 continue
 
-            ThreadsManager().clear()
             for dut in self.DUTS:
-                if dut.PRESENT:
-                    if tc.PARALLEL:
-                        ThreadsManager().decorator__to_thread(dut.TP_RESULTS[tc].run)()
-                    else:
-                        dut.TP_RESULTS[tc].run()
+                if tc.PARALLEL:
+                    dut.TP_RESULTS[tc].start()
+                else:
+                    dut.TP_RESULTS[tc].run()
 
             if tc.PARALLEL:
-                ThreadsManager().wait_all()
+                for dut in self.DUTS:
+                    dut.TP_RESULTS[tc].wait()
+
+            # FINISH TCase ----------------------------------------------
             tc.teardown_all()
-        self.SIGNALS.signal__tp_finished.emit()
+
+        # FINISH TPlan ---------------------------------------------------
+        self.tc_active = None
+        self.signal__tp_finished.emit()
 
 
 # =====================================================================================================================

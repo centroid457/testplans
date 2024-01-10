@@ -2,6 +2,5 @@ pip
 pytest
 PyQt5
 
-threading_manager
 singleton_meta
 pyqt_templates
