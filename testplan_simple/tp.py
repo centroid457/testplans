@@ -85,7 +85,7 @@ class TpManager:
             if not tc.startup_all():
                 continue
 
-            ThreadsManager().thread_items__clear()
+            ThreadsManager().clear()
             for dut in self.DUTS:
                 if dut.PRESENT:
                     if tc.PARALLEL:
