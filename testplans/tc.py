@@ -70,9 +70,6 @@ class TestCase(_TestCaseBase, abc.ABC):
     def teardown_all(cls):
         pass
 
-    def dump_results(self):
-        pass
-
     def run(self) -> None:
         if self.startup():
             self.result = self.run_wrapped()

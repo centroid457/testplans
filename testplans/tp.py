@@ -1,14 +1,13 @@
-from typing import *
-import abc
-
-from threading_manager import ThreadsManager
-from threading import Thread
-
-from pyqt_templates import *
-
 # from . import *
 from .tc import TestCase
 from .dut import Dut
+
+from typing import *
+import abc
+from PyQt5.QtCore import QThread
+
+from threading_manager import ThreadsManager
+from pyqt_templates import *
 
 
 # =====================================================================================================================
@@ -18,7 +17,7 @@ class Signals(QObject):
 
 
 # =====================================================================================================================
-class TpManager:
+class TpManager(QThread):
     TCS: Dict[Type[TestCase], Optional[bool]] = None    # settings
     # {
     #     TC1: True,
@@ -34,7 +33,7 @@ class TpManager:
     SIGNALS: Signals = Signals()
 
     def __init__(self):
-        # super().__init__()
+        super().__init__()
         self.reinit()
 
     def reinit(self) -> None:
@@ -74,11 +73,7 @@ class TpManager:
             dut.results_tc_clear()
 
     # RUN -----------------------------------------------------------
-    @ThreadsManager().decorator__to_thread
     def run(self) -> None:
-        # TODO: ADD THREAD!!!
-        # TODO: ADD THREAD!!!
-        # TODO: ADD THREAD!!!
         for tc in self.TCS:
             if tc.SKIP:
                 continue

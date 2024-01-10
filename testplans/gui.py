@@ -1,6 +1,6 @@
 # from . import *
 from .tc import TestCase
-from .tp import TpManager, ThreadsManager
+from .tp import TpManager
 from .tm import TpTableModel
 
 import time
@@ -101,9 +101,9 @@ class TpGui(Gui):
             self.DATA.duts_results_tc_clear()
             self.TM._data_reread()
             # time.sleep(0.5)
-            self.DATA.run()
+            self.DATA.start()
         elif state is False:
-            ThreadsManager().terminate_all()
+            self.DATA.terminate()
 
     def TV_selection_changed(self, first: QItemSelection, last: QItemSelection) -> None:
         # print("selectionChanged")
