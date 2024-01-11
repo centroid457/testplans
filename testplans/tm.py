@@ -118,6 +118,8 @@ class TpTableModel(TableModelTemplate):
                     return QColor("#00FF00")
                 if dut.TP_RESULTS[tc].result is False:
                     return QColor("#FF5050")
+                if 0 < dut.TP_RESULTS[tc].progress < 100:
+                    return QColor("#FFFF50")
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:

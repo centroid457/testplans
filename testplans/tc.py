@@ -28,7 +28,7 @@ class TestCase(_TestCaseBase, QThread):
     # AUXILIARY -----------------------------------
     SIGNALS: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
 
-    # VALUES --------------------------------------
+    # INITS --------------------------------------
     DUT: Any = None
 
     # RESULTS --------------------------------------

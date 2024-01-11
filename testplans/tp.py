@@ -17,6 +17,7 @@ class TpManager(QThread):
     signal__tp_finished = pyqtSignal()
     signal__tp_stop = pyqtSignal()
 
+    # SETTINGS ------------------------------------
     TCS: Dict[Type[TestCase], Optional[bool]] = None    # settings
     # {
     #     TC1: True,
@@ -28,6 +29,7 @@ class TpManager(QThread):
     #     Dut2
     # ]
 
+    # AUXILIARY -----------------------------------
     tc_active: Optional[Type[TestCase]] = None
 
     def __init__(self):
@@ -47,9 +49,18 @@ class TpManager(QThread):
         self.reinit()
 
     # TCS -----------------------------------------------------------
-    def TCS_apply_skipped(self):
+    def TCS_apply_skipped(self) -> None:
         for tc, using in self.TCS.items():
             tc.SKIP = not using
+
+    @property
+    def tcs_duts(self) -> List[TestCase]:
+        result = []
+
+        if self.tc_active:
+            for dut in self.DUTS:
+                result.append(dut.TP_RESULTS[self.tc_active])
+        return result
 
     # DUTS -----------------------------------------------------------
     def duts_generate(self) -> None:
@@ -72,12 +83,13 @@ class TpManager(QThread):
 
     # --------------------------------------------------------------------
     def terminate(self):
+        super().terminate()
+        print("hello")
         if self.tc_active:
             self.tc_active.teardown_all()
             self.tc_active = None
 
         self.signal__tp_finished.emit()
-        super().terminate()
 
     # RUN ----------------------------------------------------------------
     def run(self) -> None:
@@ -89,13 +101,13 @@ class TpManager(QThread):
                 continue
 
             if tc.ACYNC:
-                for dut in self.DUTS:
-                    dut.TP_RESULTS[tc].start()
-                for dut in self.DUTS:
-                    dut.TP_RESULTS[tc].wait()
+                for tcs_dut in self.tcs_duts:
+                    tcs_dut.start()
+                for tcs_dut in self.tcs_duts:
+                    tcs_dut.wait()
             else:
-                for dut in self.DUTS:
-                    dut.TP_RESULTS[tc].run()
+                for tcs_dut in self.tcs_duts:
+                    tcs_dut.run()
 
             # FINISH TCase ----------------------------------------------
             tc.teardown_all()

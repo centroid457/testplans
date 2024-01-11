@@ -25,7 +25,7 @@ if __name__ == "__main__":
     class Tc1_reverse(TestCase):
         ACYNC = True
         def run_wrapped(self) -> bool:
-            time.sleep(0.5)
+            time.sleep(0.9)
             return not self.DUT.VALUE
 
     class Tc2(Tc1):
