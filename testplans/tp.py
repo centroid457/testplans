@@ -88,7 +88,7 @@ class TpManager(QThread):
             if not tc.startup_all():
                 continue
 
-            if tc.PARALLEL:
+            if tc.ACYNC:
                 for dut in self.DUTS:
                     dut.TP_RESULTS[tc].start()
                 for dut in self.DUTS:

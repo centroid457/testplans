@@ -22,7 +22,7 @@ class TestCase(_TestCaseBase, QThread):
     # SETTINGS ------------------------------------
     DESCRIPTION: str = ""
     SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!
-    PARALLEL: Optional[bool] = True
+    ACYNC: Optional[bool] = True
     STOP_IF_FALSE_RESULT: Optional[bool] = None
 
     # AUXILIARY -----------------------------------
@@ -50,7 +50,7 @@ class TestCase(_TestCaseBase, QThread):
 
     @classmethod
     @property
-    def name(cls):
+    def NAME(cls):
         return cls.__name__
 
     # RESULT ----------------------------------------------------------------------------------------------------------
@@ -68,10 +68,20 @@ class TestCase(_TestCaseBase, QThread):
         self.details.update(details)
         self.SIGNALS.signal__tc_details_updated.emit(self)
 
-    def details_pretty(self) -> str:
+    def info_pretty(self) -> str:
         result = ""
+
+        result += f"NAME={self.NAME}\n"
+        result += f"DESCRIPTION={self.DESCRIPTION}\n"
+        result += f"SKIP={self.SKIP}\n"
+        result += f"ACYNC={self.ACYNC}\n"
+        result += f"result={self.result}\n"
+        result += f"progress={self.progress}\n"
+        result += f"exx={self.exx}\n"
+
+        result += f"details=====================\n"
         for name, value in self.details.items():
-            result += f"{name}: {value}"
+            result += f"{name}: {value}\n"
         return result
 
     # RUN -------------------------------------------------------------------------------------------------------------

@@ -119,15 +119,12 @@ class TpGui(Gui):
         row = index.row()
         col = index.column()
 
-        if not col > 0:
+        if not col > 1:
             return
 
         tc = list(self.DATA.TCS)[row]
-        if col > 0:
-            dut = self.DATA.DUTS[col-2]
-        else:
-            dut = None
-        self.PTE.setPlainText(dut.TP_RESULTS[tc].details_pretty())
+        dut = self.DATA.DUTS[col-2]
+        self.PTE.setPlainText(dut.TP_RESULTS[tc].info_pretty())
 
         # print(f"{row=}/{section=}/{dut=}/{tc=}")
 

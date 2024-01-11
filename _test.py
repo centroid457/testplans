@@ -85,7 +85,7 @@ class Test__1:
 
         # -------------------------------------------
         class Tc1(TestCase):
-            PARALLEL = True
+            ACYNC = True
             def run_wrapped(self) -> bool:
                 time.sleep(0.5)
                 return self.DUT.VALUE
@@ -109,7 +109,7 @@ class Test__1:
         assert Tp_obj.DUTS[1].check_result_final() is True
 
         # -------------------------------------------
-        Tc1.PARALLEL = False
+        Tc1.ACYNC = False
 
         Tp_obj = TpManager1()
         time_start = time.time()

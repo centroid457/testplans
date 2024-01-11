@@ -25,7 +25,7 @@ class TpTableModel(TableModelTemplate):
                 if section == 0:
                     return "ТЕСТКЕЙС"
                 if section == 1:
-                    return "PARALLEL"
+                    return "ACYNC"
                 if section > 1:
                     return f"{section-1}"
             # ------------------------------
@@ -62,9 +62,9 @@ class TpTableModel(TableModelTemplate):
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:
             if col == 0:
-                return f'{tc.name}\n{tc.DESCRIPTION}'
+                return f'{tc.NAME}\n{tc.DESCRIPTION}'
             if col == 1:
-                return '+' if tc.PARALLEL else '-'
+                return '+' if tc.ACYNC else '-'
             if col > 1:
                 result = dut.TP_RESULTS[tc].result
                 if result is None:

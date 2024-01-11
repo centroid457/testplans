@@ -15,7 +15,7 @@ if __name__ == "__main__":
 
     # -------------------------------------------
     class Tc1(TestCase):
-        PARALLEL = False
+        ACYNC = False
         DESCRIPTION = "DESCRIPTION"
         def run_wrapped(self) -> bool:
             time.sleep(0.5)
@@ -23,7 +23,7 @@ if __name__ == "__main__":
             return self.DUT.VALUE
 
     class Tc1_reverse(TestCase):
-        PARALLEL = True
+        ACYNC = True
         def run_wrapped(self) -> bool:
             time.sleep(0.5)
             return not self.DUT.VALUE
