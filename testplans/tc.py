@@ -84,6 +84,11 @@ class TestCase(_TestCaseBase, QThread):
             result += f"{name}: {value}\n"
         return result
 
+    # -----------------------------------------------------------------------------------------------------------------
+    def terminate(self) -> None:
+        super().terminate()
+        self.teardown()
+
     # RUN -------------------------------------------------------------------------------------------------------------
     def run(self) -> None:
         # PREPARE --------

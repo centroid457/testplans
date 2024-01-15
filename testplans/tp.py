@@ -6,6 +6,7 @@ from typing import *
 from PyQt5.QtCore import QThread
 
 from pyqt_templates import *
+from object_info import ObjectInfo
 
 
 # =====================================================================================================================
@@ -56,7 +57,7 @@ class TpManager(QThread):
             tc.SKIP = not using
 
     @property
-    def tcs_duts(self) -> List[TestCase]:
+    def tcs_active(self) -> List[TestCase]:
         result = []
 
         if self.tc_active:
@@ -84,10 +85,17 @@ class TpManager(QThread):
             dut.results_tc_clear()
 
     # --------------------------------------------------------------------
-    def terminate(self):
+    def terminate(self) -> None:
         super().terminate()
-        print("hello")
+
+        # TERMINATE CHILDS!!! ---------------------
+        # ObjectInfo(self.currentThread()).print()    # cant find childs!!!
+
+        # finish current ----------------------------
         if self.tc_active:
+            for tcs_dut in self.tcs_active:
+                tcs_dut.terminate()
+
             self.tc_active.teardown_all()
             self.tc_active = None
 
@@ -103,12 +111,12 @@ class TpManager(QThread):
                 continue
 
             if tc.ACYNC:
-                for tcs_dut in self.tcs_duts:
+                for tcs_dut in self.tcs_active:
                     tcs_dut.start()
-                for tcs_dut in self.tcs_duts:
+                for tcs_dut in self.tcs_active:
                     tcs_dut.wait()
             else:
-                for tcs_dut in self.tcs_duts:
+                for tcs_dut in self.tcs_active:
                     tcs_dut.run()
 
             # FINISH TCase ----------------------------------------------
