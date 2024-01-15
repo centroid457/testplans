@@ -31,6 +31,7 @@ class TestCase(_TestCaseBase, QThread):
 
     # INITS --------------------------------------
     DUT: Any = None
+    DUTS_ALL: List[Any] = None  # applied for CLS!
 
     # RESULTS --------------------------------------
     __result: Optional[bool] = None
@@ -75,7 +76,7 @@ class TestCase(_TestCaseBase, QThread):
         result += f"NAME={self.NAME}\n"
         result += f"DESCRIPTION={self.DESCRIPTION}\n"
         result += f"SKIP={self.SKIP}\n"
-        result += f"SKIP={self.skip_tc_dut}\n"
+        result += f"skip_tc_dut={self.skip_tc_dut}\n"
         result += f"ACYNC={self.ACYNC}\n"
         result += f"result={self.result}\n"
         result += f"progress={self.progress}\n"
@@ -86,12 +87,38 @@ class TestCase(_TestCaseBase, QThread):
             result += f"{name}: {value}\n"
         return result
 
-    # -----------------------------------------------------------------------------------------------------------------
+    # =================================================================================================================
+    @classmethod
+    @property
+    def TCS_all(cls) -> List['TestCase']:
+        result = []
+        for dut in cls.DUTS_ALL:
+            try:
+                tc_dut = dut.TP_RESULTS[cls]
+            except:
+                tc_dut = cls(dut)
+                if not hasattr(dut, "TP_RESULTS"):
+                    setattr(dut, "TP_RESULTS", dict())
+                dut.TP_RESULTS.update({cls: tc_dut})
+
+            result.append(tc_dut)
+
+        return result
+
+    # =================================================================================================================
     def terminate(self) -> None:
         super().terminate()
+
         progress = self.progress
         self.teardown()
         self.progress = progress
+
+    @classmethod
+    def terminate_all(cls) -> None:
+        for tc_dut in cls.TCS_all:
+            tc_dut.terminate()
+
+        cls.teardown_all()
 
     # =================================================================================================================
     def run(self) -> None:
@@ -109,10 +136,13 @@ class TestCase(_TestCaseBase, QThread):
         self.teardown()
 
     @classmethod
-    def run_all(cls, duts: List[Any]) -> None:
+    def run_all(cls, duts: List[Any] = None) -> None:
         """run TC on batch duts
         prefered using in thread on upper level!
         """
+        # duts = duts or cls.DUTS_ALL or []
+        cls.DUTS_ALL = duts
+
         if not duts:
             return
 
@@ -123,14 +153,7 @@ class TestCase(_TestCaseBase, QThread):
             return
 
         # BATCH --------------------------
-        for dut in duts:
-            try:
-                tc_dut = dut.TP_RESULTS[cls]
-            except:
-                tc_dut = cls(dut)
-                dut.TP_RESULTS: dict
-                dut.TP_RESULTS.update({cls: tc_dut})
-
+        for tc_dut in cls.TCS_all:
             if tc_dut.skip_tc_dut:
                 continue
 
@@ -140,8 +163,7 @@ class TestCase(_TestCaseBase, QThread):
 
         # FINISH --------------------------
         if cls.ACYNC:
-            for dut in duts:
-                tc_dut = dut.TP_RESULTS[cls]
+            for tc_dut in cls.TCS_all:
                 tc_dut.wait()
 
         cls.teardown_all()

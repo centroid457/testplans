@@ -95,10 +95,7 @@ class TpManager(QThread):
 
         # finish current ----------------------------
         if self.tc_active:
-            for tcs_dut in self.tcs_active:
-                tcs_dut.terminate()
-
-            self.tc_active.teardown_all()
+            self.tc_active.terminate_all()
             self.tc_active = None
 
         self.signal__tp_finished.emit()
