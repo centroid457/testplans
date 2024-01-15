@@ -87,7 +87,9 @@ class TestCase(_TestCaseBase, QThread):
     # -----------------------------------------------------------------------------------------------------------------
     def terminate(self) -> None:
         super().terminate()
+        progress = self.progress
         self.teardown()
+        self.progress = progress
 
     # RUN -------------------------------------------------------------------------------------------------------------
     def run(self) -> None:
