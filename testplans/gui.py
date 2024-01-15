@@ -28,7 +28,7 @@ class TpGui(Gui):
         # layout_details ----------------------------------------------------------------------------------------------
         layout_details = QVBoxLayout()
         layout_details.addWidget(self.BTN)
-        layout_details.addWidget(self.BTN_select_tc_on_duts)
+        layout_details.addWidget(self.BTN_settings)
         layout_details.addWidget(self.PTE)
 
         # layout_main -------------------------------------------------------------------------------------------------
@@ -42,8 +42,8 @@ class TpGui(Gui):
         self.BTN = QPushButton("START")
         self.BTN.setCheckable(True)
 
-        self.BTN_select_tc_on_duts = QPushButton("select tc on duts")
-        self.BTN_select_tc_on_duts.setCheckable(True)
+        self.BTN_settings = QPushButton("settings")
+        self.BTN_settings.setCheckable(True)
 
     def PTE_create(self) -> None:
         self.PTE = QPlainTextEdit()
@@ -79,17 +79,19 @@ class TpGui(Gui):
         self.TV.resizeColumnsToContents()   # set column width to fit contents
         # self.TV.setColumnWidth(0, 100)
 
-        # hh = self.TV.horizontalHeader()
+        hh = self.TV.horizontalHeader()
+        hh.setSectionHidden(1, True)
         # hh.setStretchLastSection(True)
 
-        # self.TV.selectRow(1)
-        # self.TV.selectColumn(2)
+        # self.TV.selectRow(1)      # not working
+        # self.TV.selectColumn(2)   # not working
+
         # self.TV.setSelectionModel(QItemSelection().select())
 
     # SLOTS ===========================================================================================================
     def slots_connect(self):
         self.BTN.toggled.connect(self.BTN__toggled)
-        self.BTN_select_tc_on_duts.toggled.connect(self.BTN_select_tc_on_duts__toggled)
+        self.BTN_settings.toggled.connect(self.BTN_settings__toggled)
         self.DATA.signal__tp_finished.connect(lambda: self.BTN.setChecked(False))
 
         TestCase.SIGNALS.signal__tc_finished.connect(lambda z=None: print("signal__tc_finished.emit") or self.TM._data_reread())
@@ -110,9 +112,10 @@ class TpGui(Gui):
             if not self.DATA.isFinished():
                 self.DATA.terminate()
 
-    def BTN_select_tc_on_duts__toggled(self, state: Optional[bool] = None) -> None:
+    def BTN_settings__toggled(self, state: Optional[bool] = None) -> None:
         print(f"BTN_select_tc_on_duts__toggled {state=}")
-        self.TM.open__skip_tc_dut = state
+        self.TV.horizontalHeader().setSectionHidden(1, not state)
+        self.TM.open__settings = state
         self.TM._data_reread()
 
     def TV_selection_changed(self, first: QItemSelection, last: QItemSelection) -> None:

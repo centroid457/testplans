@@ -13,7 +13,7 @@ class TpTableModel(TableModelTemplate):
     DATA: TpManager
 
     # AUX -------------------------------------------
-    open__skip_tc_dut: Optional[bool] = None
+    open__settings: Optional[bool] = None
 
     def rowCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.TCS)
@@ -47,7 +47,7 @@ class TpTableModel(TableModelTemplate):
             flags |= Qt.ItemIsUserCheckable
             # flags |= Qt.ItemIsSelectable
         if col > 1:
-            if self.open__skip_tc_dut:
+            if self.open__settings:
                 flags |= Qt.ItemIsUserCheckable
                 # flags |= Qt.ItemIsSelectable
         else:
@@ -133,18 +133,19 @@ class TpTableModel(TableModelTemplate):
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
-            if col == 0:
-                if tc.SKIP:
-                    return Qt.Unchecked
-                else:
-                    return Qt.Checked
-
-            if col > 1:
-                if self.open__skip_tc_dut:
-                    if tc_dut.skip_tc_dut:
+            if self.open__settings:
+                if col == 0:
+                    if tc.SKIP:
                         return Qt.Unchecked
                     else:
                         return Qt.Checked
+
+                if col > 1:
+                    if self.open__settings:
+                        if tc_dut.skip_tc_dut:
+                            return Qt.Unchecked
+                        else:
+                            return Qt.Checked
 
     def setData(self, index: QModelIndex, value: Any, role: int = None) -> bool:
         # PREPARE -----------------------------------------------------------------------------------------------------
