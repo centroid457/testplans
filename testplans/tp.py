@@ -107,23 +107,7 @@ class TpManager(QThread):
     def run(self) -> None:
         for tc in self.TCS:
             self.tc_active = tc
-            if tc.SKIP:
-                continue
-            if not tc.startup_all():
-                continue
-
-            if tc.ACYNC:
-                for tcs_dut in self.tcs_active:
-                    tcs_dut.start()
-                for tcs_dut in self.tcs_active:
-                    tcs_dut.wait()
-            else:
-                for tcs_dut in self.tcs_active:
-                    tcs_dut.start()
-                    tcs_dut.wait()
-
-            # FINISH TCase ----------------------------------------------
-            tc.teardown_all()
+            tc.run_all(self.DUTS)
 
         # FINISH TPlan ---------------------------------------------------
         self.tc_active = None

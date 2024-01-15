@@ -93,7 +93,7 @@ class TestCase(_TestCaseBase, QThread):
         self.teardown()
         self.progress = progress
 
-    # RUN -------------------------------------------------------------------------------------------------------------
+    # =================================================================================================================
     def run(self) -> None:
         # PREPARE --------
         self.clear()
@@ -107,6 +107,44 @@ class TestCase(_TestCaseBase, QThread):
             except Exception as exx:
                 self.exx = exx
         self.teardown()
+
+    @classmethod
+    def run_all(cls, duts: List[Any]) -> None:
+        """run TC on batch duts
+        prefered using in thread on upper level!
+        """
+        if not duts:
+            return
+
+        if cls.SKIP:
+            return
+
+        if not cls.startup_all():
+            return
+
+        # BATCH --------------------------
+        for dut in duts:
+            try:
+                tc_dut = dut.TP_RESULTS[cls]
+            except:
+                tc_dut = cls(dut)
+                dut.TP_RESULTS: dict
+                dut.TP_RESULTS.update({cls: tc_dut})
+
+            if tc_dut.skip_tc_dut:
+                continue
+
+            tc_dut.start()
+            if not cls.ACYNC:
+                tc_dut.wait()
+
+        # FINISH --------------------------
+        if cls.ACYNC:
+            for dut in duts:
+                tc_dut = dut.TP_RESULTS[cls]
+                tc_dut.wait()
+
+        cls.teardown_all()
 
     # REDEFINE ========================================================================================================
     pass
