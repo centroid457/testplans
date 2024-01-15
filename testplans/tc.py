@@ -22,6 +22,7 @@ class TestCase(_TestCaseBase, QThread):
     # SETTINGS ------------------------------------
     DESCRIPTION: str = ""
     SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!
+    skip_on_dut: Optional[bool] = None
     ACYNC: Optional[bool] = True
     STOP_IF_FALSE_RESULT: Optional[bool] = None
 
@@ -74,6 +75,7 @@ class TestCase(_TestCaseBase, QThread):
         result += f"NAME={self.NAME}\n"
         result += f"DESCRIPTION={self.DESCRIPTION}\n"
         result += f"SKIP={self.SKIP}\n"
+        result += f"SKIP={self.skip_on_dut}\n"
         result += f"ACYNC={self.ACYNC}\n"
         result += f"result={self.result}\n"
         result += f"progress={self.progress}\n"

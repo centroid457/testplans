@@ -28,6 +28,7 @@ class TpGui(Gui):
         # layout_details ----------------------------------------------------------------------------------------------
         layout_details = QVBoxLayout()
         layout_details.addWidget(self.BTN)
+        layout_details.addWidget(self.BTN_select_tc_on_duts)
         layout_details.addWidget(self.PTE)
 
         # layout_main -------------------------------------------------------------------------------------------------
@@ -40,6 +41,9 @@ class TpGui(Gui):
     def BTN_create(self) -> None:
         self.BTN = QPushButton("START")
         self.BTN.setCheckable(True)
+
+        self.BTN_select_tc_on_duts = QPushButton("select tc on duts")
+        self.BTN_select_tc_on_duts.setCheckable(True)
 
     def PTE_create(self) -> None:
         self.PTE = QPlainTextEdit()

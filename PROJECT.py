@@ -45,7 +45,7 @@ class PROJECT:
         "..."
     ]
     NEWS: List[str] = [
-        "apply new pypi template",
+        "correct safe termination tp+tc",
     ]
 
 
