@@ -32,7 +32,10 @@ class PROJECT:
         # "feat1",
         # ["feat2", "block1", "block2"],
 
-        "threads", "safe stop process",
+        "threads",
+        "safe stop process",
+        "skip tc",
+        "skip tc on dut",
     ]
 
     # HISTORY -----------------------------------------------
@@ -45,7 +48,8 @@ class PROJECT:
         "..."
     ]
     NEWS: List[str] = [
-        "correct safe termination tp+tc",
+        "apply new pypi template",
+        "finish run TCS by TC class! TP work only with TC class, not instances on duts",
     ]
 
 
