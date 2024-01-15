@@ -12,7 +12,6 @@ class Dut1(Dut):
     def check_present(self) -> bool:
         return True
 
-
 # -------------------------------------------
 class Tc1(TestCase):
     ACYNC = False

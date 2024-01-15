@@ -5,6 +5,7 @@ from .tc import TestCase
 
 # =====================================================================================================================
 class Dut:
+    SKIP: Optional[bool] = None
     PRESENT: Optional[bool] = None
     TP_RESULTS: Dict[Type[TestCase], TestCase] = None   # dict is very convenient!!!
 
