@@ -1,9 +1,15 @@
-# testplans
-Just a simple testplan structure for several duts.  
-Designed to apply testplan(testcase lists) for several duts.  
+# testplans (v0.0.0)
+
+## DESCRIPTION_SHORT
+Just a simple testplan structure for several duts
+
+## DESCRIPTION_LONG
+Designed to apply testplan(testcase lists) for several duts
 
 
 ## Features
+1. threads  
+2. safe stop process  
 
 
 ********************************************************************************
@@ -31,7 +37,7 @@ from testplans import *
 ## USAGE EXAMPLES
 See tests and sourcecode for other examples.
 
-******************************
+------------------------------
 ### 1. example1.py
 ```python
 from NEW_PROJECT____ import *
