@@ -89,6 +89,7 @@ class TpGui(Gui):
     # SLOTS ===========================================================================================================
     def slots_connect(self):
         self.BTN.toggled.connect(self.BTN__toggled)
+        self.BTN_select_tc_on_duts.toggled.connect(self.BTN_select_tc_on_duts__toggled)
         self.DATA.signal__tp_finished.connect(lambda: self.BTN.setChecked(False))
 
         TestCase.SIGNALS.signal__tc_finished.connect(lambda z=None: print("signal__tc_finished.emit") or self.TM._data_reread())
@@ -108,6 +109,11 @@ class TpGui(Gui):
         elif state is False:
             if not self.DATA.isFinished():
                 self.DATA.terminate()
+
+    def BTN_select_tc_on_duts__toggled(self, state: Optional[bool] = None) -> None:
+        print(f"BTN_select_tc_on_duts__toggled {state=}")
+        self.TM.open__skip_tc_dut = state
+        self.TM._data_reread()
 
     def TV_selection_changed(self, first: QItemSelection, last: QItemSelection) -> None:
         # print("selectionChanged")

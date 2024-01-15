@@ -12,6 +12,9 @@ from .tp import TpManager
 class TpTableModel(TableModelTemplate):
     DATA: TpManager
 
+    # AUX -------------------------------------------
+    open__skip_tc_dut: Optional[bool] = None
+
     def rowCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.TCS)
 
@@ -40,9 +43,13 @@ class TpTableModel(TableModelTemplate):
         # -------------------------------------------------------------------------------------------------------------
         flags = super().flags(index)
 
-        if col <= 1:
+        if col == 0:
             flags |= Qt.ItemIsUserCheckable
             # flags |= Qt.ItemIsSelectable
+        if col > 1:
+            if self.open__skip_tc_dut:
+                flags |= Qt.ItemIsUserCheckable
+                # flags |= Qt.ItemIsSelectable
         else:
             # flags -= Qt.ItemIsSelectable
             pass
@@ -52,12 +59,13 @@ class TpTableModel(TableModelTemplate):
         # PREPARE -----------------------------------------------------------------------------------------------------
         col = index.column()
         row = index.row()
-
         tc = list(self.DATA.TCS)[row]
+
+        dut = None
+        tc_dut = None
         if col > 1:
             dut = self.DATA.DUTS[col-2]
-        else:
-            dut = None
+            tc_dut = dut.TP_RESULTS[tc]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:
@@ -66,11 +74,11 @@ class TpTableModel(TableModelTemplate):
             if col == 1:
                 return '+' if tc.ACYNC else '-'
             if col > 1:
-                result = dut.TP_RESULTS[tc].result
-                if result is None:
-                    return ""
-                else:
-                    return f'{result}'
+                if tc_dut:
+                    if tc_dut.result is None:
+                        return ""
+                    else:
+                        return f'{tc_dut.result}'
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.TextAlignmentRole:
@@ -111,14 +119,16 @@ class TpTableModel(TableModelTemplate):
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.BackgroundColorRole:
             if tc.SKIP:
-                return QColor('#f2f2f2')
+                return QColor('#e2e2e2')
 
             if col > 1:
-                if dut.TP_RESULTS[tc].result is True:
+                if tc_dut.skip_tc_dut:
+                    return QColor('#e2e2e2')
+                if tc_dut.result is True:
                     return QColor("#00FF00")
-                if dut.TP_RESULTS[tc].result is False:
+                if tc_dut.result is False:
                     return QColor("#FF5050")
-                if dut.TP_RESULTS[tc].progress > 0:
+                if tc_dut.progress > 0:
                     return QColor("#FFFF50")
 
         # -------------------------------------------------------------------------------------------------------------
@@ -129,21 +139,33 @@ class TpTableModel(TableModelTemplate):
                 else:
                     return Qt.Checked
 
+            if col > 1:
+                if self.open__skip_tc_dut:
+                    if tc_dut.skip_tc_dut:
+                        return Qt.Unchecked
+                    else:
+                        return Qt.Checked
+
     def setData(self, index: QModelIndex, value: Any, role: int = None) -> bool:
         # PREPARE -----------------------------------------------------------------------------------------------------
         row = index.row()
         col = index.column()
-
         tc = list(self.DATA.TCS)[row]
+
+        dut = None
+        tc_dut = None
         if col > 1:
             dut = self.DATA.DUTS[col-2]
-        else:
-            dut = None
+            tc_dut = dut.TP_RESULTS[tc]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
             if col == 0:
                 tc.SKIP = value == Qt.Unchecked
+
+            if col > 1:
+                if tc_dut:
+                    tc_dut.skip_tc_dut = value == Qt.Unchecked
 
         # FINAL -------------------------------------------------------------------------------------------------------
         self._data_reread()

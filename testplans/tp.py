@@ -62,7 +62,9 @@ class TpManager(QThread):
 
         if self.tc_active:
             for dut in self.DUTS:
-                result.append(dut.TP_RESULTS[self.tc_active])
+                tc_dut = dut.TP_RESULTS[self.tc_active]
+                if not tc_dut.skip_tc_dut:
+                    result.append(tc_dut)
         return result
 
     # DUTS -----------------------------------------------------------
@@ -117,7 +119,8 @@ class TpManager(QThread):
                     tcs_dut.wait()
             else:
                 for tcs_dut in self.tcs_active:
-                    tcs_dut.run()
+                    tcs_dut.start()
+                    tcs_dut.wait()
 
             # FINISH TCase ----------------------------------------------
             tc.teardown_all()
