@@ -33,7 +33,7 @@ class TpTableModel(TableModelTemplate):
                     return f"{section-1}"
             # ------------------------------
             if orientation == Qt.Vertical:
-                return section + 1
+                return str(section + 1)
 
     def flags(self, index: QModelIndex) -> int:
         # PREPARE -----------------------------------------------------------------------------------------------------
@@ -141,11 +141,30 @@ class TpTableModel(TableModelTemplate):
                         return Qt.Checked
 
                 if col > 1:
-                    if self.open__settings:
+                    if not tc_dut.SKIP and not dut.SKIP:
                         if tc_dut.skip_tc_dut:
                             return Qt.Unchecked
                         else:
                             return Qt.Checked
+
+        # -------------------------------------------------------------------------------------------------------------
+        if role == Qt.FontRole:
+            if tc == self.DATA.tc_active:
+                # QFont("Arial", 9, QFont.Bold)
+                font = QFont()
+
+                font.setBold(True)
+                # font.setItalic(True)
+
+                # font.setOverline(True)  # надчеркнутый
+                # font.setStrikeOut(True)  # зачеркнутый
+                font.setUnderline(True)  # подчеркнутый
+
+                # не понял!! --------------------
+                # font.setStretch(5)
+                # font.setCapitalization()
+
+                return font
 
     def setData(self, index: QModelIndex, value: Any, role: int = None) -> bool:
         # PREPARE -----------------------------------------------------------------------------------------------------

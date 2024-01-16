@@ -11,6 +11,9 @@ class Dut:
 
     check_present: Callable[..., bool]
 
+    def SKIP_reverse(self) -> None:
+        self.SKIP = not bool(self.SKIP)
+
     def mark_present(self) -> None:
         self.PRESENT = self.check_present()
 

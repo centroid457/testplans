@@ -83,6 +83,7 @@ class TpGui(Gui):
         #
         hh = self.TV.horizontalHeader()
         hh.setSectionHidden(1, True)
+        hh.setSectionsClickable(False)
         # hh.setStretchLastSection(True)
 
         # self.TV.selectRow(1)      # not working
@@ -101,7 +102,8 @@ class TpGui(Gui):
         # fixme: change object for redraw
         # TestCase.SIGNALS.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.PTE)
 
-        self.TV.selectionModel().selectionChanged.connect(self.TV_selection_changed)
+        self.TV.selectionModel().selectionChanged.connect(self.TV_selectionChanged)
+        self.TV.horizontalHeader().sectionClicked.connect(self.TV_hh_sectionClicked)
 
     def BTN__toggled(self, state: Optional[bool] = None) -> None:
         print(f"btn {state=}")
@@ -117,10 +119,17 @@ class TpGui(Gui):
     def BTN_settings__toggled(self, state: Optional[bool] = None) -> None:
         print(f"BTN_select_tc_on_duts__toggled {state=}")
         self.TV.horizontalHeader().setSectionHidden(1, not state)
+        self.TV.horizontalHeader().setSectionsClickable(state)
         self.TM.open__settings = state
         self.TM._data_reread()
 
-    def TV_selection_changed(self, first: QItemSelection, last: QItemSelection) -> None:
+    def TV_hh_sectionClicked(self, index: int) -> None:
+        if index > 1:
+            dut = self.DATA.DUTS[index - 2]
+            dut.SKIP_reverse()
+            self.TM._data_reread()
+
+    def TV_selectionChanged(self, first: QItemSelection, last: QItemSelection) -> None:
         # print("selectionChanged")
         # print(f"{first=}")  # first=<PyQt5.QtCore.QItemSelection object at 0x000001C79A107460>
         # ObjectInfo(first.indexes()[0]).print(_log_iter=True, skip_fullnames=["takeFirst", "takeLast"])
