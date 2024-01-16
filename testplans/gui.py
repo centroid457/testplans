@@ -65,6 +65,7 @@ class TpGui(Gui):
         self.PTE.setFont(QFont("Calibri (Body)", 7))
 
     def TV_create(self):
+        # TODO: move examples to pyqtTemplate!
         self.TM = TpTableModel(self.DATA)
 
         self.TV = QTableView()
@@ -79,6 +80,7 @@ class TpGui(Gui):
         self.TV.resizeColumnsToContents()   # set column width to fit contents
         # self.TV.setColumnWidth(0, 100)
 
+        #
         hh = self.TV.horizontalHeader()
         hh.setSectionHidden(1, True)
         # hh.setStretchLastSection(True)
