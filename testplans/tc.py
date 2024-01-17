@@ -27,17 +27,16 @@ class TestCase(_TestCaseBase, QThread):
     STOP_IF_FALSE_RESULT: Optional[bool] = None
 
     # AUXILIARY -----------------------------------
-    SIGNALS: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
+    signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
 
-    # INITS --------------------------------------
-    DUT: Any = None
-    DUTS_ALL: List[Any] = None  # applied for CLS!
+    # INSTANCE ------------------------------------
+    DUTS_ALL: List[Any]     # applied for CLS!
+    DUT: Any
 
-    # RESULTS --------------------------------------
-    __result: Optional[bool] = None
-    details: Dict[str, Any] = None
-    exx: Optional[Exception] = None
-    progress: int = 0
+    __result: Optional[bool]
+    details: Dict[str, Any]
+    exx: Optional[Exception]
+    progress: int
 
     def __init__(self, dut: Any):
         super().__init__()
@@ -63,12 +62,12 @@ class TestCase(_TestCaseBase, QThread):
     @result.setter
     def result(self, value: Optional[bool]) -> None:
         self.__result = value
-        self.SIGNALS.signal__tc_finished.emit()
+        self.signals.signal__tc_finished.emit()
 
     # DETAILS ---------------------------------------------------------------------------------------------------------
     def details_update(self, details: Dict[str, Any]) -> None:
         self.details.update(details)
-        self.SIGNALS.signal__tc_details_updated.emit(self)
+        self.signals.signal__tc_details_updated.emit(self)
 
     def info_pretty(self) -> str:
         result = ""
