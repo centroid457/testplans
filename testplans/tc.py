@@ -20,6 +20,7 @@ class Signals(SignalsTemplate):
 # =====================================================================================================================
 class TestCaseBase(_TestCaseBase, QThread):
     # SETTINGS ------------------------------------
+    NAME: str = ""      # set auto!
     DESCRIPTION: str = ""
     SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!
     skip_tc_dut: Optional[bool] = None
@@ -32,6 +33,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     # INSTANCE ------------------------------------
     DUTS_ALL: List[Any]     # applied for CLS!
     DUT: Any
+    SETTINGS: Dict[str, Any] = {}
 
     __result: Optional[bool]
     details: Dict[str, Any]
@@ -49,11 +51,11 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.exx = None
         self.progress = 0
 
-    @classmethod
-    @property
-    def NAME(cls):
-        return cls.__name__
-        # return pathlib.Path(__file__).name    # work as last destination where property starts!
+    # @classmethod
+    # @property
+    # def NAME(cls):
+    #     return cls.__name__
+    #     # return pathlib.Path(__file__).name    # work as last destination where property starts!
 
     # RESULT ----------------------------------------------------------------------------------------------------------
     @property

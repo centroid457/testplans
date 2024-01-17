@@ -10,7 +10,9 @@ from pyqt_templates import *
 from object_info import ObjectInfo
 
 from importlib import import_module
+
 import TESTCASES
+import DEVICES
 
 
 # =====================================================================================================================
@@ -29,7 +31,7 @@ class TestPlanBase(QThread):
 
     # SETTINGS ------------------------------------
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
-    # DIRPATH_TCS: Union[str, Path] = "TESTCASES"
+    DIRPATH_TCS: Union[str, Path] = "TESTCASES"
     # DIRPATH_DEVS: Union[str, Path] = "DEVICES"
 
     TCS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = None    # settings
@@ -50,7 +52,7 @@ class TestPlanBase(QThread):
     def __init__(self):
         super().__init__()
         # self.DIRPATH_TPS: Path = Path(self.DIRPATH_TPS)
-        # self.DIRPATH_TCS: Path = Path(self.DIRPATH_TCS)
+        self.DIRPATH_TCS: Path = Path(self.DIRPATH_TCS)
         # self.DIRPATH_DEVS: Path = Path(self.DIRPATH_DEVS)
 
         self.reinit()
@@ -64,6 +66,8 @@ class TestPlanBase(QThread):
             # print(dir(TESTCASES))
             if isinstance(item, TestCaseBase):
                 tc_cls = item
+                msg = f"[ERROR] DONT USE IT!"
+                raise Exception(msg)
             elif isinstance(item, str):   # filename
                 # tc_cls = import_module(item, "TESTCASES").TestCase    # not working!
                 # tc_cls = getattr(TESTCASES, item).TestCase      # not working
@@ -71,12 +75,19 @@ class TestPlanBase(QThread):
                 if not tc_cls:
                     msg = f"[ERROR] file not found[{item=}] in TESTCASES/"
                     raise Exx__TcItemNotFound(msg)
+                tc_cls.NAME = item
             else:
                 msg = f"[ERROR] type is inconvenient [{item=}]"
                 raise Exx__TcItemType(msg)
 
             tc_cls.SKIP = not using
             self.TCS.update({tc_cls: using})
+
+            settings_filepath = self.DIRPATH_TCS.joinpath(f"{item}.json")
+            if settings_filepath.exists():
+                print("SETTINGS EXISTS")
+            else:
+                print("SETTINGS NOT EXISTS")
 
         # DUTS --------------------------------------------------------------
         self.DUTS = []
