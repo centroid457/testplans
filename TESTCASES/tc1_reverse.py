@@ -1,10 +1,10 @@
 import time
 
 from testplans import TestCaseBase
-from .tc1_direct import TestCase as TC
+from . import tc1_direct
 
 
-class TestCase(TC):
+class TestCase(tc1_direct.TestCase):
     ACYNC = True
     DESCRIPTION = "reverse1"
 

@@ -10,6 +10,7 @@ from pyqt_templates import *
 from object_info import ObjectInfo
 
 from importlib import import_module
+import TESTCASES
 
 
 # =====================================================================================================================
@@ -27,9 +28,9 @@ class TestPlanBase(QThread):
     signal__tp_stop = pyqtSignal()
 
     # SETTINGS ------------------------------------
-    DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
-    DIRPATH_TCS: Union[str, Path] = "TESTCASES"
-    DIRPATH_DEVS: Union[str, Path] = "DEVICES"
+    # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
+    # DIRPATH_TCS: Union[str, Path] = "TESTCASES"
+    # DIRPATH_DEVS: Union[str, Path] = "DEVICES"
 
     TCS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = None    # settings
     # {
@@ -48,9 +49,9 @@ class TestPlanBase(QThread):
 
     def __init__(self):
         super().__init__()
-        self.DIRPATH_TPS: Path = Path(self.DIRPATH_TPS)
-        self.DIRPATH_TCS: Path = Path(self.DIRPATH_TCS)
-        self.DIRPATH_DEVS: Path = Path(self.DIRPATH_DEVS)
+        # self.DIRPATH_TPS: Path = Path(self.DIRPATH_TPS)
+        # self.DIRPATH_TCS: Path = Path(self.DIRPATH_TCS)
+        # self.DIRPATH_DEVS: Path = Path(self.DIRPATH_DEVS)
 
         self.reinit()
 
@@ -60,10 +61,12 @@ class TestPlanBase(QThread):
         self.TCS = {}
 
         for item, using in tcs.items():
+            # print(dir(TESTCASES))
             if isinstance(item, TestCaseBase):
                 tc_cls = item
             elif isinstance(item, str):   # filename
                 # tc_cls = import_module(item, "TESTCASES").TestCase    # not working!
+                # tc_cls = getattr(TESTCASES, item).TestCase      # not working
                 tc_cls = import_module(f"TESTCASES.{item}").TestCase
                 if not tc_cls:
                     msg = f"[ERROR] file not found[{item=}] in TESTCASES/"
