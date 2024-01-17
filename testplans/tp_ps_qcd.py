@@ -4,7 +4,7 @@ from singleton_meta import *
 
 
 # duts =================================================================================================================
-class DutPs(Dut):
+class DutPs(DutBase):
     POSITION: int = None
 
     def __init__(self, position: int):
@@ -26,35 +26,35 @@ class _BasePs:
 
 
 # TC_STEPS ============================================================================================================
-class PsQcd_Tc1(TestCase, _BasePs):
+class PsQcd_Tc1(TestCaseBase, _BasePs):
     def run_wrapped(self) -> bool:
         pass
 
 
-class PsQcd_Tc2(TestCase, _BasePs):
+class PsQcd_Tc2(TestCaseBase, _BasePs):
     def run_wrapped(self) -> bool:
         pass
 
 
-class PsQcd_Tc3(TestCase, _BasePs):
+class PsQcd_Tc3(TestCaseBase, _BasePs):
     def run_wrapped(self) -> bool:
         pass
 
 
-class PsQcd_Tc4(TestCase, _BasePs):
+class PsQcd_Tc4(TestCaseBase, _BasePs):
     def run_wrapped(self) -> bool:
         pass
 
 
 # TC ==================================================================================================================
-# class PsQcd_Tc1(TestCase):
+# class PsQcd_Tc1(TestCaseBase):
 #     details = {
 #         PsQcd_Tcs1: True,
 #         PsQcd_Tcs2: True,
 #     }
 #
 #
-# class PsQcd_Tc2(TestCase):
+# class PsQcd_Tc2(TestCaseBase):
 #     details = {
 #         PsQcd_Tcs3: True,
 #         PsQcd_Tcs4: True,
@@ -62,7 +62,7 @@ class PsQcd_Tc4(TestCase, _BasePs):
 
 
 # TP ==================================================================================================================
-class PsQcd_Tp(TpManager, _BasePs):
+class PsQcd_Tp(TestPlanBase, _BasePs):
     details = {
         PsQcd_Tc1: True,
         PsQcd_Tc2: True,
@@ -77,7 +77,7 @@ class ATF(SingletonByCallMeta):
 
 
 # =====================================================================================================================
-class Manager_PsQcd(TpManager):
+class Manager_PsQcd(TestPlanBase):
     COUNT: int = 10
     ITEMS: Dict[PsQcd_Tp, Any] = {
         # PsQcd_Tp(1): None,

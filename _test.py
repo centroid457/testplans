@@ -3,13 +3,13 @@ import time
 import pytest
 
 from testplans import *
-from testplans.tp import TpManager
-from testplans.dut import Dut
+from testplans.tp import TestPlanBase
+from testplans.dut import DutBase
 
 
 # =====================================================================================================================
 class Test__1:
-    VICTIM: Type[TpManager] = type("VICTIM", (TpManager,), {})
+    VICTIM: Type[TestPlanBase] = type("VICTIM", (TestPlanBase,), {})
 
     @classmethod
     def setup_class(cls):
@@ -20,12 +20,12 @@ class Test__1:
         pass
 
     def setup_method(self, method):
-        self.VICTIM = type("VICTIM", (TpManager,), {})
+        self.VICTIM = type("VICTIM", (TestPlanBase,), {})
 
     # -----------------------------------------------------------------------------------------------------------------
     def test__simple(self):
         # -------------------------------------------
-        class M1_Dut(Dut):
+        class M1_Dut(DutBase):
             def __init__(self, value: Any):
                 self.VALUE = value
 
@@ -33,16 +33,16 @@ class Test__1:
                 return True
 
         # -------------------------------------------
-        class Tc1(TestCase):
+        class Tc1(TestCaseBase):
             def run_wrapped(self) -> bool:
                 return self.DUT.VALUE
 
-        class Tc1_reverse(TestCase):
+        class Tc1_reverse(TestCaseBase):
             def run_wrapped(self) -> bool:
                 return not self.DUT.VALUE
 
         # -------------------------------------------
-        class TpManager1(TpManager):
+        class TestPlan1(TestPlanBase):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False
@@ -51,14 +51,14 @@ class Test__1:
                 for value in [True, ]:
                     self.DUTS.append(M1_Dut(value))
 
-        Tp_obj = TpManager1()
+        Tp_obj = TestPlan1()
         Tp_obj.run()
         assert Tp_obj.DUTS[0].check_result_final() is True
 
         assert len(Tp_obj.DUTS) == 1
 
         # -------------------------------------------
-        class TpManager2(TpManager):
+        class TestPlan2(TestPlanBase):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False
@@ -67,7 +67,7 @@ class Test__1:
                 for value in [False, ]:
                     self.DUTS.append(M1_Dut(value))
 
-        Tp_obj = TpManager2()
+        Tp_obj = TestPlan2()
         Tp_obj.run()
         assert Tp_obj.DUTS[0].check_result_final() is False
 
@@ -76,7 +76,7 @@ class Test__1:
 
     def test__parallel(self):
         # -------------------------------------------
-        class M1_Dut(Dut):
+        class M1_Dut(DutBase):
             def __init__(self, value: Any):
                 self.VALUE = value
 
@@ -84,14 +84,14 @@ class Test__1:
                 return True
 
         # -------------------------------------------
-        class Tc1(TestCase):
+        class Tc1(TestCaseBase):
             ACYNC = True
             def run_wrapped(self) -> bool:
                 time.sleep(0.5)
                 return self.DUT.VALUE
 
         # -------------------------------------------
-        class TpManager1(TpManager):
+        class TestPlan1(TestPlanBase):
             TCS = {
                 Tc1: True,
             }
@@ -99,7 +99,7 @@ class Test__1:
                 for value in [True, True, ]:
                     self.DUTS.append(M1_Dut(value))
 
-        Tp_obj = TpManager1()
+        Tp_obj = TestPlan1()
         time_start = time.time()
         Tp_obj.run()
         time_passed = time.time() - time_start
@@ -111,7 +111,7 @@ class Test__1:
         # -------------------------------------------
         Tc1.ACYNC = False
 
-        Tp_obj = TpManager1()
+        Tp_obj = TestPlan1()
         time_start = time.time()
         Tp_obj.run()
         time_passed = time.time() - time_start
@@ -124,7 +124,7 @@ class Test__1:
 
     def test__skip(self):
         # -------------------------------------------
-        class M1_Dut(Dut):
+        class M1_Dut(DutBase):
             def __init__(self, value: Any):
                 self.VALUE = value
 
@@ -132,11 +132,11 @@ class Test__1:
                 return True
 
         # -------------------------------------------
-        class Tc1(TestCase):
+        class Tc1(TestCaseBase):
             def run_wrapped(self) -> bool:
                 time.sleep(0.5)
                 return self.DUT.VALUE
-        class TpManager1(TpManager):
+        class TestPlan1(TestPlanBase):
             TCS = {
                 Tc1: False,
             }
@@ -144,7 +144,7 @@ class Test__1:
                 for value in [False, False, ]:
                     self.DUTS.append(M1_Dut(value))
 
-        Tp_obj = TpManager1()
+        Tp_obj = TestPlan1()
         time_start = time.time()
         Tp_obj.run()
         time_passed = time.time() - time_start
@@ -155,7 +155,7 @@ class Test__1:
 
     def test__GUI(self):
         # -------------------------------------------
-        class M1_Dut(Dut):
+        class M1_Dut(DutBase):
             def __init__(self, value: Any):
                 self.VALUE = value
 
@@ -163,14 +163,14 @@ class Test__1:
                 return True
 
         # -------------------------------------------
-        class Tc1(TestCase):
+        class Tc1(TestCaseBase):
             def run_wrapped(self) -> bool:
                 return self.DUT.VALUE
 
-        class Tc1_reverse(TestCase):
+        class Tc1_reverse(TestCaseBase):
             def run_wrapped(self) -> bool:
                 return not self.DUT.VALUE
-        class TpManager1(TpManager):
+        class TestPlan1(TestPlanBase):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False,
@@ -179,7 +179,7 @@ class Test__1:
                 for value in [False, False, ]:
                     self.DUTS.append(M1_Dut(value))
 
-        Tp_obj = TpManager1()
+        Tp_obj = TestPlan1()
 
         with pytest.raises(SystemExit) as exx:
             TpGui(Tp_obj)

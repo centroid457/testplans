@@ -1,17 +1,20 @@
 from typing import *
 
-from .tc import TestCase
+from .tc import TestCaseBase
 
 
 # =====================================================================================================================
-class Dut:
+class DutBase:
     SKIP: Optional[bool] = None
     PRESENT: Optional[bool] = None
-    TP_RESULTS: Dict[Type[TestCase], TestCase] = None   # dict is very convenient!!!
+    TP_RESULTS: Dict[Type[TestCaseBase], TestCaseBase] = None   # dict is very convenient!!!
 
     check_present: Callable[..., bool]
 
-    def SKIP_reverse(self) -> None:
+    def _SKIP_reverse(self) -> None:
+        """
+        this is only for testing purpose
+        """
         self.SKIP = not bool(self.SKIP)
 
     def mark_present(self) -> None:

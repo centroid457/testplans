@@ -5,12 +5,12 @@ from PyQt5.QtGui import *
 
 from pyqt_templates import TableModelTemplate
 
-from .tp import TpManager
+from .tp import TestPlanBase
 
 
 # =====================================================================================================================
 class TpTableModel(TableModelTemplate):
-    DATA: TpManager
+    DATA: TestPlanBase
 
     # AUX -------------------------------------------
     open__settings: Optional[bool] = None

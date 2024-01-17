@@ -18,7 +18,7 @@ class Signals(SignalsTemplate):
 
 
 # =====================================================================================================================
-class TestCase(_TestCaseBase, QThread):
+class TestCaseBase(_TestCaseBase, QThread):
     # SETTINGS ------------------------------------
     DESCRIPTION: str = ""
     SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!
@@ -89,7 +89,7 @@ class TestCase(_TestCaseBase, QThread):
     # =================================================================================================================
     @classmethod
     @property
-    def TCS_all(cls) -> List['TestCase']:
+    def TCS_all(cls) -> List['TestCaseBase']:
         result = []
         for dut in cls.DUTS_ALL:
             try:

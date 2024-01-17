@@ -1,6 +1,6 @@
 # from . import *
-from .tc import TestCase
-from .tp import TpManager
+from .tc import TestCaseBase
+from .tp import TestPlanBase
 from .tm import TpTableModel
 
 import time
@@ -15,7 +15,7 @@ class TpGui(Gui):
     SIZE = (600, 300)
 
     # NEW -------------------------------------------
-    DATA: TpManager
+    DATA: TestPlanBase
 
     # WINDOW ==========================================================================================================
     def wgt_create(self):
@@ -97,10 +97,10 @@ class TpGui(Gui):
         self.BTN_settings.toggled.connect(self.BTN_settings__toggled)
         self.DATA.signal__tp_finished.connect(lambda: self.BTN.setChecked(False))
 
-        TestCase.signals.signal__tc_finished.connect(lambda z=None: print("signal__tc_finished.emit") or self.TM._data_reread())
+        TestCaseBase.signals.signal__tc_finished.connect(lambda z=None: print("signal__tc_finished.emit") or self.TM._data_reread())
 
         # fixme: change object for redraw
-        # TestCase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.PTE)
+        # TestCaseBase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.PTE)
 
         self.TV.selectionModel().selectionChanged.connect(self.TV_selectionChanged)
         self.TV.horizontalHeader().sectionClicked.connect(self.TV_hh_sectionClicked)
@@ -126,7 +126,7 @@ class TpGui(Gui):
     def TV_hh_sectionClicked(self, index: int) -> None:
         if index > 1:
             dut = self.DATA.DUTS[index - 2]
-            dut.SKIP_reverse()
+            dut._SKIP_reverse()
             self.TM._data_reread()
 
     def TV_selectionChanged(self, first: QItemSelection, last: QItemSelection) -> None:
