@@ -96,6 +96,7 @@ class TpGui(Gui):
         self.BTN.toggled.connect(self.BTN__toggled)
         self.BTN_settings.toggled.connect(self.BTN_settings__toggled)
         self.DATA.signal__tp_finished.connect(lambda: self.BTN.setChecked(False))
+        self.DATA.signal__tp_finished.connect(self.TM._data_reread)
 
         TestCaseBase.signals.signal__tc_finished.connect(lambda z=None: print("signal__tc_finished.emit") or self.TM._data_reread())
 

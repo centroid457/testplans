@@ -3,14 +3,22 @@ from .tc import TestCaseBase
 from .dut import DutBase
 
 from typing import *
+from pathlib import Path
 from PyQt5.QtCore import QThread
 
 from pyqt_templates import *
 from object_info import ObjectInfo
 
+from importlib import import_module
+
 
 # =====================================================================================================================
-pass
+class Exx__TcItemNotFound(Exception):
+    pass
+
+
+class Exx__TcItemType(Exception):
+    pass
 
 
 # =====================================================================================================================
@@ -19,8 +27,11 @@ class TestPlanBase(QThread):
     signal__tp_stop = pyqtSignal()
 
     # SETTINGS ------------------------------------
-    # TODO: place into files? and use as filepath? +timeout use direct in settings for tc!!!
-    TCS: Dict[Type[TestCaseBase], Optional[bool]] = None    # settings
+    DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
+    DIRPATH_TCS: Union[str, Path] = "TESTCASES"
+    DIRPATH_DEVS: Union[str, Path] = "DEVICES"
+
+    TCS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = None    # settings
     # {
     #     TC1: True,
     #     TC2: True
@@ -37,25 +48,40 @@ class TestPlanBase(QThread):
 
     def __init__(self):
         super().__init__()
+        self.DIRPATH_TPS: Path = Path(self.DIRPATH_TPS)
+        self.DIRPATH_TCS: Path = Path(self.DIRPATH_TCS)
+        self.DIRPATH_DEVS: Path = Path(self.DIRPATH_DEVS)
+
         self.reinit()
 
-    def reinit(self) -> None:
-        self.DUTS = []
-        self.TCS_apply_skipped()
+    def reinit(self, tcs: Optional[Dict[Type[TestCaseBase], Optional[bool]]] = None) -> Optional[NoReturn]:
+        # TCS --------------------------------------------------------------
+        tcs = tcs or dict(self.TCS)
+        self.TCS = {}
 
+        for item, using in tcs.items():
+            if isinstance(item, TestCaseBase):
+                tc_cls = item
+            elif isinstance(item, str):   # filename
+                # tc_cls = import_module(item, "TESTCASES").TestCase    # not working!
+                tc_cls = import_module(f"TESTCASES.{item}").TestCase
+                if not tc_cls:
+                    msg = f"[ERROR] file not found[{item=}] in TESTCASES/"
+                    raise Exx__TcItemNotFound(msg)
+            else:
+                msg = f"[ERROR] type is inconvenient [{item=}]"
+                raise Exx__TcItemType(msg)
+
+            tc_cls.SKIP = not using
+            self.TCS.update({tc_cls: using})
+
+        # DUTS --------------------------------------------------------------
+        self.DUTS = []
         self.duts_generate()
         self.duts_mark_presented()
         self.duts_results_tp_init()
 
-    def reinit_new_TCS(self, tcs: Dict[Type[TestCaseBase], Optional[bool]]) -> None:
-        self.TCS = tcs
-        self.reinit()
-
     # TCS -----------------------------------------------------------
-    def TCS_apply_skipped(self) -> None:
-        for tc, using in self.TCS.items():
-            tc.SKIP = not using
-
     @property
     def tcs_active(self) -> List[TestCaseBase]:
         result = []

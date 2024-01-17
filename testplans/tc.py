@@ -1,5 +1,5 @@
+import pathlib
 from typing import *
-
 from PyQt5.QtCore import QThread
 
 from pyqt_templates import *
@@ -53,6 +53,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     @property
     def NAME(cls):
         return cls.__name__
+        # return pathlib.Path(__file__).name    # work as last destination where property starts!
 
     # RESULT ----------------------------------------------------------------------------------------------------------
     @property

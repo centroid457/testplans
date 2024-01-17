@@ -1,7 +1,7 @@
 import time
 
 from testplans import TestCaseBase
-from tc1_direct import TestCase as TC
+from .tc1_direct import TestCase as TC
 
 
 class TestCase(TC):

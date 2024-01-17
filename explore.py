@@ -7,10 +7,8 @@ from testplans.tp import TestPlanBase
 # -------------------------------------------
 class TestPlan1(TestPlanBase):
     TCS = {
-        TestCase: True,
-        Tc1_reverse: True,
-        Tc2: False,
-        Tc2_reverse: True,
+        "tc1_direct": True,
+        "tc1_reverse": True,
     }
 
     def duts_generate(self) -> None:
