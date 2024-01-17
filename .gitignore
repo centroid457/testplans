@@ -42,8 +42,8 @@ USERDATA/
 
 # ========================================
 # SPECIAL FOR THIS PROJECT ---------------
-TESTPLANS/
-TESTCASES/
-DEVICES/
+#TPS/
+#TESTCASES/
+#DEVICES/
 
 # ========================================
