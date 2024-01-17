@@ -40,5 +40,10 @@ TEMPORARY/
 # user saved data ----------
 USERDATA/
 
+# ========================================
+# SPECIAL FOR THIS PROJECT ---------------
+TESTPLANS/
+TESTCASES/
+DEVICES/
 
-# ==========================
+# ========================================
