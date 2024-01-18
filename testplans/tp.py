@@ -3,6 +3,7 @@ from .tc import TestCaseBase
 from .dut import DutBase
 
 from typing import *
+import json
 from pathlib import Path
 from PyQt5.QtCore import QThread
 
@@ -21,6 +22,10 @@ class Exx__TcItemNotFound(Exception):
 
 
 class Exx__TcItemType(Exception):
+    pass
+
+
+class Exx__TcSettingsIncorrect(Exception):
     pass
 
 
@@ -86,8 +91,15 @@ class TestPlanBase(QThread):
             settings_filepath = self.DIRPATH_TCS.joinpath(f"{item}.json")
             if settings_filepath.exists():
                 print("SETTINGS EXISTS")
+                with open(settings_filepath, "r") as settings_fo:
+                    settings = json.load(settings_fo)
+
+                tc_cls.SETTINGS: Dict
+                tc_cls.SETTINGS.update(settings)
             else:
                 print("SETTINGS NOT EXISTS")
+
+        print(tc_cls.SETTINGS)
 
         # DUTS --------------------------------------------------------------
         self.DUTS = []

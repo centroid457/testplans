@@ -3,12 +3,19 @@ from typing import *
 from PyQt5.QtCore import QThread
 
 from pyqt_templates import *
+from private_values import PrivateJson
 
 
 # =====================================================================================================================
 class _TestCaseBase:
     # just to use in Signals before defining exact
     pass
+
+
+class Settings(PrivateJson):
+
+    value1: int = 0
+    value2: int
 
 
 # =====================================================================================================================
@@ -33,7 +40,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     # INSTANCE ------------------------------------
     DUTS_ALL: List[Any]     # applied for CLS!
     DUT: Any
-    SETTINGS: Dict[str, Any] = {}
+    SETTINGS: Dict[str, Any] = None
 
     __result: Optional[bool]
     details: Dict[str, Any]
@@ -83,6 +90,10 @@ class TestCaseBase(_TestCaseBase, QThread):
         result += f"result={self.result}\n"
         result += f"progress={self.progress}\n"
         result += f"exx={self.exx}\n"
+
+        result += f"SETTINGS=====================\n"
+        for name, value in self.SETTINGS.items():
+            result += f"{name}: {value}\n"
 
         result += f"details=====================\n"
         for name, value in self.details.items():

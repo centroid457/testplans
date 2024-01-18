@@ -7,6 +7,7 @@ from . import tc1_direct
 class TestCase(tc1_direct.TestCase):
     ACYNC = True
     DESCRIPTION = "reverse1"
+    SETTINGS = {}   # DONT DELETE!
 
     def run_wrapped(self) -> bool:
         time.sleep(0.5)

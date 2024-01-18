@@ -6,6 +6,7 @@ from testplans import TestCaseBase
 class TestCase(TestCaseBase):
     ACYNC = False
     DESCRIPTION = "direct1"
+    SETTINGS = {}   # DONT DELETE!
 
     def run_wrapped(self) -> bool:
         time.sleep(0.2)
