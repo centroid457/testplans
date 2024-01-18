@@ -2,7 +2,7 @@ from TESTCASES.example_tc1_direct import TestCase
 from testplans import *
 from testplans.tp import TestPlanBase
 
-from DEVICES import dev1
+from DEVICES import dut_example1
 
 
 # -------------------------------------------
@@ -13,7 +13,7 @@ class TestPlan_example1(TestPlanBase):
         "example_tc1_reverse": True,
     }
 
-    DUT_CLS = dev1.Device
+    DUT_CLS = dut_example1.Device
 
     SETTINGS_BASE: PrivateJson      # apply for all TCS!!! in settings before create themselves!
 
