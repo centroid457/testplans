@@ -1,6 +1,6 @@
 # from . import *
 from .tc import TestCaseBase
-from .tp import TestPlanBase
+from .tp import TpMultyDutBase
 from .tm import TpTableModel
 
 import time
@@ -15,7 +15,7 @@ class TpGui(Gui):
     SIZE = (600, 300)
 
     # NEW -------------------------------------------
-    DATA: TestPlanBase
+    DATA: TpMultyDutBase
 
     # WINDOW ==========================================================================================================
     def wgt_create(self):

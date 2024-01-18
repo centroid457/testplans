@@ -3,13 +3,13 @@ import time
 import pytest
 
 from testplans import *
-from testplans.tp import TestPlanBase
+from testplans.tp import TpMultyDutBase
 from testplans.devices import DutBase
 
 
 # =====================================================================================================================
 class Test__1:
-    VICTIM: Type[TestPlanBase] = type("VICTIM", (TestPlanBase,), {})
+    VICTIM: Type[TpMultyDutBase] = type("VICTIM", (TpMultyDutBase,), {})
 
     @classmethod
     def setup_class(cls):
@@ -20,7 +20,7 @@ class Test__1:
         pass
 
     def setup_method(self, method):
-        self.VICTIM = type("VICTIM", (TestPlanBase,), {})
+        self.VICTIM = type("VICTIM", (TpMultyDutBase,), {})
 
     # -----------------------------------------------------------------------------------------------------------------
     def test__simple(self):
@@ -42,7 +42,7 @@ class Test__1:
                 return not self.DUT.VALUE
 
         # -------------------------------------------
-        class TestPlan1(TestPlanBase):
+        class TestPlan1(TpMultyDutBase):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False
@@ -58,7 +58,7 @@ class Test__1:
         assert len(Tp_obj.DUTS) == 1
 
         # -------------------------------------------
-        class TestPlan2(TestPlanBase):
+        class TestPlan2(TpMultyDutBase):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False
@@ -91,7 +91,7 @@ class Test__1:
                 return self.DUT.VALUE
 
         # -------------------------------------------
-        class TestPlan1(TestPlanBase):
+        class TestPlan1(TpMultyDutBase):
             TCS = {
                 Tc1: True,
             }
@@ -136,7 +136,7 @@ class Test__1:
             def run_wrapped(self) -> bool:
                 time.sleep(0.5)
                 return self.DUT.VALUE
-        class TestPlan1(TestPlanBase):
+        class TestPlan1(TpMultyDutBase):
             TCS = {
                 Tc1: False,
             }
@@ -170,7 +170,7 @@ class Test__1:
         class Tc1_reverse(TestCaseBase):
             def run_wrapped(self) -> bool:
                 return not self.DUT.VALUE
-        class TestPlan1(TestPlanBase):
+        class TestPlan1(TpMultyDutBase):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False,

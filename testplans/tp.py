@@ -31,7 +31,7 @@ class Exx__TcSettingsIncorrect(Exception):
 
 
 # =====================================================================================================================
-class TestPlanBase(QThread):
+class TpMultyDutBase(QThread):
     signal__tp_finished = pyqtSignal()
     signal__tp_stop = pyqtSignal()
 

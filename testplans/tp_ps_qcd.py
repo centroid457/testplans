@@ -62,7 +62,7 @@ class PsQcd_Tc4(TestCaseBase, _BasePs):
 
 
 # TP ==================================================================================================================
-class PsQcd_Tp(TestPlanBase, _BasePs):
+class PsQcd_Tp(TpMultyDutBase, _BasePs):
     details = {
         PsQcd_Tc1: True,
         PsQcd_Tc2: True,
@@ -77,7 +77,7 @@ class ATF(SingletonByCallMeta):
 
 
 # =====================================================================================================================
-class Manager_PsQcd(TestPlanBase):
+class Manager_PsQcd(TpMultyDutBase):
     COUNT: int = 10
     ITEMS: Dict[PsQcd_Tp, Any] = {
         # PsQcd_Tp(1): None,

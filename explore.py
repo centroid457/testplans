@@ -1,12 +1,12 @@
 from TESTCASES.example_tc1_direct import TestCase
 from testplans import *
-from testplans.tp import TestPlanBase
+from testplans.tp import TpMultyDutBase
 
 from DEVICES import dut_example1
 
 
 # -------------------------------------------
-class TestPlan_example1(TestPlanBase):
+class TestPlan_example1(TpMultyDutBase):
     TCS = {
         "example_tc1_direct": True,
         "example_tc1_copy": True,
