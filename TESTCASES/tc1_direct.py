@@ -1,5 +1,4 @@
 import time
-
 from testplans import TestCaseBase
 
 
@@ -12,5 +11,3 @@ class TestCase(TestCaseBase):
         time.sleep(0.2)
         self.details_update({"detail_value": self.DUT.VALUE})
         return self.DUT.VALUE
-
-

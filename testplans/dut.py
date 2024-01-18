@@ -5,11 +5,14 @@ from .tc import TestCaseBase
 
 # =====================================================================================================================
 class DutBase:
+    # SETTINGS ------------------------------------
     SKIP: Optional[bool] = None
-    PRESENT: Optional[bool] = None
-    TP_RESULTS: Dict[Type[TestCaseBase], TestCaseBase] = None   # dict is very convenient!!!
 
+    # AUXILIARY -----------------------------------
+    present: Optional[bool] = None
     check_present: Callable[..., bool]
+
+    TP_RESULTS: Dict[Type[TestCaseBase], TestCaseBase] = None   # dict is very convenient!!!
 
     def _SKIP_reverse(self) -> None:
         """
@@ -18,7 +21,7 @@ class DutBase:
         self.SKIP = not bool(self.SKIP)
 
     def mark_present(self) -> None:
-        self.PRESENT = self.check_present()
+        self.present = self.check_present()
 
     def check_result_final(self) -> Optional[bool]:
         for tc in self.TP_RESULTS.values():

@@ -8,6 +8,7 @@ from testplans.tp import TestPlanBase
 class TestPlan1(TestPlanBase):
     TCS = {
         "tc1_direct": True,
+        "tc1_copy": True,
         "tc1_reverse": True,
     }
 

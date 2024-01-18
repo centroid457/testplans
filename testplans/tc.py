@@ -40,7 +40,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     # INSTANCE ------------------------------------
     DUTS_ALL: List[Any]     # applied for CLS!
     DUT: Any
-    SETTINGS: PrivateJson = None
+    SETTINGS: PrivateJson
 
     __result: Optional[bool]
     details: Dict[str, Any]
@@ -137,7 +137,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     def run(self) -> None:
         # PREPARE --------
         self.clear()
-        if not self.DUT.PRESENT or self.DUT.SKIP:
+        if not self.DUT.present or self.DUT.SKIP:
             return
 
         # WORK --------

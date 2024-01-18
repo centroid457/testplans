@@ -42,7 +42,7 @@ class PROJECT:
     VERSION: Tuple[int, int, int] = (0, 0, 0)
     VERSION_STR: str = ".".join(map(str, VERSION))
     TODO: List[str] = [
-        "..."
+        "add meta for settings in tcs, it is better then applying in manually in TP!"
     ]
     FIXME: List[str] = [
         "..."
@@ -50,6 +50,8 @@ class PROJECT:
     NEWS: List[str] = [
         "apply new pypi template",
         "finish run TCS by TC class! TP work only with TC class, not instances on duts",
+        "use FOLDERS: TESTCASES/TESTPLANS/DEVICES",
+        "use TESTCASES with settings"
     ]
 
 
