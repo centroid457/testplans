@@ -40,7 +40,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     # INSTANCE ------------------------------------
     DUTS_ALL: List[Any]     # applied for CLS!
     DUT: Any
-    SETTINGS: Dict[str, Any] = None
+    SETTINGS: PrivateJson = None
 
     __result: Optional[bool]
     details: Dict[str, Any]
@@ -92,7 +92,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         result += f"exx={self.exx}\n"
 
         result += f"SETTINGS=====================\n"
-        for name, value in self.SETTINGS.items():
+        for name, value in self.SETTINGS.dict.items():
             result += f"{name}: {value}\n"
 
         result += f"details=====================\n"

@@ -9,6 +9,7 @@ from PyQt5.QtCore import QThread
 
 from pyqt_templates import *
 from object_info import ObjectInfo
+from private_values import PrivateJson
 
 from importlib import import_module
 
@@ -89,17 +90,14 @@ class TestPlanBase(QThread):
             self.TCS.update({tc_cls: using})
 
             settings_filepath = self.DIRPATH_TCS.joinpath(f"{item}.json")
+            print(settings_filepath)
             if settings_filepath.exists():
                 print("SETTINGS EXISTS")
-                with open(settings_filepath, "r") as settings_fo:
-                    settings = json.load(settings_fo)
-
-                tc_cls.SETTINGS: Dict
-                tc_cls.SETTINGS.update(settings)
+                tc_cls.SETTINGS = PrivateJson(_filepath=settings_filepath)
             else:
                 print("SETTINGS NOT EXISTS")
 
-        print(tc_cls.SETTINGS)
+        print(f"{tc_cls.SETTINGS=}")
 
         # DUTS --------------------------------------------------------------
         self.DUTS = []
