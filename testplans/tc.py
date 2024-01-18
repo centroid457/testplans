@@ -32,7 +32,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!
     skip_tc_dut: Optional[bool] = None
     ACYNC: Optional[bool] = True
-    STOP_IF_FALSE_RESULT: Optional[bool] = None
+    # STOP_IF_FALSE_RESULT: Optional[bool] = None     # NOT USED NOW! MAYBE NOT IMPORTANT!!!
 
     # AUXILIARY -----------------------------------
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
