@@ -46,6 +46,9 @@ class TpTableModel(TableModelTemplate):
         if col == 0:
             flags |= Qt.ItemIsUserCheckable
             # flags |= Qt.ItemIsSelectable
+        if col == 1:
+            if self.open__settings:
+                flags |= Qt.ItemIsUserCheckable
         if col > 1:
             if self.open__settings:
                 flags |= Qt.ItemIsUserCheckable
@@ -140,6 +143,12 @@ class TpTableModel(TableModelTemplate):
                     else:
                         return Qt.Checked
 
+                if col == 1:
+                    if tc.ACYNC:
+                        return Qt.Checked
+                    else:
+                        return Qt.Unchecked
+
                 if col > 1:
                     if not tc_dut.SKIP and not dut.SKIP:
                         if tc_dut.skip_tc_dut:
@@ -182,6 +191,9 @@ class TpTableModel(TableModelTemplate):
         if role == Qt.CheckStateRole:
             if col == 0:
                 tc.SKIP = value == Qt.Unchecked
+
+            if col == 1:
+                tc.ACYNC = value == Qt.Checked
 
             if col > 1:
                 if tc_dut:
