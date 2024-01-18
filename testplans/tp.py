@@ -52,6 +52,8 @@ class TestPlanBase(QThread):
     #     Dut2
     # ]
 
+    DUT_CLS: Type[DutBase] = None
+
     # AUXILIARY -----------------------------------
     tc_active: Optional[Type[TestCaseBase]] = None
 
@@ -102,8 +104,8 @@ class TestPlanBase(QThread):
         # DUTS --------------------------------------------------------------
         self.DUTS = []
         self.duts_generate()
-        self.duts_mark_presented()
-        self.duts_results_tp_init()
+        self._duts_mark_presented()
+        self._duts_results_tp_init()
 
     # TCS -----------------------------------------------------------
     @property
@@ -122,17 +124,17 @@ class TestPlanBase(QThread):
         # raise NotImplemented
         pass
 
-    def duts_mark_presented(self) -> None:
+    def _duts_mark_presented(self) -> None:
         for dut in self.DUTS:
             dut.mark_present()
 
-    def duts_results_tp_init(self) -> None:
+    def _duts_results_tp_init(self) -> None:
         for dut in self.DUTS:
             dut.TP_RESULTS = dict()
             for tc in self.TCS:
                 dut.TP_RESULTS.update({tc: tc(dut)})
 
-    def duts_results_tc_clear(self) -> None:
+    def _duts_results_tc_clear(self) -> None:
         for dut in self.DUTS:
             dut.results_tc_clear()
 

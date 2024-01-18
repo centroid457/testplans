@@ -110,7 +110,7 @@ class TpGui(Gui):
         print(f"btn {state=}")
         self._wgt_main__center()
         if state:
-            self.DATA.duts_results_tc_clear()
+            self.DATA._duts_results_tc_clear()
             self.TM._data_reread()
             self.DATA.start()
         elif state is False:

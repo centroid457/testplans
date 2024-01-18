@@ -1,25 +1,27 @@
-from DEVICES.dev1 import Device
-from TESTCASES.tc1_direct import TestCase
+from TESTCASES.example_tc1_direct import TestCase
 from testplans import *
 from testplans.tp import TestPlanBase
 
+from DEVICES import dev1
+
 
 # -------------------------------------------
-class TestPlan1(TestPlanBase):
+class TestPlan_example1(TestPlanBase):
     TCS = {
-        "tc1_direct": True,
-        "tc1_copy": True,
-        "tc1_reverse": True,
+        "example_tc1_direct": True,
+        "example_tc1_copy": True,
+        "example_tc1_reverse": True,
     }
 
+    DUT_CLS = dev1.Device
     def duts_generate(self) -> None:
         for value in [True, True, False, False, ]:
-            self.DUTS.append(Device(value))
+            self.DUTS.append(self.DUT_CLS(value))
 
 
 # =====================================================================================================================
 if __name__ == "__main__":
-    Tp_obj = TestPlan1()
+    Tp_obj = TestPlan_example1()
     TpGui(Tp_obj)
 
 
