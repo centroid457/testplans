@@ -4,7 +4,7 @@ import pytest
 
 from testplans import *
 from testplans.tp import TestPlanBase
-from testplans.dut import DutBase
+from testplans.devices import DutBase
 
 
 # =====================================================================================================================

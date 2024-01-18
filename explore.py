@@ -14,6 +14,9 @@ class TestPlan_example1(TestPlanBase):
     }
 
     DUT_CLS = dev1.Device
+
+    SETTINGS_BASE: PrivateJson      # apply for all TCS!!! in settings before create themselves!
+
     def duts_generate(self) -> None:
         for value in [True, True, False, False, ]:
             self.DUTS.append(self.DUT_CLS(value))

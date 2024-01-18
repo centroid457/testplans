@@ -1,4 +1,4 @@
-from .dut import *
+from .devices import *
 from .tc import *
 from .tp import *
 
