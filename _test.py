@@ -8,9 +8,30 @@ from testplans.devices import DutBase
 
 
 # =====================================================================================================================
-class Test__1:
-    VICTIM: Type[TpMultyDutBase] = type("VICTIM", (TpMultyDutBase,), {})
+# -------------------------------------------
+class Dut1(DutBase):
+    def __init__(self, value: Any):
+        self.VALUE = value
 
+    def check_present(self) -> bool:
+        return True
+
+
+# -------------------------------------------
+class Tc1(TestCaseBase):
+    TIME_SLEEP: float = 0.2
+    def run_wrapped(self) -> bool:
+        time.sleep(self.TIME_SLEEP)
+        return self.DUT.VALUE
+
+
+class Tc1_reverse(TestCaseBase):
+    def run_wrapped(self) -> bool:
+        return not super().run_wrapped()
+
+
+# =====================================================================================================================
+class Test__1:
     @classmethod
     def setup_class(cls):
         pass
@@ -25,36 +46,18 @@ class Test__1:
     # -----------------------------------------------------------------------------------------------------------------
     def test__simple(self):
         # -------------------------------------------
-        class M1_Dut(DutBase):
-            def __init__(self, value: Any):
-                self.VALUE = value
-
-            def check_present(self) -> bool:
-                return True
-
-        # -------------------------------------------
-        class Tc1(TestCaseBase):
-            def run_wrapped(self) -> bool:
-                return self.DUT.VALUE
-
-        class Tc1_reverse(TestCaseBase):
-            def run_wrapped(self) -> bool:
-                return not self.DUT.VALUE
-
-        # -------------------------------------------
-        class TestPlan1(TpMultyDutBase):
+        class Tp1(TpMultyDutBase):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False
             }
             def duts_generate(self) -> None:
                 for value in [True, ]:
-                    self.DUTS.append(M1_Dut(value))
+                    self.DUTS.append(Dut1(value))
 
-        Tp_obj = TestPlan1()
+        Tp_obj = Tp1()
         Tp_obj.run()
         assert Tp_obj.DUTS[0].check_result_final() is True
-
         assert len(Tp_obj.DUTS) == 1
 
         # -------------------------------------------
@@ -65,7 +68,7 @@ class Test__1:
             }
             def duts_generate(self) -> None:
                 for value in [False, ]:
-                    self.DUTS.append(M1_Dut(value))
+                    self.DUTS.append(Dut1(value))
 
         Tp_obj = TestPlan2()
         Tp_obj.run()
@@ -74,36 +77,20 @@ class Test__1:
         # -------------------------------------------
         assert len(Tp_obj.DUTS) == 1
 
-    def test__parallel(self):
-        # -------------------------------------------
-        class M1_Dut(DutBase):
-            def __init__(self, value: Any):
-                self.VALUE = value
-
-            def check_present(self) -> bool:
-                return True
-
-        # -------------------------------------------
-        class Tc1(TestCaseBase):
-            ACYNC = True
-            def run_wrapped(self) -> bool:
-                time.sleep(0.5)
-                return self.DUT.VALUE
-
-        # -------------------------------------------
-        class TestPlan1(TpMultyDutBase):
+    def test__acync(self):
+        class Tp1(TpMultyDutBase):
             TCS = {
                 Tc1: True,
             }
             def duts_generate(self) -> None:
                 for value in [True, True, ]:
-                    self.DUTS.append(M1_Dut(value))
+                    self.DUTS.append(Dut1(value))
 
-        Tp_obj = TestPlan1()
+        Tp_obj = Tp1()
         time_start = time.time()
         Tp_obj.run()
         time_passed = time.time() - time_start
-        assert 0.5 <= time_passed <= 0.9
+        assert Tc1.TIME_SLEEP - 0.1 <= time_passed <= Tc1.TIME_SLEEP * 2
 
         assert Tp_obj.DUTS[0].check_result_final() is True
         assert Tp_obj.DUTS[1].check_result_final() is True
@@ -111,11 +98,11 @@ class Test__1:
         # -------------------------------------------
         Tc1.ACYNC = False
 
-        Tp_obj = TestPlan1()
+        Tp_obj = Tp1()
         time_start = time.time()
         Tp_obj.run()
         time_passed = time.time() - time_start
-        assert time_passed >= 1
+        assert time_passed >= Tc1.TIME_SLEEP * 2
 
         assert Tp_obj.DUTS[0].check_result_final() is True
         assert Tp_obj.DUTS[1].check_result_final() is True
@@ -123,28 +110,15 @@ class Test__1:
         # -------------------------------------------
 
     def test__skip(self):
-        # -------------------------------------------
-        class M1_Dut(DutBase):
-            def __init__(self, value: Any):
-                self.VALUE = value
-
-            def check_present(self) -> bool:
-                return True
-
-        # -------------------------------------------
-        class Tc1(TestCaseBase):
-            def run_wrapped(self) -> bool:
-                time.sleep(0.5)
-                return self.DUT.VALUE
-        class TestPlan1(TpMultyDutBase):
+        class Tp1(TpMultyDutBase):
             TCS = {
                 Tc1: False,
             }
             def duts_generate(self) -> None:
                 for value in [False, False, ]:
-                    self.DUTS.append(M1_Dut(value))
+                    self.DUTS.append(Dut1(value))
 
-        Tp_obj = TestPlan1()
+        Tp_obj = Tp1()
         time_start = time.time()
         Tp_obj.run()
         time_passed = time.time() - time_start
@@ -154,32 +128,16 @@ class Test__1:
         assert Tp_obj.DUTS[1].check_result_final() is True
 
     def test__GUI(self):
-        # -------------------------------------------
-        class M1_Dut(DutBase):
-            def __init__(self, value: Any):
-                self.VALUE = value
-
-            def check_present(self) -> bool:
-                return True
-
-        # -------------------------------------------
-        class Tc1(TestCaseBase):
-            def run_wrapped(self) -> bool:
-                return self.DUT.VALUE
-
-        class Tc1_reverse(TestCaseBase):
-            def run_wrapped(self) -> bool:
-                return not self.DUT.VALUE
-        class TestPlan1(TpMultyDutBase):
+        class Tp1(TpMultyDutBase):
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False,
             }
             def duts_generate(self) -> None:
                 for value in [False, False, ]:
-                    self.DUTS.append(M1_Dut(value))
+                    self.DUTS.append(Dut1(value))
 
-        Tp_obj = TestPlan1()
+        Tp_obj = Tp1()
 
         with pytest.raises(SystemExit) as exx:
             TpGui(Tp_obj)

@@ -72,7 +72,7 @@ class TpMultyDutBase(QThread):
         self.TCS = {}
         for item, using in tcs.items():
             # print(dir(TESTCASES))
-            if isinstance(item, TestCaseBase):
+            if issubclass(item, TestCaseBase):
                 tc_cls = item
                 # msg = f"[ERROR] DONT USE IT!"
                 # raise Exception(msg)
