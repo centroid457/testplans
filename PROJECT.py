@@ -40,7 +40,7 @@ class PROJECT:
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 0, 1)
+    VERSION: Tuple[int, int, int] = (0, 0, 2)
     VERSION_STR: str = ".".join(map(str, VERSION))
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!"
@@ -49,9 +49,7 @@ class PROJECT:
         "..."
     ]
     NEWS: List[str] = [
-        "run TCS by TC class! TP work only with TC class, not instances on duts",
-        "try use folders: TESTCASES/TESTPLANS/DEVICES",
-        "use settings for testcases"
+        "fix exx without settings",
     ]
 
 

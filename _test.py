@@ -144,5 +144,9 @@ class Test__1:
         assert exx.type == SystemExit
         assert exx.value.code == 0
 
+    @pytest.mark.skip
+    def test__SETTINGS(self):
+        pass
+
 
 # =====================================================================================================================

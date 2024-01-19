@@ -72,11 +72,7 @@ class TpMultyDutBase(QThread):
         self.TCS = {}
         for item, using in tcs.items():
             # print(dir(TESTCASES))
-            if issubclass(item, TestCaseBase):
-                tc_cls = item
-                # msg = f"[ERROR] DONT USE IT!"
-                # raise Exception(msg)
-            elif isinstance(item, str):   # filename
+            if isinstance(item, str):   # filename
                 # tc_cls = import_module(item, "TESTCASES").TestCase    # not working!
                 # tc_cls = getattr(TESTCASES, item).TestCase      # not working
                 tc_cls = import_module(f"TESTCASES.{item}").TestCase
@@ -84,6 +80,10 @@ class TpMultyDutBase(QThread):
                     msg = f"[ERROR] file not found[{item=}] in TESTCASES/"
                     raise Exx__TcItemNotFound(msg)
                 tc_cls.NAME = item
+            elif isinstance(type(item), type) and issubclass(item, TestCaseBase):
+                tc_cls = item
+                # msg = f"[ERROR] DONT USE IT!"
+                # raise Exception(msg)
             else:
                 msg = f"[ERROR] type is inconvenient [{item=}]"
                 raise Exx__TcItemType(msg)
