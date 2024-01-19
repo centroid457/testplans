@@ -1,15 +1,19 @@
-# testplans (v0.0.0)
+# testplans (v0.0.1)
 
 ## DESCRIPTION_SHORT
-Just a simple testplan structure for several duts
+Simple testplan framework for several duts
 
 ## DESCRIPTION_LONG
-Designed to apply testplan(testcase lists) for several duts
+Designed to apply testplan for several duts
 
 
 ## Features
-1. threads  
+1. thread safe  
 2. safe stop process  
+3. skip:  
+	- tc  
+	- tc on dut  
+	- dut  
 
 
 ********************************************************************************
@@ -36,21 +40,5 @@ from testplans import *
 ********************************************************************************
 ## USAGE EXAMPLES
 See tests and sourcecode for other examples.
-
-------------------------------
-### 1. example1.py
-```python
-from NEW_PROJECT____ import *
-
-
-# =====================================================================================================================
-if __name__ == "__main__":
-    NEW_CLASS____()
-
-
-# =====================================================================================================================
-
-print(NEW_CLASS____())
-```
 
 ********************************************************************************

@@ -93,10 +93,11 @@ class TpMultyDutBase(QThread):
 
             settings_filepath = self.DIRPATH_TCS.joinpath(f"{item}.json")
             if settings_filepath.exists():
-                print(f"{settings_filepath=} EXISTS")
+                # print(f"{settings_filepath=} EXISTS")
                 tc_cls.SETTINGS = PrivateJson(_filepath=settings_filepath)
             else:
-                print(f"{settings_filepath=} NOT_EXISTS")
+                # print(f"{settings_filepath=} NOT_EXISTS")
+                pass
 
         # print(f"{tc_cls.SETTINGS=}")
 

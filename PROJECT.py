@@ -16,8 +16,10 @@ class PROJECT:
     NAME_INSTALL: str = NAME_IMPORT.replace("_", "-")
     KEYWORDS: List[str] = [
         "testplan",
-        "testplan structure",
+        "testplan structure framework",
         "testplan gui",
+        "testplan multy dut",
+        "testplan several dut",
     ]
     CLASSIFIERS_TOPICS_ADD: List[str] = [
         # "Topic :: Communications",
@@ -26,20 +28,19 @@ class PROJECT:
 
     # README -----------------------------------------------
     # add DOUBLE SPACE at the end of all lines! for correct representation in MD-viewers
-    DESCRIPTION_SHORT: str = "just a simple testplan structure for several DUTs"
-    DESCRIPTION_LONG: str = """designed to apply testplan(testcase lists) for several DUTs"""
+    DESCRIPTION_SHORT: str = "simple testplan framework for several DUTs"
+    DESCRIPTION_LONG: str = """designed to apply testplan for several DUTs"""
     FEATURES: List[str] = [
         # "feat1",
         # ["feat2", "block1", "block2"],
 
-        "threads",
+        "thread safe",
         "safe stop process",
-        "skip tc",
-        "skip tc on dut",
+        ["skip", "tc", "tc on dut", "dut"],
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 0, 0)
+    VERSION: Tuple[int, int, int] = (0, 0, 1)
     VERSION_STR: str = ".".join(map(str, VERSION))
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!"
@@ -48,10 +49,9 @@ class PROJECT:
         "..."
     ]
     NEWS: List[str] = [
-        "apply new pypi template",
-        "finish run TCS by TC class! TP work only with TC class, not instances on duts",
-        "use FOLDERS: TESTCASES/TESTPLANS/DEVICES",
-        "use TESTCASES with settings"
+        "run TCS by TC class! TP work only with TC class, not instances on duts",
+        "try use folders: TESTCASES/TESTPLANS/DEVICES",
+        "use settings for testcases"
     ]
 
 

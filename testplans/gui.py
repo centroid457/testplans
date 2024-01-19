@@ -98,7 +98,8 @@ class TpGui(Gui):
         self.DATA.signal__tp_finished.connect(lambda: self.BTN.setChecked(False))
         self.DATA.signal__tp_finished.connect(self.TM._data_reread)
 
-        TestCaseBase.signals.signal__tc_finished.connect(lambda z=None: print("signal__tc_finished.emit") or self.TM._data_reread())
+        TestCaseBase.signals.signal__tc_finished.connect(self.TM._data_reread)
+        # TestCaseBase.signals.signal__tc_finished.connect(lambda z=None: print("signal__tc_finished.emit") or self.TM._data_reread())
 
         # fixme: change object for redraw
         # TestCaseBase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.PTE)
@@ -107,7 +108,7 @@ class TpGui(Gui):
         self.TV.horizontalHeader().sectionClicked.connect(self.TV_hh_sectionClicked)
 
     def BTN__toggled(self, state: Optional[bool] = None) -> None:
-        print(f"btn {state=}")
+        # print(f"btn {state=}")
         self._wgt_main__center()
         if state:
             self.DATA._duts_results_tc_clear()
@@ -118,7 +119,7 @@ class TpGui(Gui):
                 self.DATA.terminate()
 
     def BTN_settings__toggled(self, state: Optional[bool] = None) -> None:
-        print(f"BTN_select_tc_on_duts__toggled {state=}")
+        # print(f"BTN_select_tc_on_duts__toggled {state=}")
         self.TV.horizontalHeader().setSectionHidden(1, not state)
         self.TV.horizontalHeader().setSectionsClickable(state)
         self.TM.open__settings = state

@@ -2,7 +2,7 @@
 
 ********************************************************************************
 ## TODO
-1. ...  
+1. add meta for settings in tcs, it is better then applying in manually in TP!  
 
 ********************************************************************************
 ## FIXME
@@ -11,10 +11,10 @@
 ********************************************************************************
 ## NEWS
 
-0.0.0 (2024/01/15 11:00:48)
+0.0.1 (2024/01/19 10:46:03)
 ------------------------------
-- apply new pypi template  
-
-
+- run TCS by TC class! TP work only with TC class, not instances on duts  
+- try use folders: TESTCASES/TESTPLANS/DEVICES  
+- use settings for testcases  
 
 ********************************************************************************
