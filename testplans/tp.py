@@ -41,7 +41,7 @@ class TpMultyDutBase(QThread):
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"
     # DIRPATH_DEVS: Union[str, Path] = "DEVICES"
 
-    TCS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]]    # settings
+    TCS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}    # settings
     # {
     #     Tc1: True,
     #     Tc2: True
