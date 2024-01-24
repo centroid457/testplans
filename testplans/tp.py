@@ -13,8 +13,8 @@ from private_values import PrivateJson
 
 from importlib import import_module
 
-import TESTCASES
-import DEVICES
+# import TESTCASES
+# import DEVICES
 
 
 # =====================================================================================================================
@@ -101,7 +101,7 @@ class TpMultyDutBase(QThread):
                 # print(f"{settings_filepath=} EXISTS")
                 tc_cls.SETTINGS = PrivateJson(_filepath=settings_filepath)
             else:
-                # print(f"{settings_filepath=} NOT_EXISTS")
+                print(f"{settings_filepath=} NOT_EXISTS")
                 pass
 
         # print(f"{tc_cls.SETTINGS=}")
