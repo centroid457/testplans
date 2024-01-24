@@ -32,8 +32,9 @@ class Exx__TcSettingsIncorrect(Exception):
 
 # =====================================================================================================================
 class TpMultyDutBase(QThread):
-    signal__tp_finished = pyqtSignal()
+    signal__tp_start = pyqtSignal()
     signal__tp_stop = pyqtSignal()
+    signal__tp_finished = pyqtSignal()
 
     # SETTINGS ------------------------------------
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
@@ -65,6 +66,9 @@ class TpMultyDutBase(QThread):
         # self.DIRPATH_DEVS: Path = Path(self.DIRPATH_DEVS)
 
         self.reinit()
+
+        self.signal__tp_start.connect(self.run)
+        self.signal__tp_stop.connect(self.terminate)
 
     def reinit(self, tcs: Optional[Dict[Type[TestCaseBase], Optional[bool]]] = None) -> Optional[NoReturn]:
         # TCS --------------------------------------------------------------
