@@ -48,6 +48,9 @@ class TestCaseBase(_TestCaseBase, QThread):
     exx: Optional[Exception]
     progress: int
 
+    # DEVICES ------------------------------------
+    # device1: DEVICES.dut_example1.Device    # APPLY any if need!
+
     def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
         super().__init__()
         self.DUT = dut
