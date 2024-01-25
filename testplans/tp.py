@@ -13,7 +13,6 @@ from private_values import PrivateJson
 
 from importlib import import_module
 
-# import TESTCASES
 # import DEVICES
 
 
@@ -75,34 +74,38 @@ class TpMultyDutBase(QThread):
         # TCS --------------------------------------------------------------
         tcs = tcs or dict(self.TCS)
         self.TCS = {}
-        for item, using in tcs.items():
-            # print(dir(TESTCASES))
-            if isinstance(item, str):   # filename
-                # tc_cls = import_module(item, "TESTCASES").TestCase    # not working!
-                # tc_cls = getattr(TESTCASES, item).TestCase      # not working
-                tc_cls = import_module(f"TESTCASES.{item}").TestCase
-                if not tc_cls:
-                    msg = f"[ERROR] file not found[{item=}] in TESTCASES/"
-                    raise Exx__TcItemNotFound(msg)
-                tc_cls.NAME = item
-            elif isinstance(type(item), type) and issubclass(item, TestCaseBase):
-                tc_cls = item
-                # msg = f"[ERROR] DONT USE IT!"
-                # raise Exception(msg)
-            else:
-                msg = f"[ERROR] type is inconvenient [{item=}]"
-                raise Exx__TcItemType(msg)
+        if self.DIRPATH_TCS.exists():
+            for item, using in tcs.items():
+                # print(dir(TESTCASES))
+                if isinstance(item, str):   # filename
+                    # tc_cls = import_module(item, "TESTCASES").TestCase    # not working!
+                    # tc_cls = getattr(TESTCASES, item).TestCase      # not working
+                    tc_cls = import_module(f"{self.DIRPATH_TCS.name}.{item}").TestCase
+                    if not tc_cls:
+                        msg = f"[ERROR] file not found[{item=}] in /{self.DIRPATH_TCS.name}/"
+                        raise Exx__TcItemNotFound(msg)
+                    tc_cls.NAME = item
+                elif isinstance(type(item), type) and issubclass(item, TestCaseBase):
+                    tc_cls = item
+                    # msg = f"[ERROR] DONT USE IT!"
+                    # raise Exception(msg)
+                else:
+                    msg = f"[ERROR] type is inconvenient [{item=}]"
+                    raise Exx__TcItemType(msg)
 
-            tc_cls.SKIP = not using
-            self.TCS.update({tc_cls: using})
+                tc_cls.SKIP = not using
+                self.TCS.update({tc_cls: using})
 
-            settings_filepath = self.DIRPATH_TCS.joinpath(f"{item}.json")
-            if settings_filepath.exists():
-                # print(f"{settings_filepath=} EXISTS")
-                tc_cls.SETTINGS = PrivateJson(_filepath=settings_filepath)
-            else:
-                print(f"{settings_filepath=} NOT_EXISTS")
-                pass
+                settings_filepath = self.DIRPATH_TCS.joinpath(f"{item}.json")
+                if settings_filepath.exists():
+                    # print(f"{settings_filepath=} EXISTS")
+                    tc_cls.SETTINGS = PrivateJson(_filepath=settings_filepath)
+                else:
+                    print(f"{settings_filepath=} NOT_EXISTS")
+                    pass
+        else:
+            msg = f"[ERROR] not found path {self.DIRPATH_TCS=}"
+            print(msg)
 
         # print(f"{tc_cls.SETTINGS=}")
 

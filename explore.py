@@ -1,4 +1,3 @@
-from TESTCASES.example_tc1_direct import TestCase
 from testplans import *
 from testplans.tp import TpMultyDutBase
 
