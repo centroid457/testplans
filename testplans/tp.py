@@ -41,6 +41,8 @@ class TpMultyDutBase(QThread):
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"
     # DIRPATH_DEVS: Union[str, Path] = "DEVICES"
+    SETTINGS_BASE_NAME: Union[str, Path] = "SETTINGS_BASE.json"
+    SETTINGS_BASE_FILEPATH: Path
 
     TCS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}    # settings
     # {
@@ -66,6 +68,7 @@ class TpMultyDutBase(QThread):
         # self.DIRPATH_TPS: Path = Path(self.DIRPATH_TPS)
         self.DIRPATH_TCS: Path = Path(self.DIRPATH_TCS)
         # self.DIRPATH_DEVS: Path = Path(self.DIRPATH_DEVS)
+        self.SETTINGS_BASE_FILEPATH = self.DIRPATH_TCS.joinpath(self.SETTINGS_BASE_NAME)
 
         if not self.DIRPATH_TCS.exists():
             msg = f"[ERROR] not found path {self.DIRPATH_TCS.name=}"
@@ -87,6 +90,12 @@ class TpMultyDutBase(QThread):
         tcs = tcs or dict(self.TCS)
         self.TCS = {}
 
+        # SETTINGS BASE ----------------------------------------
+        settings_base = {}
+        if self.SETTINGS_BASE_FILEPATH.exists():
+            settings_base = json.loads(self.SETTINGS_BASE_FILEPATH.read_text())
+
+        # WORK ----------------------------------------
         for item, using in tcs.items():
             # print(dir(TESTCASES))
             if isinstance(item, str):   # filename
@@ -108,10 +117,13 @@ class TpMultyDutBase(QThread):
             tc_cls.SKIP = not using
             self.TCS.update({tc_cls: using})
 
+            # SETTINGS TC ----------------------------------------
+            tc_cls.SETTINGS = PrivateJson(_dict=settings_base)
+
             settings_filepath = self.DIRPATH_TCS.joinpath(f"{item}.json")
             if settings_filepath.exists():
-                # print(f"{settings_filepath=} EXISTS")
-                tc_cls.SETTINGS = PrivateJson(_filepath=settings_filepath)
+                settings_tc = json.loads(settings_filepath.read_text())
+                tc_cls.SETTINGS.update_dict(settings_tc)
             else:
                 print(f"{settings_filepath=} NOT_EXISTS")
                 pass
