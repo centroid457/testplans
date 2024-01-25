@@ -1,5 +1,6 @@
 import pathlib
 from typing import *
+import json
 from PyQt5.QtCore import QThread
 
 from pyqt_templates import *
@@ -12,10 +13,9 @@ class _TestCaseBase:
     pass
 
 
-class Settings(PrivateJson):
-
-    value1: int = 0
-    value2: int
+# class Settings(PrivateJson):
+#     value1: int = 0
+#     value2: int
 
 
 # =====================================================================================================================
@@ -33,6 +33,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     skip_tc_dut: Optional[bool] = None
     ACYNC: Optional[bool] = True
     # STOP_IF_FALSE_RESULT: Optional[bool] = None     # NOT USED NOW! MAYBE NOT IMPORTANT!!!
+    SETTINGS_FILES: Union[None, pathlib.Path, List[pathlib.Path]] = None
 
     # AUXILIARY -----------------------------------
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
@@ -40,17 +41,36 @@ class TestCaseBase(_TestCaseBase, QThread):
     # INSTANCE ------------------------------------
     DUTS_ALL: List[Any]     # applied for CLS!
     DUT: Any
-    SETTINGS: Optional[PrivateJson] = None      # applied in TP
+    SETTINGS: Optional[PrivateJson] = None
 
     __result: Optional[bool]
     details: Dict[str, Any]
     exx: Optional[Exception]
     progress: int
 
-    def __init__(self, dut: Any):
+    def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
         super().__init__()
         self.DUT = dut
         self.clear()
+
+        if _settings_files is not None:
+            self.SETTINGS_FILES = _settings_files
+
+        self.load_setings()
+
+    def load_setings(self) -> None:
+        if not self.SETTINGS:
+            self.SETTINGS = PrivateJson(_dict={})
+
+        _settings_files = self.SETTINGS_FILES
+        if _settings_files:
+            if isinstance(_settings_files, pathlib.Path):
+                _settings_files = [_settings_files, ]
+
+            if isinstance(_settings_files, (list, tuple)):
+                for file in _settings_files:
+                    file_data = json.loads(file.read_text())
+                    self.SETTINGS.update_dict(file_data)
 
     def clear(self) -> None:
         self.__result = None

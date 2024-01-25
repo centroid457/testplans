@@ -118,14 +118,13 @@ class TpMultyDutBase(QThread):
             self.TCS.update({tc_cls: using})
 
             # SETTINGS TC ----------------------------------------
-            tc_cls.SETTINGS = PrivateJson(_dict=settings_base)
+            tc_cls.SETTINGS_FILES = [self.SETTINGS_BASE_FILEPATH, ]
 
-            settings_filepath = self.DIRPATH_TCS.joinpath(f"{item}.json")
-            if settings_filepath.exists():
-                settings_tc = json.loads(settings_filepath.read_text())
-                tc_cls.SETTINGS.update_dict(settings_tc)
+            settings_tc_filepath = self.DIRPATH_TCS.joinpath(f"{item}.json")
+            if settings_tc_filepath.exists():
+                tc_cls.SETTINGS_FILES.append(settings_tc_filepath)
             else:
-                print(f"{settings_filepath=} NOT_EXISTS")
+                print(f"{settings_tc_filepath=} NOT_EXISTS")
                 pass
 
         # print(f"{tc_cls.SETTINGS=}")

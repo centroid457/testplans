@@ -50,6 +50,7 @@ class PROJECT:
     ]
     NEWS: List[str] = [
         "add SETTINGS_BASE",
+        "add SETTINGS_FILES in TC"
     ]
 
 
