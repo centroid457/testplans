@@ -6,14 +6,7 @@ from DEVICES import dut_example1
 
 # -------------------------------------------
 class TestPlan_example1(TpMultyDutBase):
-    TCS = {
-        "example_tc1_direct": True,
-        "example_tc1_copy": True,
-        "example_tc1_reverse": True,
-    }
-
     DUT_CLS = dut_example1.Device
-
     SETTINGS_BASE: PrivateJson      # apply for all TCS!!! in settings before create themselves!
 
     def duts_generate(self) -> None:

@@ -72,6 +72,11 @@ class TpMultyDutBase(QThread):
             print(msg)
             raise Exx__TcsPathNotExists(msg)
 
+        if not self.TCS:
+            for file in self.DIRPATH_TCS.glob("*.py"):
+                if not file.stem.startswith("__"):
+                    self.TCS.update({file.stem: True})
+
         self.reinit()
 
         self.signal__tp_start.connect(self.run)
