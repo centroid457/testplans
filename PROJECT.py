@@ -49,7 +49,7 @@ class PROJECT:
         "..."
     ]
     NEWS: List[str] = [
-        "fix work without any TC (again)"
+        "add SETTINGS_BASE",
     ]
 
 

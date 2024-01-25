@@ -181,7 +181,6 @@ class TpMultyDutBase(QThread):
 
         self.signal__tp_finished.emit()
 
-    # RUN ----------------------------------------------------------------
     def run(self) -> None:
         for step, tc in enumerate(self.TCS):
             self.progress = int(step / len(self.TCS) * 100)
