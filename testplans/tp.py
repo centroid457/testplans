@@ -13,8 +13,6 @@ from private_values import PrivateJson
 
 from importlib import import_module
 
-# import DEVICES
-
 
 # =====================================================================================================================
 class Exx__TcsPathNotExists(Exception):
