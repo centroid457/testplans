@@ -40,7 +40,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     # INSTANCE ------------------------------------
     DUTS_ALL: List[Any]     # applied for CLS!
     DUT: Any
-    SETTINGS: Optional[PrivateJson] = None
+    SETTINGS: Optional[PrivateJson] = None      # applied in TP
 
     __result: Optional[bool]
     details: Dict[str, Any]
