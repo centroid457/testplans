@@ -47,6 +47,7 @@ class Test__1:
     def test__simple(self):
         # -------------------------------------------
         class Tp1(TpMultyDutBase):
+            START_GUI = False
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False
@@ -62,6 +63,7 @@ class Test__1:
 
         # -------------------------------------------
         class TestPlan2(TpMultyDutBase):
+            START_GUI = False
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False
@@ -79,6 +81,7 @@ class Test__1:
 
     def test__acync(self):
         class Tp1(TpMultyDutBase):
+            START_GUI = False
             TCS = {
                 Tc1: True,
             }
@@ -111,6 +114,7 @@ class Test__1:
 
     def test__skip(self):
         class Tp1(TpMultyDutBase):
+            START_GUI = False
             TCS = {
                 Tc1: False,
             }
@@ -137,10 +141,8 @@ class Test__1:
                 for value in [False, False, ]:
                     self.DUTS.append(Dut1(value))
 
-        Tp_obj = Tp1()
-
         with pytest.raises(SystemExit) as exx:
-            TpGui(Tp_obj)
+            Tp1()
         assert exx.type == SystemExit
         assert exx.value.code == 0
 
