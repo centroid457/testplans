@@ -40,7 +40,7 @@ class PROJECT:
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 0, 6)
+    VERSION: Tuple[int, int, int] = (0, 0, 7)
     VERSION_STR: str = ".".join(map(str, VERSION))
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!"
@@ -49,8 +49,7 @@ class PROJECT:
         "..."
     ]
     NEWS: List[str] = [
-        "add SETTINGS_BASE",
-        "add SETTINGS_FILES in TC"
+        "add START_GUI",
     ]
 
 
