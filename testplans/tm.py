@@ -5,12 +5,12 @@ from PyQt5.QtGui import *
 
 from pyqt_templates import TableModelTemplate
 
-from .tp import TpMultyDutBase
+# from .tp import TpMultyDutBase
 
 
 # =====================================================================================================================
 class TpTableModel(TableModelTemplate):
-    DATA: TpMultyDutBase
+    DATA: "TpMultyDutBase"
 
     # AUX -------------------------------------------
     open__settings: Optional[bool] = None
