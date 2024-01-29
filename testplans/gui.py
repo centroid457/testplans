@@ -9,7 +9,7 @@ from pyqt_templates import *
 
 
 # =====================================================================================================================
-class TpGui(Gui):
+class TpGuiBase(Gui):
     # OVERWRITTEN -----------------------------------
     TITLE = "[TestPlan] Universal"
     SIZE = (600, 300)

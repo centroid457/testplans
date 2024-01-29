@@ -1,7 +1,7 @@
 # from . import *
 from .tc import TestCaseBase
 from .devices import DutBase, DeviceBase
-from .gui import TpGui
+from .gui import TpGuiBase
 
 from typing import *
 import json
@@ -40,6 +40,7 @@ class TpMultyDutBase(QThread):
 
     # SETTINGS ------------------------------------
     START_GUI: bool = True
+    CLS_GUI: Type[TpGuiBase] = TpGuiBase
     # START_HTTP: bool = True       # TODO: FINISH
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
@@ -88,7 +89,7 @@ class TpMultyDutBase(QThread):
         self.signal__tp_stop.connect(self.terminate)
 
         if self.START_GUI:
-            TpGui(self)
+            self.CLS_GUI(self)
 
     def reinit(self, tcs: Optional[Dict[Type[TestCaseBase], Optional[bool]]] = None) -> Optional[NoReturn]:
         # TCS --------------------------------------------------------------

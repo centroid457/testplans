@@ -49,7 +49,7 @@ class PROJECT:
         "..."
     ]
     NEWS: List[str] = [
-        "add START_GUI",
+        "add START_GUI, CLS_GUI",
     ]
 
 
