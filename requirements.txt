@@ -4,3 +4,4 @@ PyQt5
 
 singleton_meta
 pyqt_templates
+server-templates
