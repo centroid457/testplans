@@ -33,7 +33,7 @@ class ReleaseFileBase:
             lines = ""
         if isinstance(lines, str):
             lines = [lines, ]
-        with self.filepath.open("a") as fo_append:
+        with self.filepath.open("a", encoding="utf-8") as fo_append:
             for lines in lines:
                 fo_append.write(f"{lines}\n")
 
@@ -109,7 +109,7 @@ class Readme(ReleaseFileBase):
 
             f"",
             f"## DESCRIPTION_LONG",
-            f"{PROJECT.DESCRIPTION_LONG.capitalize().strip()}",
+            f"{PROJECT.DESCRIPTION_LONG.strip()}",
 
             *features,
 
@@ -231,7 +231,7 @@ class History(ReleaseFileBase):
         group: List[str] = [
             f"## NEWS",
             "",
-            f"{PROJECT.VERSION_STR} ({time.strftime("%Y/%m/%d %H:%M:%S")})",
+            f"{PROJECT.VERSION_STR} ({time.strftime('%Y/%m/%d %H:%M:%S')})",
             self.LINE_SEPARATOR_PART,
         ]
         news_new = self._lines_create__group(PROJECT.NEWS, nums=False)
