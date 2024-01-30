@@ -90,20 +90,28 @@ class TpMultyDutBase(QThread):
         self.signal__tp_start.connect(self.start)
         self.signal__tp_stop.connect(self.terminate)
 
+        self.api = self.CLS_API(self)
+        # self.gui = self.CLS_GUI(self)
+
         if self.START_API:
-            self.api = self.CLS_API(self)
-            self.api.start()
+            self.start_api()
 
         if self.START_GUI:
-            self.CLS_GUI(self)
-            # this will BLOCK process
-            # this will BLOCK process
-            # this will BLOCK process
-            # this will BLOCK process
-            # this will BLOCK process
-            # this will BLOCK process
-            # this will BLOCK process
-            # this will BLOCK process
+            self.start_gui()
+
+    def start_api(self) -> None:
+        self.api.start()
+
+    def start_gui(self) -> None:
+        self.CLS_GUI(self)
+        # this will BLOCK process
+        # this will BLOCK process
+        # this will BLOCK process
+        # this will BLOCK process
+        # this will BLOCK process
+        # this will BLOCK process
+        # this will BLOCK process
+        # this will BLOCK process
 
     def reinit(self, tcs: Optional[Dict[Type[TestCaseBase], Optional[bool]]] = None) -> Optional[NoReturn]:
         # TCS --------------------------------------------------------------
