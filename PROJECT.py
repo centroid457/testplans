@@ -86,16 +86,16 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 0, 7)
+    VERSION: Tuple[int, int, int] = (0, 0, 8)
     VERSION_STR: str = ".".join(map(str, VERSION))
     TODO: List[str] = [
-        "add meta for settings in tcs, it is better then applying in manually in TP!"
+        "add meta for settings in tcs, it is better then applying in manually in TP!",
     ]
     FIXME: List[str] = [
-        "..."
+        "TP progress",
     ]
     NEWS: List[str] = [
-        "add START_GUI, CLS_GUI",
+        "add START_API",
     ]
 
 

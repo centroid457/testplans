@@ -110,13 +110,16 @@ class TpGuiBase(Gui):
     def BTN__toggled(self, state: Optional[bool] = None) -> None:
         # print(f"btn {state=}")
         self._wgt_main__center()
+        if self.DATA.isRunning():
+            state = False
+
         if state:
-            self.DATA._duts_results_tc_clear()
-            self.TM._data_reread()
             self.DATA.start()
+            self.TM._data_reread()
         elif state is False:
-            if not self.DATA.isFinished():
-                self.DATA.terminate()
+            # if not self.DATA.isFinished():
+            self.DATA.terminate()
+            self.TM._data_reread()
 
     def BTN_settings__toggled(self, state: Optional[bool] = None) -> None:
         # print(f"BTN_select_tc_on_duts__toggled {state=}")
