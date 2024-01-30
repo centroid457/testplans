@@ -1,7 +1,16 @@
-pip
-pytest
-PyQt5
+# ==========================
+# VERSION = (0, 0, 1)   # just add version
 
+# COMMON ===================
+pytest
+requirements-checker
+object-info
+
+# ========================================
+# SPECIAL FOR THIS PROJECT ---------------
+PyQt5
 singleton_meta
 pyqt_templates
 server-templates
+
+# ========================================
