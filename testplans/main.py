@@ -2,6 +2,7 @@
 from .tc import TestCaseBase
 from .devices import DutBase, DeviceBase
 from .gui import TpGuiBase
+from .api import TpApi
 
 from typing import *
 import json
@@ -40,7 +41,7 @@ class TpMultyDutBase(QThread):
 
     # SETTINGS ------------------------------------------------------
     START_API: bool = True
-    CLS_API: Type[TpGuiBase] = ServerAiohttpBase
+    CLS_API: Type[ServerAiohttpBase] = TpApi
 
     START_GUI: bool = True
     CLS_GUI: Type[TpGuiBase] = TpGuiBase

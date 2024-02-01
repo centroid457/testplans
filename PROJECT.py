@@ -90,12 +90,13 @@ designed to apply testplan for several DUTs
     VERSION_STR: str = ".".join(map(str, VERSION))
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
+        "close all (api+tpThreads) on GUI close!",
     ]
     FIXME: List[str] = [
         "TP progress",
     ]
     NEWS: List[str] = [
-        "add START_API",
+        "add first step API",
     ]
 
 

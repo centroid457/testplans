@@ -3,7 +3,7 @@ import time
 import pytest
 
 from testplans import *
-from testplans.tp import TpMultyDutBase
+from testplans.main import TpMultyDutBase
 from testplans.devices import DutBase
 
 

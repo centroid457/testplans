@@ -1,5 +1,5 @@
 from testplans import *
-from testplans.tp import TpMultyDutBase
+from testplans.main import TpMultyDutBase
 
 from DEVICES import dut_example1
 
