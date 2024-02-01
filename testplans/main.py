@@ -40,6 +40,10 @@ class TpMultyDutBase(QThread):
     signal__tp_finished = pyqtSignal()
 
     # SETTINGS ------------------------------------------------------
+    STAND_ID: Optional[str] = "stand_id__1"
+    STAND_TYPE: Optional[str] = "stand_type"
+    STAND_DESCRIPTION: Optional[str] = "stand_description"
+
     START_API: bool = True
     CLS_API: Type[ServerAiohttpBase] = TpApi
 
@@ -226,6 +230,39 @@ class TpMultyDutBase(QThread):
         self.tc_active = None
         self.progress = 100
         self.signal__tp_finished.emit()
+
+    # =================================================================================================================
+    def info_get(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
+        TP_TCS = []
+        for tc in self.TCS:
+            TP_TCS.append(tc.info_get())
+
+        result = {
+            # BASE STRING INFO
+            "STAND_ID": self.STAND_ID,
+            "STAND_TYPE": self.STAND_TYPE,
+            "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
+
+            # AUX
+            "TP_TCS_COUNT": len(self.TCS),
+            "TP_DUTS_COUNT": len(self.DUTS),
+
+            # SETTINGS
+            "TP_SETTINGS_BASE": {},     # TODO: load json
+
+            # STRUCTURE
+            "TP_TCS": TP_TCS,
+            "TP_DUTS": [],      # TODO: decide how to use
+            # [
+            #     # [{DUT1}, {DUT2}, …]
+            #     {
+            #         DUT_ID: 1  # ??? 	# aux
+            #         DUT_SKIP: False
+            #     }
+            # ]
+
+            }
+        return result
 
 
 # =====================================================================================================================
