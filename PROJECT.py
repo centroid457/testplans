@@ -97,6 +97,7 @@ designed to apply testplan for several DUTs
     ]
     NEWS: List[str] = [
         "add first step API",
+        "add TC.info_get",
     ]
 
 

@@ -41,7 +41,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     # INSTANCE ------------------------------------
     DUTS_ALL: List[Any]     # applied for CLS!
     DUT: Any
-    SETTINGS: Optional[PrivateJson] = None
+    SETTINGS: PrivateJson = None
 
     __result: Optional[bool]
     details: Dict[str, Any]
@@ -51,29 +51,32 @@ class TestCaseBase(_TestCaseBase, QThread):
     # DEVICES ------------------------------------
     # device1: DEVICES.dut_example1.Device    # APPLY any if need!
 
-    def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
+    # def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
+    def __init__(self, dut: Any):
         super().__init__()
         self.DUT = dut
         self.clear()
 
-        if _settings_files is not None:
-            self.SETTINGS_FILES = _settings_files
+        # if _settings_files is not None:
+        #     self.SETTINGS_FILES = _settings_files
 
-        self.load_setings()
+        self.SETTINGS = self.settings_read()
 
-    def load_setings(self) -> None:
-        if not self.SETTINGS:
-            self.SETTINGS = PrivateJson(_dict={})
+    @classmethod
+    def settings_read(cls) -> PrivateJson:
+        result = PrivateJson(_dict={})
 
-        _settings_files = self.SETTINGS_FILES
+        _settings_files = cls.SETTINGS_FILES
         if _settings_files:
             if isinstance(_settings_files, pathlib.Path):
                 _settings_files = [_settings_files, ]
 
             if isinstance(_settings_files, (list, tuple)):
                 for file in _settings_files:
-                    file_data = json.loads(file.read_text())
-                    self.SETTINGS.update_dict(file_data)
+                    if file.exists():
+                        file_data = json.loads(file.read_text())
+                        result.update_dict(file_data)
+        return result
 
     def clear(self) -> None:
         self.__result = None
@@ -102,7 +105,9 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.details.update(details)
         self.signals.signal__tc_details_updated.emit(self)
 
+    # =================================================================================================================
     def info_pretty(self) -> str:
+        # fixme: ref from info_get
         result = ""
 
         result += f"NAME={self.NAME}\n"
@@ -122,6 +127,17 @@ class TestCaseBase(_TestCaseBase, QThread):
         result += f"details=====================\n"
         for name, value in self.details.items():
             result += f"{name}: {value}\n"
+        return result
+
+    @classmethod
+    def info_get(cls) -> Dict[str, Union[str, None, bool, int, dict, list]]:
+        result = {
+            "TC_NAME": cls.NAME,
+            "TC_DESCRIPTION": cls.DESCRIPTION,
+            "TC_ASYNC": cls.ACYNC,
+            "TC_SKIP": cls.SKIP,
+            "TC_SETTINGS": cls.settings_read().dict,
+        }
         return result
 
     # =================================================================================================================
