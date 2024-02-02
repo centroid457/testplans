@@ -1,12 +1,11 @@
 import pathlib
 from PROJECT import PROJECT
 
-
 from requirements_checker import Packages
 
 
 # =====================================================================================================================
-__version__ = "0.0.1"
+VERSION = (0, 0, 1)   # use direct upgrade this module by PROJECT.NAME_INSTALL
 
 
 # =====================================================================================================================
@@ -16,13 +15,13 @@ print()
 print("1=pip==================================================")
 pkgs_cli.upgrade_pip()
 print()
-print("2=find_packages========================================")
+print("2=this project=========================================")
 pkgs_cli.upgrade(PROJECT.NAME_INSTALL)
 print()
 print("3=upgrade__centroid457=================================")
 pkgs_cli.upgrade__centroid457()
 print()
-print("4=requirements.txt======================================")
+print("4=requirements.txt=====================================")
 filepath = pathlib.Path(__file__).parent.joinpath("requirements.txt")   # FIXME: not working!
 pkgs_cli.upgrade_file(filepath)
 

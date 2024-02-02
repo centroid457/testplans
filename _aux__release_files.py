@@ -7,6 +7,11 @@ from PROJECT import PROJECT
 
 
 # =====================================================================================================================
+# VERSION = (0, 0, 1)   # keep russian lang by using utf-8
+VERSION = (0, 0, 2)   # reuse utf8+ del all capitalizing()
+
+
+# =====================================================================================================================
 class Exx_HistorySameVersionOrNews(Exception):
     pass
 
@@ -33,7 +38,7 @@ class ReleaseFileBase:
             lines = ""
         if isinstance(lines, str):
             lines = [lines, ]
-        with self.filepath.open("a", encoding="utf-8") as fo_append:
+        with self.filepath.open("a", encoding="utf8") as fo_append:
             for lines in lines:
                 fo_append.write(f"{lines}\n")
 
@@ -105,7 +110,7 @@ class Readme(ReleaseFileBase):
 
             f"",
             f"## DESCRIPTION_SHORT",
-            f"{PROJECT.DESCRIPTION_SHORT.capitalize().strip()}",
+            f"{PROJECT.DESCRIPTION_SHORT.strip()}",
 
             f"",
             f"## DESCRIPTION_LONG",
@@ -154,7 +159,9 @@ class Readme(ReleaseFileBase):
         self._file_append_lines(LINES_EXAMPLES_START)
         self._file_append_lines()
 
-        files = [item for item in self.dirpath_examples.iterdir() if item.is_file()]
+        files = []
+        if self.dirpath_examples.exists():
+            files = [item for item in self.dirpath_examples.iterdir() if item.is_file()]
 
         for index, file in enumerate(files, start=1):
             LINES = [
@@ -218,6 +225,9 @@ class History(ReleaseFileBase):
 
         # ----------------------------
         for news_item in PROJECT.NEWS:
+            if isinstance(news_item, list):
+                news_item = news_item[0]
+
             if re.search(r'- ' + str(news_item) + r'\s*\n', self.LAST_NEWS):
                 msg = f"exists_news"
                 print(msg)
