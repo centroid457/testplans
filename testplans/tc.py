@@ -136,7 +136,7 @@ class TestCaseBase(_TestCaseBase, QThread):
             "TC_DESCRIPTION": cls.DESCRIPTION,
             "TC_ASYNC": cls.ACYNC,
             "TC_SKIP": cls.SKIP,
-            "TC_SETTINGS": cls.settings_read().dict,
+            "TC_SETTINGS": cls.settings_read(),
         }
         return result
 

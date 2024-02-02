@@ -30,6 +30,18 @@ class Tc1_reverse(TestCaseBase):
         return not super().run_wrapped()
 
 
+# -------------------------------------------
+class Tp1(TpMultyDutBase):
+    START_GUI = False
+    TCS = {
+        Tc1: True,
+        Tc1_reverse: False
+    }
+    def duts_generate(self) -> None:
+        for value in [True, True, ]:
+            self.DUTS.append(Dut1(value))
+
+
 # =====================================================================================================================
 class Test__1:
     @classmethod
@@ -46,20 +58,10 @@ class Test__1:
     # -----------------------------------------------------------------------------------------------------------------
     def test__simple(self):
         # -------------------------------------------
-        class Tp1(TpMultyDutBase):
-            START_GUI = False
-            TCS = {
-                Tc1: True,
-                Tc1_reverse: False
-            }
-            def duts_generate(self) -> None:
-                for value in [True, ]:
-                    self.DUTS.append(Dut1(value))
-
         Tp_obj = Tp1()
         Tp_obj.run()
         assert Tp_obj.DUTS[0].check_result_final() is True
-        assert len(Tp_obj.DUTS) == 1
+        assert len(Tp_obj.DUTS) == 2
 
         # -------------------------------------------
         class TestPlan2(TpMultyDutBase):
@@ -132,19 +134,19 @@ class Test__1:
         assert Tp_obj.DUTS[1].check_result_final() is True
 
     def test__GUI(self):
-        class Tp1(TpMultyDutBase):
-            TCS = {
-                Tc1: True,
-                Tc1_reverse: False,
-            }
-            def duts_generate(self) -> None:
-                for value in [False, False, ]:
-                    self.DUTS.append(Dut1(value))
+        class Tp(Tp1):
+            START_GUI = True
 
         with pytest.raises(SystemExit) as exx:
-            Tp1()
+            Tp()
         assert exx.type == SystemExit
         assert exx.value.code == 0
+
+    def test__info_get(self):
+        Tp_obj = Tp1()
+        info_data = Tp_obj.info_get()
+        assert isinstance(info_data, dict)
+        assert len(info_data) > 2
 
     @pytest.mark.skip
     def test__SETTINGS(self):
