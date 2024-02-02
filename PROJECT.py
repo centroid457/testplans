@@ -91,6 +91,7 @@ designed to apply testplan for several DUTs
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api+tpThreads) on GUI close!",
+        "add version for all jsons for future api",
     ]
     FIXME: List[str] = [
         "TP progress",
