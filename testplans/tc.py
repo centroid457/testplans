@@ -60,13 +60,13 @@ class TestCaseBase(_TestCaseBase, QThread):
         # if _settings_files is not None:
         #     self.SETTINGS_FILES = _settings_files
 
-        self.SETTINGS = self.settings_read()
+        self.SETTINGS = PrivateJson(_dict=self.settings_read())
 
     @classmethod
-    def settings_read(cls) -> PrivateJson:
-        result = PrivateJson(_dict={})
+    def settings_read(cls, files: Union[None, pathlib.Path, List[pathlib.Path]] = None) -> dict:
+        result = {}
 
-        _settings_files = cls.SETTINGS_FILES
+        _settings_files = files or cls.SETTINGS_FILES
         if _settings_files:
             if isinstance(_settings_files, pathlib.Path):
                 _settings_files = [_settings_files, ]
@@ -75,7 +75,7 @@ class TestCaseBase(_TestCaseBase, QThread):
                 for file in _settings_files:
                     if file.exists():
                         file_data = json.loads(file.read_text())
-                        result.update_dict(file_data)
+                        result.update(file_data)
         return result
 
     def clear(self) -> None:

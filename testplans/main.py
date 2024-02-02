@@ -248,7 +248,7 @@ class TpMultyDutBase(QThread):
             "TP_DUTS_COUNT": len(self.DUTS),
 
             # SETTINGS
-            "TP_SETTINGS_BASE": {},     # TODO: load json
+            "TP_SETTINGS_BASE": TestCaseBase.settings_read(files=self.SETTINGS_BASE_FILEPATH),
 
             # STRUCTURE
             "TP_TCS": TP_TCS,
