@@ -1,7 +1,7 @@
 # testplans (v0.0.9)
 
 ## DESCRIPTION_SHORT
-Simple testplan framework for several duts
+simple testplan framework for several DUTs
 
 ## DESCRIPTION_LONG
 designed to apply testplan for several DUTs
