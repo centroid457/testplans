@@ -2,10 +2,11 @@ from typing import *
 
 
 # =====================================================================================================================
-class PROJECT:
-    # AUX --------------------------------------------------
-    _VERSION_TEMPLATE: Tuple[int] = (0, 0, 2)
+VERSION = (0, 0, 3)   # 1/deprecate _VERSION_TEMPLATE from PRJ object +2/place update_prj here in __main__ +3/separate finalize attrs
 
+
+# =====================================================================================================================
+class PROJECT:
     # AUTHOR -----------------------------------------------
     AUTHOR_NAME: str = "Andrei Starichenko"
     AUTHOR_EMAIL: str = "centroid@mail.ru"
@@ -13,7 +14,6 @@ class PROJECT:
 
     # PROJECT ----------------------------------------------
     NAME_IMPORT: str = "testplans"
-    NAME_INSTALL: str = NAME_IMPORT.replace("_", "-")
     KEYWORDS: List[str] = [
         "testplan",
         "testplan structure framework",
@@ -87,7 +87,6 @@ designed to apply testplan for several DUTs
 
     # HISTORY -----------------------------------------------
     VERSION: Tuple[int, int, int] = (0, 0, 10)
-    VERSION_STR: str = ".".join(map(str, VERSION))
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api+tpThreads) on GUI close!",
@@ -99,10 +98,14 @@ designed to apply testplan for several DUTs
         "fix TC.info_get",
     ]
 
+    # FINALIZE -----------------------------------------------
+    VERSION_STR: str = ".".join(map(str, VERSION))
+    NAME_INSTALL: str = NAME_IMPORT.replace("_", "-")
+
 
 # =====================================================================================================================
 if __name__ == '__main__':
-    pass
+    release_files_update(PROJECT)
 
 
 # =====================================================================================================================
