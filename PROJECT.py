@@ -98,6 +98,7 @@ designed to apply testplan for several DUTs
     ]
     NEWS: List[str] = [
         "add INDEX in DUT",
+        "add TC results_get/*all"
     ]
 
     # FINALIZE -----------------------------------------------

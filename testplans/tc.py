@@ -115,6 +115,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         result += f"SKIP={self.SKIP}\n"
         result += f"skip_tc_dut={self.skip_tc_dut}\n"
         result += f"ACYNC={self.ACYNC}\n"
+        result += f"DUT.INDEX={self.DUT.INDEX}\n"
         result += f"result={self.result}\n"
         result += f"progress={self.progress}\n"
         result += f"exx={self.exx}\n"
@@ -144,31 +145,37 @@ class TestCaseBase(_TestCaseBase, QThread):
         return result
 
     # =================================================================================================================
-    @classmethod
-    def results_get(cls) -> List[Dict[str, Union[str, None, bool, int, dict, list]]]:
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        result = []
-        for tc in cls.TCS_all:
-            result_i = {
-                "TC_NAME": cls.NAME,
-                "TC_DESCRIPTION": cls.DESCRIPTION,
-                "TC_ASYNC": cls.ACYNC,
-                "TC_SKIP": cls.SKIP,
-                "TC_SETTINGS": cls.settings_read(),
-            }
+    def results_get(self) -> Dict[str, Any]:
+        result = {
+            # COORDINATES
+            "DUT_INDEX": self.DUT.INDEX,
+
+            # INFO
+            "TC_NAME": self.NAME,
+            "TC_DESCRIPTION": self.DESCRIPTION,
+            "TC_ASYNC": self.ACYNC,
+            "TC_SKIP": self.SKIP,
+            "TC_SETTINGS": self.SETTINGS.dict,
+
+            # RESULTS
+            "TC_ACTIVE": self.isRunning(),
+            "TC_PROGRESS": self.progress,
+            "TC_RESULT": self.result,
+            "TC_DETAILS": self.details,
+        }
         return result
+
+    @classmethod
+    def results_get_all(cls) -> List[Dict[str, Any]]:
+        results = []
+        for tc_dut in cls.TCS_dut_all:
+            results.append(tc_dut.results_get())
+        return results
 
     # =================================================================================================================
     @classmethod
     @property
-    def TCS_all(cls) -> List['TestCaseBase']:
+    def TCS_dut_all(cls) -> List['TestCaseBase']:
         """
         get existed tc objects for all DUTs, if not existed - create it in all DUTs
         """
@@ -196,7 +203,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     @classmethod
     def terminate_all(cls) -> None:
-        for tc_dut in cls.TCS_all:
+        for tc_dut in cls.TCS_dut_all:
             tc_dut.terminate()
 
         cls.teardown_all()
@@ -234,7 +241,7 @@ class TestCaseBase(_TestCaseBase, QThread):
             return
 
         # BATCH --------------------------
-        for tc_dut in cls.TCS_all:
+        for tc_dut in cls.TCS_dut_all:
             if tc_dut.skip_tc_dut:
                 continue
 
@@ -244,7 +251,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
         # FINISH --------------------------
         if cls.ACYNC:
-            for tc_dut in cls.TCS_all:
+            for tc_dut in cls.TCS_dut_all:
                 tc_dut.wait()
 
         cls.teardown_all()
