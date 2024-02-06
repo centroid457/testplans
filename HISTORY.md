@@ -4,6 +4,7 @@
 ## TODO
 1. add meta for settings in tcs, it is better then applying in manually in TP!  
 2. close all (api+tpThreads) on GUI close!  
+3. add version for all jsons for future api  
 
 ********************************************************************************
 ## FIXME
@@ -11,6 +12,12 @@
 
 ********************************************************************************
 ## NEWS
+
+0.0.11 (2024/02/06 15:45:10)
+------------------------------
+- add INDEX in DUT  
+- add TC results_get/*all  
+- add TP results_get (not finished)  
 
 0.0.10 (2024/02/02 10:57:02)
 ------------------------------
