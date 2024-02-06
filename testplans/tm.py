@@ -28,7 +28,7 @@ class TpTableModel(TableModelTemplate):
                 if section == 0:
                     return "ТЕСТКЕЙС"
                 if section == 1:
-                    return "ACYNC"
+                    return "ASYNC"
                 if section > 1:
                     return f"{section-1}"
             # ------------------------------
@@ -75,7 +75,7 @@ class TpTableModel(TableModelTemplate):
             if col == 0:
                 return f'{tc.NAME}\n{tc.DESCRIPTION}'
             if col == 1:
-                return '+' if tc.ACYNC else '-'
+                return '+' if tc.ASYNC else '-'
             if col > 1:
                 if tc_dut:
                     if tc_dut.result is None:
@@ -144,7 +144,7 @@ class TpTableModel(TableModelTemplate):
                         return Qt.Checked
 
                 if col == 1:
-                    if tc.ACYNC:
+                    if tc.ASYNC:
                         return Qt.Checked
                     else:
                         return Qt.Unchecked
@@ -193,7 +193,7 @@ class TpTableModel(TableModelTemplate):
                 tc.SKIP = value == Qt.Unchecked
 
             if col == 1:
-                tc.ACYNC = value == Qt.Checked
+                tc.ASYNC = value == Qt.Checked
 
             if col > 1:
                 if tc_dut:

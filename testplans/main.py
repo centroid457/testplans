@@ -119,6 +119,11 @@ class TpMultyDutBase(QThread):
         # this will BLOCK process
 
     def reinit(self, tcs: Optional[Dict[Type[TestCaseBase], Optional[bool]]] = None) -> Optional[NoReturn]:
+        # DUTS --------------------------------------------------------------
+        self.DUTS = []
+        self.duts_generate()
+        self._duts_mark_presented()
+
         # TCS --------------------------------------------------------------
         tcs = tcs or dict(self.TCS)
         self.TCS = {}
@@ -139,6 +144,7 @@ class TpMultyDutBase(QThread):
                     msg = f"[ERROR] file not found[{item=}] in /{self.DIRPATH_TCS.name}/"
                     raise Exx__TcItemNotFound(msg)
                 tc_cls.NAME = item
+                tc_cls.DUTS_input(self.DUTS)
             elif isinstance(type(item), type) and issubclass(item, TestCaseBase):
                 tc_cls = item
                 # msg = f"[ERROR] DONT USE IT!"
@@ -162,10 +168,8 @@ class TpMultyDutBase(QThread):
 
         # print(f"{tc_cls.SETTINGS=}")
 
-        # DUTS --------------------------------------------------------------
-        self.DUTS = []
-        self.duts_generate()
-        self._duts_mark_presented()
+
+        # FINISH ------------------------------------------------------------
         self._duts_results_tp_init()
 
     # TCS -----------------------------------------------------------
@@ -224,7 +228,7 @@ class TpMultyDutBase(QThread):
         for step, tc in enumerate(self.TCS, start=1):
             self.progress = int(step / len(self.TCS) * 100) - 1
             self.tc_active = tc
-            tc.run_all(self.DUTS)
+            tc.run_all()
 
         # FINISH TPlan ---------------------------------------------------
         self.tc_active = None
@@ -296,13 +300,6 @@ class TpMultyDutBase(QThread):
             "TCS_RESULTS": TCS_RESULTS,
             }
         return result
-
-
-# =====================================================================================================================
-class TpMultyDut_Example(TpMultyDutBase):
-    def duts_generate(self) -> None:
-        for i in range(4):
-            self.DUTS.append(DutBase())
 
 
 # =====================================================================================================================

@@ -31,7 +31,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     DESCRIPTION: str = ""
     SKIP: Optional[bool] = None     # access only over CLASS attribute! not instance!!!
     skip_tc_dut: Optional[bool] = None
-    ACYNC: Optional[bool] = True
+    ASYNC: Optional[bool] = True
     # STOP_IF_FALSE_RESULT: Optional[bool] = None     # NOT USED NOW! MAYBE NOT IMPORTANT!!!
     SETTINGS_FILES: Union[None, pathlib.Path, List[pathlib.Path]] = None
 
@@ -39,7 +39,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
 
     # INSTANCE ------------------------------------
-    DUTS_ALL: List[Any]     # applied for CLS!
+    DUTS: List[Any]     # applied for CLS!
     DUT: Any
     SETTINGS: PrivateJson = None
 
@@ -61,6 +61,10 @@ class TestCaseBase(_TestCaseBase, QThread):
         #     self.SETTINGS_FILES = _settings_files
 
         self.SETTINGS = PrivateJson(_dict=self.settings_read())
+
+    @classmethod
+    def DUTS_input(cls, duts: List[Any]):
+        cls.DUTS = duts
 
     @classmethod
     def settings_read(cls, files: Union[None, pathlib.Path, List[pathlib.Path]] = None) -> dict:
@@ -114,7 +118,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         result += f"DESCRIPTION={self.DESCRIPTION}\n"
         result += f"SKIP={self.SKIP}\n"
         result += f"skip_tc_dut={self.skip_tc_dut}\n"
-        result += f"ACYNC={self.ACYNC}\n"
+        result += f"ASYNC={self.ASYNC}\n"
         result += f"DUT.INDEX={self.DUT.INDEX}\n"
         result += f"result={self.result}\n"
         result += f"progress={self.progress}\n"
@@ -138,7 +142,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         result = {
             "TC_NAME": cls.NAME,
             "TC_DESCRIPTION": cls.DESCRIPTION,
-            "TC_ASYNC": cls.ACYNC,
+            "TC_ASYNC": cls.ASYNC,
             "TC_SKIP": cls.SKIP,
             "TC_SETTINGS": cls.settings_read(),
         }
@@ -153,7 +157,7 @@ class TestCaseBase(_TestCaseBase, QThread):
             # INFO
             "TC_NAME": self.NAME,
             "TC_DESCRIPTION": self.DESCRIPTION,
-            "TC_ASYNC": self.ACYNC,
+            "TC_ASYNC": self.ASYNC,
             "TC_SKIP": self.SKIP,
             "TC_SETTINGS": self.SETTINGS.dict,
 
@@ -180,7 +184,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         get existed tc objects for all DUTs, if not existed - create it in all DUTs
         """
         result = []
-        for dut in cls.DUTS_ALL:
+        for dut in cls.DUTS:
             try:
                 tc_dut = dut.TP_RESULTS[cls]
             except:
@@ -224,14 +228,11 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.teardown()
 
     @classmethod
-    def run_all(cls, duts: List[Any] = None) -> None:
+    def run_all(cls) -> None:
         """run TC on batch duts
         prefered using in thread on upper level!
         """
-        # duts = duts or cls.DUTS_ALL or []
-        cls.DUTS_ALL = duts
-
-        if not duts:
+        if not cls.DUTS:
             return
 
         if cls.SKIP:
@@ -246,11 +247,11 @@ class TestCaseBase(_TestCaseBase, QThread):
                 continue
 
             tc_dut.start()
-            if not cls.ACYNC:
+            if not cls.ASYNC:
                 tc_dut.wait()
 
         # FINISH --------------------------
-        if cls.ACYNC:
+        if cls.ASYNC:
             for tc_dut in cls.TCS_dut_all:
                 tc_dut.wait()
 

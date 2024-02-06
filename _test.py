@@ -101,7 +101,7 @@ class Test__1:
         assert Tp_obj.DUTS[1].check_result_final() is True
 
         # -------------------------------------------
-        Tc1.ACYNC = False
+        Tc1.ASYNC = False
 
         Tp_obj = Tp1()
         time_start = time.time()

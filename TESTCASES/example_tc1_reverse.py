@@ -4,7 +4,7 @@ from . import example_tc1_direct
 
 
 class TestCase(example_tc1_direct.TestCase):
-    ACYNC = True
+    ASYNC = True
     DESCRIPTION = "reverse1"
 
     def run_wrapped(self) -> bool:

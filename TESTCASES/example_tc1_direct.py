@@ -4,7 +4,7 @@ from testplans import TestCaseBase
 import DEVICES
 
 class TestCase(TestCaseBase):
-    ACYNC = False
+    ASYNC = False
     DESCRIPTION = "direct1"
     SETTINGS = {}   # DONT DELETE!
 
