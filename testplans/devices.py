@@ -19,6 +19,16 @@ class DutBase(DeviceBase):
 
     # AUXILIARY -----------------------------------
     TP_RESULTS: Dict[Type[TestCaseBase], TestCaseBase] = None   # dict is very convenient!!!
+    INDEX: Optional[int] = 0
+    DUTS: List['DutBase'] = []
+
+    def __new__(cls, *args, **kwargs):
+        instance = super().__new__(cls)
+        # instance.INDEX = cls.INDEX
+        # cls.INDEX += 1
+        instance.INDEX = len(cls.DUTS)
+        cls.DUTS.append(instance)
+        return instance
 
     def _SKIP_reverse(self) -> None:
         """

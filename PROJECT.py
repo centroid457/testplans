@@ -97,7 +97,7 @@ designed to apply testplan for several DUTs
         "TP progress",
     ]
     NEWS: List[str] = [
-        "fix TC.info_get",
+        "add INDEX in DUT",
     ]
 
     # FINALIZE -----------------------------------------------
