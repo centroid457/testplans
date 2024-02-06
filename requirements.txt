@@ -9,8 +9,8 @@ object-info
 # ========================================
 # SPECIAL FOR THIS PROJECT ---------------
 PyQt5
-singleton_meta
-pyqt_templates
+singleton-meta
+pyqt-templates
 server-templates
 
 # ========================================
