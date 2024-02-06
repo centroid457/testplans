@@ -267,5 +267,35 @@ class TpMultyDutBase(QThread):
             }
         return result
 
+    # =================================================================================================================
+    def results_get(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
+        """
+        get all results for stand/TP
+        """
+        TCS_RESULTS = []
+        for tc in self.TCS:
+            TCS_RESULTS.append(tc.results_get_all())
+
+        result = {
+            # BASE STRING INFO
+            "STAND_ID": self.STAND_ID,
+            "STAND_TYPE": self.STAND_TYPE,
+            "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
+
+            # TODO: ADD TP SUMMARY RESULT
+            # TODO: ADD TP SUMMARY RESULT
+            # TODO: ADD TP SUMMARY RESULT
+            # TODO: ADD TP SUMMARY RESULT
+            # TODO: ADD TP SUMMARY RESULT
+            # TODO: ADD TP SUMMARY RESULT
+
+            # SETTINGS
+            "TP_SETTINGS_BASE": TestCaseBase.settings_read(files=self.SETTINGS_BASE_FILEPATH),
+
+            # STRUCTURE
+            "TCS_RESULTS": TCS_RESULTS,
+            }
+        return result
+
 
 # =====================================================================================================================
