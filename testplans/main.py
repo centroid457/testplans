@@ -233,6 +233,9 @@ class TpMultyDutBase(QThread):
 
     # =================================================================================================================
     def info_get(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
+        """
+        get info/structure about stand/TP
+        """
         TP_TCS = []
         for tc in self.TCS:
             TP_TCS.append(tc.info_get())
