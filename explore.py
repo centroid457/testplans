@@ -7,6 +7,7 @@ from DEVICES import dut_example1
 # =====================================================================================================================
 class TestPlan_example1(TpMultyDutBase):
     START_GUI = True
+    START_API = False
 
     def duts_generate(self) -> None:
         for value in [True, True, False, False, ]:
