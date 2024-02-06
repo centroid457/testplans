@@ -87,7 +87,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 0, 11)
+    VERSION: Tuple[int, int, int] = (0, 0, 12)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api+tpThreads) on GUI close!",
@@ -97,9 +97,7 @@ designed to apply testplan for several DUTs
         "TP progress",
     ]
     NEWS: List[str] = [
-        "add INDEX in DUT",
-        "add TC results_get/*all",
-        "add TP results_get (not finished)",
+        "add TpMultyDut_Example",
     ]
 
     # FINALIZE -----------------------------------------------
