@@ -131,6 +131,9 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     @classmethod
     def info_get(cls) -> Dict[str, Union[str, None, bool, int, dict, list]]:
+        """
+        get info/structure about TC
+        """
         result = {
             "TC_NAME": cls.NAME,
             "TC_DESCRIPTION": cls.DESCRIPTION,
@@ -142,8 +145,33 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     # =================================================================================================================
     @classmethod
+    def results_get(cls) -> List[Dict[str, Union[str, None, bool, int, dict, list]]]:
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        result = []
+        for tc in cls.TCS_all:
+            result_i = {
+                "TC_NAME": cls.NAME,
+                "TC_DESCRIPTION": cls.DESCRIPTION,
+                "TC_ASYNC": cls.ACYNC,
+                "TC_SKIP": cls.SKIP,
+                "TC_SETTINGS": cls.settings_read(),
+            }
+        return result
+
+    # =================================================================================================================
+    @classmethod
     @property
     def TCS_all(cls) -> List['TestCaseBase']:
+        """
+        get existed tc objects for all DUTs, if not existed - create it in all DUTs
+        """
         result = []
         for dut in cls.DUTS_ALL:
             try:
