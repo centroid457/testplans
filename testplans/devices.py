@@ -6,10 +6,12 @@ from .tc import TestCaseBase
 # =====================================================================================================================
 class DeviceBase:
     present: Optional[bool] = None
-    check_present: Callable[..., bool]
 
     def mark_present(self) -> None:
         self.present = self.check_present()
+
+    def check_present(self) -> bool:
+        return True
 
 
 # =====================================================================================================================
