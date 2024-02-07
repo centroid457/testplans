@@ -11,6 +11,8 @@ from pyqt_templates import *
 # =====================================================================================================================
 class TpGuiBase(Gui):
     # OVERWRITTEN -----------------------------------
+    START = False
+
     TITLE = "[TestPlan] Universal"
     SIZE = (600, 300)
 

@@ -9,6 +9,7 @@ import json
 from pathlib import Path
 from PyQt5.QtCore import QThread
 from importlib import import_module
+import asyncio
 
 from pyqt_templates import *
 from server_templates import ServerAiohttpBase
@@ -95,27 +96,17 @@ class TpMultyDutBase(QThread):
         self.slots_connect()
 
         self.api = self.CLS_API(self)
-        # self.gui = self.CLS_GUI(self)
-
         if self.START_API:
-            self.start_api()
+            self.api.start()
 
+        self.gui = self.CLS_GUI(self)
         if self.START_GUI:
-            self.start_gui()
-
-    def start_api(self) -> None:
-        self.api.start()
-
-    def start_gui(self) -> None:
-        self.CLS_GUI(self)
-        # this will BLOCK process
-        # this will BLOCK process
-        # this will BLOCK process
-        # this will BLOCK process
-        # this will BLOCK process
-        # this will BLOCK process
-        # this will BLOCK process
-        # this will BLOCK process
+            # this will BLOCK process
+            # this will BLOCK process
+            # this will BLOCK process
+            # this will BLOCK process
+            # this will BLOCK process
+            self.gui.run()
 
     # =================================================================================================================
     def reinit(self, tcs: Optional[Dict[Type[TestCaseBase], Optional[bool]]] = None) -> Optional[NoReturn]:
@@ -175,18 +166,7 @@ class TpMultyDutBase(QThread):
         self.signal__tp_start.connect(self.start)
         self.signal__tp_stop.connect(self.terminate)
 
-        TestCaseBase.signals.signal__tc_state_changed.connect(self.post_results)
-
-    def post_results(self, tc_inst: TestCaseBase) -> None:
-
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        # TODO: FINISH
-        pass
+        TestCaseBase.signals.signal__tc_state_changed.connect(self.post__tc_results)
 
     # =================================================================================================================
     @property
@@ -252,7 +232,7 @@ class TpMultyDutBase(QThread):
         self.signal__tp_finished.emit()
 
     # =================================================================================================================
-    def info_get(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
+    def get__info(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
         """
         get info/structure about stand/TP
         """
@@ -287,8 +267,8 @@ class TpMultyDutBase(QThread):
             }
         return result
 
-    # =================================================================================================================
-    def results_get(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
+    # -----------------------------------------------------------------------------------------------------------------
+    def get__results(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
         """
         get all results for stand/TP
         """
@@ -316,6 +296,16 @@ class TpMultyDutBase(QThread):
             "TCS_RESULTS": TCS_RESULTS,
             }
         return result
+
+    # -----------------------------------------------------------------------------------------------------------------
+    def post__tc_results(self, tc_inst: TestCaseBase) -> None:
+        body = {
+            "STAND_ID": self.STAND_ID,
+            "STAND_TYPE": self.STAND_TYPE,
+            "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
+            **tc_inst.results_get(),
+        }
+        self.api.post_json(data=body, route=self.api.CLIENT_ROUTE__POST_RESULTS)
 
 
 # =====================================================================================================================

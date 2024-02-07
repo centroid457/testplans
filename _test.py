@@ -144,7 +144,7 @@ class Test__1:
 
     def test__info_get(self):
         Tp_obj = Tp1()
-        info_data = Tp_obj.info_get()
+        info_data = Tp_obj.get__info()
         assert isinstance(info_data, dict)
         assert len(info_data) > 2
 

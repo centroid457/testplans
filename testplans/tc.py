@@ -174,7 +174,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     def results_get_all(cls) -> List[Dict[str, Any]]:
         results = []
         for tc_dut in cls.TCS_dut_all:
-            results.append(tc_dut.results_get())
+            results.append(tc_dut.get__results())
         return results
 
     # =================================================================================================================

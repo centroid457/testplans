@@ -97,10 +97,7 @@ designed to apply testplan for several DUTs
         "TP progress",
     ]
     NEWS: List[str] = [
-        "add DutBase.check_present explicitly",
-        "some fixes",
-        "move all ServerAiohttp_Example here!",
-
+        "add post_tc_results",
     ]
 
     # FINALIZE -----------------------------------------------
