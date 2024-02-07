@@ -1,5 +1,6 @@
 import pathlib
 from typing import *
+from object_info import ObjectInfo
 
 from server_templates import ServerAiohttpBase, decorator__log_request_response, web
 
@@ -21,6 +22,7 @@ class TpApi(ServerAiohttpBase):
 
     @decorator__log_request_response
     async def response_get__start(self, request) -> web.Response:
+        # ObjectInfo(request.headers).print()
         self.data.signal__tp_start.emit()
 
         # HTML --------------------------------------------------
