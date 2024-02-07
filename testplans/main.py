@@ -46,6 +46,7 @@ class TpMultyDutBase(QThread):
 
     START_API: bool = True
     CLS_API: Type[ServerAiohttpBase] = TpApi
+    api: ServerAiohttpBase
 
     START_GUI: bool = True
     CLS_GUI: Type[TpGuiBase] = TpGuiBase

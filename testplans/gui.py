@@ -17,6 +17,10 @@ class TpGuiBase(Gui):
     # NEW -------------------------------------------
     DATA: "TpMultyDutBase"
 
+    def __init__(self, data):
+        self.TITLE = f"[TestPlan]{data.STAND_ID}/{data.STAND_DESCRIPTION[:20]}"
+        super().__init__(data)
+
     # WINDOW ==========================================================================================================
     def wgt_create(self):
         self.TV_create()
@@ -109,7 +113,6 @@ class TpGuiBase(Gui):
 
     def BTN__toggled(self, state: Optional[bool] = None) -> None:
         # print(f"btn {state=}")
-        self._wgt_main__center()
         if self.DATA.isRunning():
             state = False
 

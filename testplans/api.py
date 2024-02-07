@@ -40,13 +40,13 @@ class TpApi(ServerAiohttpBase):
     @decorator__log_request_response
     async def response_post__start(self, request) -> web.Response:
         # return self.response_get__start(request)  # this is will not work!
-        await self.response_get__start(request)
+        self.data.signal__tp_start.emit()
         response = web.json_response(data={})
         return response
 
     @decorator__log_request_response
     async def response_post__stop(self, request) -> web.Response:
-        await self.response_get__stop(request)
+        self.data.signal__tp_stop.emit()
         response = web.json_response(data={})
         return response
 
@@ -80,7 +80,7 @@ class TpApi(ServerAiohttpBase):
         this is only for pretty view
         """
         # HTML --------------------------------------------------
-        page_name = "INFO_HTML"
+        page_name = "RESULTS_HTML"
         html = self.html_create(name=page_name, data=self.data.results_get(), request=request)
         return web.Response(text=html, content_type='text/html')
 

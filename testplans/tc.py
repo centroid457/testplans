@@ -154,11 +154,14 @@ class TestCaseBase(_TestCaseBase, QThread):
             # COORDINATES
             "DUT_INDEX": self.DUT.INDEX,
 
+            "SKIP_DUT": self.DUT.SKIP,
+            "SKIP_TC_DUT": self.skip_tc_dut,
+            "SKIP_TC": self.SKIP,
+
             # INFO
             "TC_NAME": self.NAME,
             "TC_DESCRIPTION": self.DESCRIPTION,
             "TC_ASYNC": self.ASYNC,
-            "TC_SKIP": self.SKIP,
             "TC_SETTINGS": self.SETTINGS.dict,
 
             # RESULTS
