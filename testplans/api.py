@@ -40,11 +40,13 @@ class TpApi(ServerAiohttpBase):
     @decorator__log_request_response
     async def response_post__start(self, request) -> web.Response:
         # return self.response_get__start(request)  # this is will not work!
+        await self.response_get__start(request)
         response = web.json_response(data={})
         return response
 
     @decorator__log_request_response
     async def response_post__stop(self, request) -> web.Response:
+        await self.response_get__stop(request)
         response = web.json_response(data={})
         return response
 
