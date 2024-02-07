@@ -20,8 +20,7 @@ class _TestCaseBase:
 
 # =====================================================================================================================
 class Signals(SignalsTemplate):
-    signal__tc_finished = pyqtSignal()
-    signal__tc_details_updated = pyqtSignal(_TestCaseBase)
+    signal__tc_state_changed = pyqtSignal(_TestCaseBase)
 
 
 # =====================================================================================================================
@@ -102,12 +101,12 @@ class TestCaseBase(_TestCaseBase, QThread):
     @result.setter
     def result(self, value: Optional[bool]) -> None:
         self.__result = value
-        self.signals.signal__tc_finished.emit()
+        self.signals.signal__tc_state_changed.emit(self)
 
     # DETAILS ---------------------------------------------------------------------------------------------------------
     def details_update(self, details: Dict[str, Any]) -> None:
         self.details.update(details)
-        self.signals.signal__tc_details_updated.emit(self)
+        self.signals.signal__tc_state_changed.emit(self)
 
     # =================================================================================================================
     def info_pretty(self) -> str:

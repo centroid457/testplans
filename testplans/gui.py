@@ -102,11 +102,7 @@ class TpGuiBase(Gui):
         self.DATA.signal__tp_finished.connect(lambda: self.BTN.setChecked(False))
         self.DATA.signal__tp_finished.connect(self.TM._data_reread)
 
-        TestCaseBase.signals.signal__tc_finished.connect(self.TM._data_reread)
-        # TestCaseBase.signals.signal__tc_finished.connect(lambda z=None: print("signal__tc_finished.emit") or self.TM._data_reread())
-
-        # fixme: change object for redraw
-        # TestCaseBase.signals.signal__tc_details_updated.connect(lambda z=None: print("signal__tc_details_updated.emit") or self.PTE)
+        TestCaseBase.signals.signal__tc_state_changed.connect(self.TM._data_reread)
 
         self.TV.selectionModel().selectionChanged.connect(self.TV_selectionChanged)
         self.TV.horizontalHeader().sectionClicked.connect(self.TV_hh_sectionClicked)

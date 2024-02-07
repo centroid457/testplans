@@ -92,9 +92,7 @@ class TpMultyDutBase(QThread):
                     self.TCS.update({file.stem: True})
 
         self.reinit()
-
-        self.signal__tp_start.connect(self.start)
-        self.signal__tp_stop.connect(self.terminate)
+        self.slots_connect()
 
         self.api = self.CLS_API(self)
         # self.gui = self.CLS_GUI(self)
@@ -119,6 +117,7 @@ class TpMultyDutBase(QThread):
         # this will BLOCK process
         # this will BLOCK process
 
+    # =================================================================================================================
     def reinit(self, tcs: Optional[Dict[Type[TestCaseBase], Optional[bool]]] = None) -> Optional[NoReturn]:
         # DUTS --------------------------------------------------------------
         self.DUTS = []
@@ -169,11 +168,27 @@ class TpMultyDutBase(QThread):
 
         # print(f"{tc_cls.SETTINGS=}")
 
-
         # FINISH ------------------------------------------------------------
         self._duts_results_tp_init()
 
-    # TCS -----------------------------------------------------------
+    def slots_connect(self) -> None:
+        self.signal__tp_start.connect(self.start)
+        self.signal__tp_stop.connect(self.terminate)
+
+        TestCaseBase.signals.signal__tc_state_changed.connect(self.post_results)
+
+    def post_results(self, tc_inst: TestCaseBase) -> None:
+
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        # TODO: FINISH
+        pass
+
+    # =================================================================================================================
     @property
     def tcs_active(self) -> List[TestCaseBase]:
         result = []
@@ -185,7 +200,7 @@ class TpMultyDutBase(QThread):
                     result.append(tc_dut)
         return result
 
-    # DUTS -----------------------------------------------------------
+    # =================================================================================================================
     def duts_generate(self) -> None:
         # raise NotImplemented
         pass
@@ -204,7 +219,7 @@ class TpMultyDutBase(QThread):
         for dut in self.DUTS:
             dut.results_tc_clear()
 
-    # --------------------------------------------------------------------
+    # =================================================================================================================
     def terminate(self) -> None:
         super().terminate()
 
