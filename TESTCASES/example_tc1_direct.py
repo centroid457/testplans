@@ -6,7 +6,6 @@ import DEVICES
 class TestCase(TestCaseBase):
     ASYNC = False
     DESCRIPTION = "direct1"
-    SETTINGS = {}   # DONT DELETE!
 
     def run_wrapped(self) -> bool:
         time.sleep(0.2)

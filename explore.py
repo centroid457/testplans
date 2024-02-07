@@ -7,7 +7,7 @@ from DEVICES import dut_example1
 # =====================================================================================================================
 class TestPlan_example1(TpMultyDutBase):
     def duts_generate(self) -> None:
-        for value in [True, True, False, False, ]:
+        for value in [True, False, ]:
             self.DUTS.append(dut_example1.Device(value))
 
 
