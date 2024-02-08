@@ -238,7 +238,7 @@ class TpMultyDutBase(QThread):
         """
         TP_TCS = []
         for tc in self.TCS:
-            TP_TCS.append(tc.info_get())
+            TP_TCS.append(tc.get__info())
 
         result = {
             # BASE STRING INFO
@@ -303,9 +303,9 @@ class TpMultyDutBase(QThread):
             "STAND_ID": self.STAND_ID,
             "STAND_TYPE": self.STAND_TYPE,
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
-            **tc_inst.results_get(),
+            **tc_inst.get__results(),
         }
-        self.api.post_json(data=body, route=self.api.CLIENT_ROUTE__POST_RESULTS)
+        self.api.post__json(data=body, route=self.api.CLIENT_ROUTE__POST_RESULTS)
 
 
 # =====================================================================================================================

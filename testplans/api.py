@@ -8,7 +8,7 @@ from server_templates import ServerAiohttpBase, decorator__log_request_response,
 # =====================================================================================================================
 class TpApi(ServerAiohttpBase):
     CLIENT_URL_BASE: str = f"http://starichenko"    # FIXME: CHANGE to correct
-    CLIENT_ROUTE__POST_RESULTS: str = "stop"        # FIXME: CHANGE to correct
+    CLIENT_ROUTE__POST_RESULTS: str = "qwerty"        # FIXME: CHANGE to correct
 
     async def response_get__(self, request) -> web.Response:
         # --------------------------

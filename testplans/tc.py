@@ -134,7 +134,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         return result
 
     @classmethod
-    def info_get(cls) -> Dict[str, Union[str, None, bool, int, dict, list]]:
+    def get__info(cls) -> Dict[str, Union[str, None, bool, int, dict, list]]:
         """
         get info/structure about TC
         """
@@ -148,7 +148,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         return result
 
     # =================================================================================================================
-    def results_get(self) -> Dict[str, Any]:
+    def get__results(self) -> Dict[str, Any]:
         result = {
             # COORDINATES
             "DUT_INDEX": self.DUT.INDEX,
