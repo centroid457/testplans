@@ -7,8 +7,11 @@ from server_templates import ServerAiohttpBase, decorator__log_request_response,
 
 # =====================================================================================================================
 class TpApi(ServerAiohttpBase):
-    CLIENT_URL_BASE: str = f"http://starichenko"
-    CLIENT_ROUTE__POST_RESULTS: str = "start"
+    # CLIENT_URL_BASE: str = f"http://starichenko"
+    # CLIENT_ROUTE__POST_RESULTS: str = "start"
+
+    CLIENT_URL_BASE: str = f"http://192.168.75.175:8080"    # LIDIA
+    CLIENT_ROUTE__POST_RESULTS: str = "results"             # LIDIA
 
     async def response_get__(self, request) -> web.Response:
         # --------------------------
