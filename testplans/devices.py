@@ -31,12 +31,9 @@ class DutBase(DeviceBase):
         # instance.INDEX = cls.INDEX
         # cls.INDEX += 1
         instance.INDEX = len(cls.DUTS)
+        instance.SN = uuid.uuid4().hex
         cls.DUTS.append(instance)
         return instance
-
-    def __init__(self, *args, **kwargs):
-        self.SN = uuid.uuid4().hex
-        super().__init__(*args, **kwargs)
 
     def _SKIP_reverse(self) -> None:
         """
