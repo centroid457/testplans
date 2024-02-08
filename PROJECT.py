@@ -98,6 +98,7 @@ designed to apply testplan for several DUTs
     ]
     NEWS: List[str] = [
         "add post_tc_results",
+        "add DUT.SN"
     ]
 
     # FINALIZE -----------------------------------------------

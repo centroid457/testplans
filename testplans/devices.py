@@ -1,4 +1,5 @@
 from typing import *
+import uuid
 
 from .tc import TestCaseBase
 
@@ -19,7 +20,8 @@ class DutBase(DeviceBase):
     # SETTINGS ------------------------------------
     SKIP: Optional[bool] = None
 
-    # AUXILIARY -----------------------------------
+    # AUX -----------------------------------
+    SN: str = None
     TP_RESULTS: Dict[Type[TestCaseBase], TestCaseBase] = None   # dict is very convenient!!!
     INDEX: Optional[int] = 0
     DUTS: List['DutBase'] = []
@@ -31,6 +33,10 @@ class DutBase(DeviceBase):
         instance.INDEX = len(cls.DUTS)
         cls.DUTS.append(instance)
         return instance
+
+    def __init__(self, *args, **kwargs):
+        self.SN = uuid.uuid4().hex
+        super().__init__(*args, **kwargs)
 
     def _SKIP_reverse(self) -> None:
         """

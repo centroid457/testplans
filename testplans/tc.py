@@ -154,6 +154,7 @@ class TestCaseBase(_TestCaseBase, QThread):
             "DUT_INDEX": self.DUT.INDEX,
             "DUT_SKIP": self.DUT.SKIP,
             "DUT_SKIP_TC": self.skip_tc_dut,
+            "DUT_SN": self.DUT.SN,
 
             # INFO
             "TC_NAME": self.NAME,
