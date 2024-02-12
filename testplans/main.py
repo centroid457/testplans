@@ -38,9 +38,9 @@ class Exx__TcSettingsIncorrect(Exception):
 # =====================================================================================================================
 class HttpClient_Tp(HttpClient):
     pass
-    # HOST: str = "192.168.74.20"
-    # PORT: int = 8080
-    # ROUTE: str = "results"
+    HOST: str = "192.168.74.20"
+    PORT: int = 8080
+    ROUTE: str = "results"
 
 
 # =====================================================================================================================
@@ -61,7 +61,7 @@ class TpMultyDutBase(QThread):
     START_GUI: bool = True
     CLS_GUI: Type[TpGuiBase] = TpGuiBase
 
-    POST: HttpClient = HttpClient_Tp
+    POST: HttpClient = HttpClient_Tp()
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"
@@ -191,6 +191,10 @@ class TpMultyDutBase(QThread):
                     result.append(tc_dut)
         return result
 
+    def tp_check_active(self) -> bool:
+        result = self.tc_active is not None and self.progress not in [0, 100]
+        return result
+
     # =================================================================================================================
     def duts_generate(self) -> None:
         # raise NotImplemented
@@ -220,13 +224,14 @@ class TpMultyDutBase(QThread):
         # finish current ----------------------------
         if self.tc_active:
             self.tc_active.terminate_all()
-            self.tc_active = None
 
+        self.tc_active = None
+        self.progress = 0
         self.signal__tp_finished.emit()
 
     def run(self) -> None:
-        # if self.isRunning():
-        #     self.terminate()
+        if self.tp_check_active():
+            return
 
         self.progress = 1
         self._duts_mark_presented()
@@ -319,7 +324,7 @@ class TpMultyDutBase(QThread):
         pass
         # self.api.post__json(data=body, route=self.api.CLIENT_ROUTE__POST_RESULTS)
         # self.POST({})
-        self.POST(body=body)
+        self.POST.post(body=body)
 
 
 # =====================================================================================================================

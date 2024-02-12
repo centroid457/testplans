@@ -1,3 +1,4 @@
+import time
 from typing import *
 import requests
 from PyQt5.QtCore import QThread
@@ -5,14 +6,7 @@ from enum import Enum, auto
 
 from object_info import ObjectInfo
 
-
-class TypeRequest(Enum):
-    GET = auto()
-    POST = auto()
-    # HEAD = auto()
-    # DELETE = auto()
-    # PATCH = auto()
-    # OPTIONS = auto()
+Type_Response = Union[requests.Response, requests.ConnectTimeout]
 
 
 class UrlCreator:
@@ -20,8 +14,7 @@ class UrlCreator:
     PROTOCOL: str = "http"
     HOST: str = "localhost"
     PORT: int = 80
-    ROUTE: str = ""
-    TYPE_REQUEST: TypeRequest = TypeRequest.POST
+    ROUTE: str = "stop123"
 
     def URL_create(
             self,
@@ -56,40 +49,83 @@ class HttpClient(UrlCreator, QThread):
     #     Cls().POST.post(body={})
     """
     # SETTINGS -------------------------------------
-    BODY: Optional[Any] = None
     TIMEOUT_SEND: float = 1
 
-    # AUX ------------------------------------------
-    response: requests.Response = None
-    # history: List[requests.Response] = []
+    RETRY_LIMIT: int = 0
+    RETRY_TIMEOUT: float = 0.1
 
-    def __init__(self, body: Optional[dict] = None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if body is not None:
-            self.BODY = body
-            self.start()
+    # AUX ------------------------------------------
+    que_posted: int = 0
+    que_len: int = 0
+    que: Dict[int, Dict[str, Union[dict, Type_Response]]] = {}
+
+    in_progress: bool = None
 
     def run(self):
+        if self.in_progress:
+            print(1111111)
+            return
+
+        self.in_progress = True
+        retry_count = 0
+
         url = self.URL_create()
-        with requests.Session() as session:
-            if self.TYPE_REQUEST == TypeRequest.POST:
-                response = session.post(url=url, data=self.BODY, timeout=self.TIMEOUT_SEND)
-            elif self.TYPE_REQUEST == TypeRequest.GET:
-                response = session.get(url=url, timeout=self.TIMEOUT_SEND)
+        while self.que_len != self.que_posted:
+            print(f"while_block=[{self.que_len=}/{self.que_posted=}]{self.que=}")
+            response_dict = self.que.get(self.que_posted + 1)
+            if response_dict is None:
+                print(f"no {response_dict=}")
+                break
 
-            self.response_apply(response)
+            body = response_dict.get("body")
+            if body is None:
+                print(f"no {body=}")
+                break
 
-    def response_apply(self, response: requests.Response) -> None:
-        self.response = response
-        # self.history.append(response)
+            with requests.Session() as session:
+                response = None
+                try:
+                    response = session.post(url=url, data=body, timeout=self.TIMEOUT_SEND)
+                except Exception as exx:
+                    retry_count += 1
+                    print(f"{exx!r}")
+                    response = exx
 
-    # def post(self, body: Optional[dict] = None) -> None:
-    #     # if body is not None:
-    #     #     self.BODY = body
-    #
-    #     self.TYPE_REQUEST = TypeRequest.POST
-    #     self.start()
-try
+                    if retry_count > self.RETRY_LIMIT:
+                        pass
+                    else:
+                        time.sleep(self.RETRY_TIMEOUT)
+                        continue
+
+                if response is not None:
+                    retry_count = 0
+                    self._response_apply(response)
+
+        # FINISH ------------------------------------------
+        self.in_progress = False
+        print(f"start_FINISHED=[{self.que_len}]{self.que=}")
+
+    def _response_apply(self, response: Type_Response) -> None:
+        print()
+        print()
+        print()
+        print(f"{response=}")
+        self.que_posted += 1
+        print(f"{self.que_posted=}")
+        print(f"{self.que=}")
+        print(f"{self.que[self.que_posted]=}")
+        self.que[self.que_posted].update({"response": response})
+
+    def post(self, body: Optional[dict] = None):
+        # TODO: add locker
+        body = body or {}
+        self.que_len += 1
+        print(f"[{self.que_len}]{body=}")
+        self.que.update({self.que_len: {"body": body}})
+        print(11)
+        self.start()
+
+
 # class HttpClient2(HttpClient):
 #     ROUTE = "start"
 #

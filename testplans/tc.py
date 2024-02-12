@@ -106,7 +106,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     # DETAILS ---------------------------------------------------------------------------------------------------------
     def details_update(self, details: Dict[str, Any]) -> None:
         self.details.update(details)
-        self.signals.signal__tc_state_changed.emit(self)
+        # self.signals.signal__tc_state_changed.emit(self)
 
     # =================================================================================================================
     def info_pretty(self) -> str:
