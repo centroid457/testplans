@@ -12,5 +12,6 @@ PyQt5
 singleton-meta
 pyqt-templates
 server-templates
+requests
 
 # ========================================

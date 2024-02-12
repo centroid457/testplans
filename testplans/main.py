@@ -3,6 +3,7 @@ from .tc import TestCaseBase
 from .devices import DutBase, DeviceBase
 from .gui import TpGuiBase
 from .api import TpApi
+from .http_client import HttpClient
 
 from typing import *
 import json
@@ -35,6 +36,14 @@ class Exx__TcSettingsIncorrect(Exception):
 
 
 # =====================================================================================================================
+class HttpClient_Tp(HttpClient):
+    pass
+    # HOST: str = "192.168.74.20"
+    # PORT: int = 8080
+    # ROUTE: str = "results"
+
+
+# =====================================================================================================================
 class TpMultyDutBase(QThread):
     signal__tp_start = pyqtSignal()
     signal__tp_stop = pyqtSignal()
@@ -51,6 +60,8 @@ class TpMultyDutBase(QThread):
 
     START_GUI: bool = True
     CLS_GUI: Type[TpGuiBase] = TpGuiBase
+
+    POST: HttpClient = HttpClient_Tp
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"
@@ -305,7 +316,10 @@ class TpMultyDutBase(QThread):
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
             **tc_inst.get__results(),
         }
-        self.api.post__json(data=body, route=self.api.CLIENT_ROUTE__POST_RESULTS)
+        pass
+        # self.api.post__json(data=body, route=self.api.CLIENT_ROUTE__POST_RESULTS)
+        # self.POST({})
+        self.POST(body=body)
 
 
 # =====================================================================================================================
