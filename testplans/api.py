@@ -7,7 +7,7 @@ from server_templates import ServerAiohttpBase, decorator__log_request_response,
 
 # =====================================================================================================================
 class TpApi(ServerAiohttpBase):
-    async def response_get__(self, request) -> web.Response:
+    async def response_get_html__(self, request) -> web.Response:
         # --------------------------
         progress = 0
         if self.data and self.data.progress is not None:
@@ -47,38 +47,16 @@ class TpApi(ServerAiohttpBase):
 
     # ---------------------------------------------------------
     @decorator__log_request_response
-    async def response_get__info_json(self, request) -> web.Response:
+    async def response_get_json__info(self, request) -> web.Response:
         body: dict = self.data.get__info()
         response = web.json_response(data=body)
         return response
 
     @decorator__log_request_response
-    async def response_get__info_html(self, request) -> web.Response:
-        """
-        this is only for pretty view
-        """
-        # RESPONSE --------------------------------------------------
-        page_name = "INFO_HTML"
-        html = self.html_create(name=page_name, data=self.data.get__info(), request=request)
-        return web.Response(text=html, content_type='text/html')
-
-    # ---------------------------------------------------------
-    @decorator__log_request_response
-    async def response_get__results_json(self, request) -> web.Response:
-
+    async def response_get_json__results(self, request) -> web.Response:
         # RESPONSE --------------------------------------------------
         body: dict = self.data.get__results()
         return web.json_response(data=body)
-
-    @decorator__log_request_response
-    async def response_get__results_html(self, request) -> web.Response:
-        """
-        this is only for pretty view
-        """
-        # RESPONSE --------------------------------------------------
-        page_name = "RESULTS_HTML"
-        html = self.html_create(name=page_name, data=self.data.get__results(), request=request)
-        return web.Response(text=html, content_type='text/html')
 
 
 # =====================================================================================================================

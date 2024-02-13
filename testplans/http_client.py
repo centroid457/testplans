@@ -6,9 +6,12 @@ from enum import Enum, auto
 
 from object_info import ObjectInfo
 
+
+# =====================================================================================================================
 Type_Response = Union[requests.Response, requests.ConnectTimeout]
 
 
+# =====================================================================================================================
 class UrlCreator:
     # SETTINGS -------------------------------------
     PROTOCOL: str = "http"
@@ -34,6 +37,7 @@ class UrlCreator:
         return url
 
 
+# =====================================================================================================================
 class HttpClient(UrlCreator, QThread):
     """
     THREADS!
@@ -63,7 +67,6 @@ class HttpClient(UrlCreator, QThread):
 
     def run(self):
         if self.in_progress:
-            print(1111111)
             return
 
         self.in_progress = True
@@ -103,17 +106,16 @@ class HttpClient(UrlCreator, QThread):
 
         # FINISH ------------------------------------------
         self.in_progress = False
-        print(f"start_FINISHED=[{self.que_len}]{self.que=}")
 
     def _response_apply(self, response: Type_Response) -> None:
-        print()
-        print()
-        print()
-        print(f"{response=}")
+        # print()
+        # print()
+        # print()
+        # print(f"{response=}")
         self.que_posted += 1
-        print(f"{self.que_posted=}")
-        print(f"{self.que=}")
-        print(f"{self.que[self.que_posted]=}")
+        # print(f"{self.que_posted=}")
+        # print(f"{self.que=}")
+        # print(f"{self.que[self.que_posted]=}")
         self.que[self.que_posted].update({"response": response})
 
     def post(self, body: Optional[dict] = None):
@@ -126,11 +128,4 @@ class HttpClient(UrlCreator, QThread):
         self.start()
 
 
-# class HttpClient2(HttpClient):
-#     ROUTE = "start"
-#
-#
-# if __name__ == "__main__":
-#     # Tp_obj = TestPlan_example1()
-#
-#     HttpClient2({}).wait()
+# =====================================================================================================================

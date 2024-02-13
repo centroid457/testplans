@@ -329,8 +329,6 @@ class TpMultyDutBase(QThread):
             **tc_inst.get__results(),
         }
         pass
-        # self.api.post__json(data=body, route=self.api.CLIENT_ROUTE__POST_RESULTS)
-        # self.POST({})
         self.POST.post(body=body)
 
 
