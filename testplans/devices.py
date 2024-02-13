@@ -35,6 +35,10 @@ class DutBase(DeviceBase):
         cls.DUTS.append(instance)
         return instance
 
+    def _reset_sn(self) -> None:
+        """this is only for testing middleware"""
+        self.SN = uuid.uuid4().hex
+
     def _SKIP_reverse(self) -> None:
         """
         this is only for testing purpose

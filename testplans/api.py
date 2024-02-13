@@ -62,6 +62,23 @@ class TpApi(ServerAiohttpBase):
         response = web.json_response(data={})
         return response
 
+    @decorator__log_request_response
+    async def response_get___reset_duts_sn(self, request) -> web.Response:
+        self.data._signal__tp_reset_duts_sn.emit()
+
+        # RESPONSE --------------------------------------------------
+        page_name = "RESET_DUTS_SN"
+        html = self.html_create(name=page_name, redirect_time=1, request=request)
+        return web.Response(text=html, content_type='text/html')
+
+    @decorator__log_request_response
+    async def response_post___reset_duts_sn(self, request) -> web.Response:
+        self.data._signal__tp_reset_duts_sn.emit()
+
+        # RESPONSE --------------------------------------------------
+        response = web.json_response(data={})
+        return response
+
     # ---------------------------------------------------------
     @decorator__log_request_response
     async def response_get__info_json(self, request) -> web.Response:
