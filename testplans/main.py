@@ -328,7 +328,6 @@ class TpMultyDutBase(QThread):
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
             **tc_inst.get__results(),
         }
-        pass
         self.POST.post(body=body)
 
 
