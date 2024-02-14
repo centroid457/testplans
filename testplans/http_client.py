@@ -38,6 +38,9 @@ class UrlCreator:
 
 
 class RequestItem(UrlCreator, QThread):
+    """
+    now its only POST!
+    """
     # SETTINGS -------------------------------------
     START_ON_INIT: bool = None
     TIMEOUT_SEND: float = 1
@@ -50,15 +53,19 @@ class RequestItem(UrlCreator, QThread):
     # REQUEST: Optional[requests.Request] = None
     RESPONSE: Optional[requests.Response] = None
     EXX_TIMEOUT: Union[None, requests.ConnectTimeout, Exception] = None
-    attempt: int
+    attempt_all: int
+    attempt_circle: int
     index: int = 0
+    TIMESTAMP: float
 
     def __init__(self, body: Type_RequestBody):
         super().__init__()
         self.__class__.index += 1
         self.BODY = body
-        self.attempt = 0
+        self.attempt_all = 0
+        self.attempt_circle = 0
         self.index = int(self.__class__.index)
+        self.TIMESTAMP = time.time()
 
         if self.START_ON_INIT:
             self.start()
@@ -68,19 +75,19 @@ class RequestItem(UrlCreator, QThread):
         return result
 
     def __str__(self) -> str:
-        return f"[{self.index=}/{self.attempt=}/{self.check_success()=}]{self.EXX_TIMEOUT=}/{self.RESPONSE=}"
+        return f"[{self.index=}/{self.attempt_all=}/{self.check_success()=}]{self.EXX_TIMEOUT=}/{self.RESPONSE=}"
 
     def __repr__(self) -> str:
         return str(self)
 
     def run(self):
-        attempt = 0
+        self.attempt_circle = 0
 
         url = self.URL_create()
 
-        while attempt == 0 or attempt < self.RETRY_LIMIT:
-            attempt += 1
-            self.attempt += 1
+        while self.attempt_circle == 0 or self.attempt_circle < self.RETRY_LIMIT:
+            self.attempt_circle += 1
+            self.attempt_all += 1
 
             with requests.Session() as session:
                 try:
@@ -117,6 +124,9 @@ class HttpClientStack(QThread):
 
     # ------------------------------------------------------------------------------------------------
     def start(self, *args):
+        """
+        apply only one thread at once (from stack)!
+        """
         if not self.isRunning():
             super().start(*args)
 
