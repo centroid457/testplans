@@ -1,6 +1,6 @@
 from testplans import *
 from testplans.main import TpMultyDutBase
-from testplans.http_client import HttpClient
+from testplans.http_client import HttpClientStack
 
 from DEVICES import dut_example1
 

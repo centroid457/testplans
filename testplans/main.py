@@ -3,7 +3,7 @@ from .tc import TestCaseBase
 from .devices import DutBase, DeviceBase
 from .gui import TpGuiBase
 from .api import TpApi
-from .http_client import HttpClient
+from .http_client import HttpClientStack, RequestItem
 
 from typing import *
 import json
@@ -36,11 +36,14 @@ class Exx__TcSettingsIncorrect(Exception):
 
 
 # =====================================================================================================================
-class HttpClient_Tp(HttpClient):
+class RequestItem_ToMiddleware(RequestItem):
     pass
-    # HOST: str = "192.168.74.20"
-    # PORT: int = 8080
-    # ROUTE: str = "results"
+    HOST: str = "192.168.74.20"
+    PORT: int = 8080
+    ROUTE: str = "results"
+
+class HttpClient_Tp(HttpClientStack):
+    REQUEST_CLS = RequestItem_ToMiddleware
 
 
 # =====================================================================================================================
@@ -63,7 +66,7 @@ class TpMultyDutBase(QThread):
     START_GUI: bool = True
     CLS_GUI: Type[TpGuiBase] = TpGuiBase
 
-    POST: HttpClient = HttpClient_Tp()
+    POST: HttpClientStack = HttpClient_Tp()
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"

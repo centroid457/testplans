@@ -2,7 +2,6 @@ import time
 from typing import *
 import requests
 from PyQt5.QtCore import QThread
-from enum import Enum, auto
 from collections import deque
 
 from object_info import ObjectInfo
@@ -38,9 +37,13 @@ class UrlCreator:
         return url
 
 
-class RequestItem:
+class RequestItem(UrlCreator, QThread):
     # SETTINGS -------------------------------------
+    START_ON_INIT: bool = None
+    TIMEOUT_SEND: float = 1
 
+    RETRY_LIMIT: int = 2
+    RETRY_TIMEOUT: float = 0.5
 
     # AUX ------------------------------------------
     BODY: Type_RequestBody
@@ -51,35 +54,53 @@ class RequestItem:
     index: int = 0
 
     def __init__(self, body: Type_RequestBody):
+        super().__init__()
         self.__class__.index += 1
         self.BODY = body
         self.attempt = 0
         self.index = int(self.__class__.index)
 
+        if self.START_ON_INIT:
+            self.start()
+
     def check_success(self) -> bool:
         result = self.RESPONSE is not None and self.RESPONSE.ok
         return result
 
-    def attempt_next(self) -> None:
-        self.attempt += 1
-
     def __str__(self) -> str:
-        return f"[{self.index=}/{self.attempt=}]{self.EXX_TIMEOUT=}/{self.RESPONSE=}"
+        return f"[{self.index=}/{self.attempt=}/{self.check_success()=}]{self.EXX_TIMEOUT=}/{self.RESPONSE=}"
 
     def __repr__(self) -> str:
         return str(self)
 
+    def run(self):
+        attempt = 0
+
+        url = self.URL_create()
+
+        while attempt == 0 or attempt < self.RETRY_LIMIT:
+            attempt += 1
+            self.attempt += 1
+
+            with requests.Session() as session:
+                try:
+                    response = session.post(url=url, data=self.BODY, timeout=self.TIMEOUT_SEND)
+                    self.RESPONSE = response
+                except Exception as exx:
+                    self.EXX_TIMEOUT = exx
+
+            print(self)
+            if self.check_success():
+                break
+
 
 # =====================================================================================================================
-class HttpClient(UrlCreator, QThread):
+class HttpClientStack(QThread):
     # TODO: add timestamp
     # TODO: save send data
 
     # SETTINGS -------------------------------------
-    TIMEOUT_SEND: float = 1
-
-    RETRY_LIMIT: int = 2
-    RETRY_TIMEOUT: float = 0.5
+    REQUEST_CLS: Type[RequestItem] = RequestItem
 
     # AUX ------------------------------------------
     __stack: deque
@@ -101,43 +122,34 @@ class HttpClient(UrlCreator, QThread):
 
     # ------------------------------------------------------------------------------------------------
     def run(self):
-        retry_count = 0
-        url = self.URL_create()
+        stack_attempt = 0
         while len(self.STACK):
             # NEXT -----------------------------------------
             if self.request_last is None or self.request_last.check_success():
-                retry_count = 0
+                stack_attempt = 0
                 self.request_last = self.STACK[0]
 
             # WORK -----------------------------------------
-            self.request_last.attempt_next()
-            with requests.Session() as session:
-                try:
-                    response = session.post(url=url, data=self.request_last.BODY, timeout=self.TIMEOUT_SEND)
-                    self.request_last.RESPONSE = response
-                except Exception as exx:
-                    self.request_last.EXX_TIMEOUT = exx
+            stack_attempt += 1
+            print(f"{stack_attempt=}")
+            self.request_last.run()
 
             if self.request_last.check_success():
-                retry_count = 0
                 self.STACK.popleft()
                 continue
 
-            print()
-            print(f"{self.request_last=}")
-            print(f"{self.STACK=}")
-
-            if retry_count >= self.RETRY_LIMIT:
-                break
+            print(f"len={len(self.STACK)}/{self.STACK=}")
+            if stack_attempt < 2:
+                time.sleep(1)
             else:
-                retry_count += 1
-                time.sleep(self.RETRY_TIMEOUT)
+                break
 
     def post(self, body: Optional[dict] = None):
         # TODO: add locker???
         body = body or {}
-        item = RequestItem(body)
+        item = self.REQUEST_CLS(body)
         self.STACK.append(item)
+        print(f"len={len(self.STACK)}")
         self.start()
 
 
