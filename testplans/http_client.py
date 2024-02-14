@@ -3,12 +3,14 @@ from typing import *
 import requests
 from PyQt5.QtCore import QThread
 from enum import Enum, auto
+from collections import deque
 
 from object_info import ObjectInfo
 
 
 # =====================================================================================================================
-Type_Response = Union[requests.Response, requests.ConnectTimeout]
+Type_Response = Union[None, requests.Response, requests.ConnectTimeout]
+Type_RequestBody = Union[str, dict]
 
 
 # =====================================================================================================================
@@ -33,98 +35,109 @@ class UrlCreator:
             route = self.ROUTE
 
         url = f"{self.PROTOCOL}://{host}:{port}/{route}"
-        print(f"{url=}")
         return url
+
+
+class RequestItem:
+    # SETTINGS -------------------------------------
+
+
+    # AUX ------------------------------------------
+    BODY: Type_RequestBody
+    # REQUEST: Optional[requests.Request] = None
+    RESPONSE: Optional[requests.Response] = None
+    EXX_TIMEOUT: Union[None, requests.ConnectTimeout, Exception] = None
+    attempt: int
+    index: int = 0
+
+    def __init__(self, body: Type_RequestBody):
+        self.__class__.index += 1
+        self.BODY = body
+        self.attempt = 0
+        self.index = int(self.__class__.index)
+
+    def check_success(self) -> bool:
+        result = self.RESPONSE is not None and self.RESPONSE.ok
+        return result
+
+    def attempt_next(self) -> None:
+        self.attempt += 1
+
+    def __str__(self) -> str:
+        return f"[{self.index=}/{self.attempt=}]{self.EXX_TIMEOUT=}/{self.RESPONSE=}"
+
+    def __repr__(self) -> str:
+        return str(self)
 
 
 # =====================================================================================================================
 class HttpClient(UrlCreator, QThread):
-    """
-    THREADS!
+    # TODO: add timestamp
+    # TODO: save send data
 
-    NOTE:
-    1. typical usage
-        class Cls:
-            POST = HttpClient
-        Cls().POST(body={})
-    # 2. sometimes it will not work! so use second way (and maybe it is preferred)
-    #     class Cls:
-    #         POST = HttpClient()
-    #     Cls().POST.post(body={})
-    """
     # SETTINGS -------------------------------------
     TIMEOUT_SEND: float = 1
 
-    RETRY_LIMIT: int = 0
-    RETRY_TIMEOUT: float = 0.1
+    RETRY_LIMIT: int = 2
+    RETRY_TIMEOUT: float = 0.5
 
     # AUX ------------------------------------------
-    que_posted: int = 0
-    que_len: int = 0
-    que: Dict[int, Dict[str, Union[dict, Type_Response]]] = {}
+    __stack: deque
+    request_last: Optional[RequestItem] = None
 
-    in_progress: bool = None
+    def __init__(self):
+        super().__init__()
+        self.__class__.__stack = deque()
 
+    @classmethod
+    @property
+    def STACK(cls) -> deque:
+        return cls.__stack
+
+    # ------------------------------------------------------------------------------------------------
+    def start(self, *args):
+        if not self.isRunning():
+            super().start(*args)
+
+    # ------------------------------------------------------------------------------------------------
     def run(self):
-        if self.in_progress:
-            return
-
-        self.in_progress = True
         retry_count = 0
-
         url = self.URL_create()
-        while self.que_len != self.que_posted:
-            print(f"while_block=[{self.que_len=}/{self.que_posted=}]{self.que=}")
-            response_dict = self.que.get(self.que_posted + 1)
-            if response_dict is None:
-                print(f"no {response_dict=}")
-                break
+        while len(self.STACK):
+            # NEXT -----------------------------------------
+            if self.request_last is None or self.request_last.check_success():
+                retry_count = 0
+                self.request_last = self.STACK[0]
 
-            body = response_dict.get("body")
-            if body is None:
-                print(f"no {body=}")
-                break
-
+            # WORK -----------------------------------------
+            self.request_last.attempt_next()
             with requests.Session() as session:
-                response = None
                 try:
-                    response = session.post(url=url, data=body, timeout=self.TIMEOUT_SEND)
+                    response = session.post(url=url, data=self.request_last.BODY, timeout=self.TIMEOUT_SEND)
+                    self.request_last.RESPONSE = response
                 except Exception as exx:
-                    retry_count += 1
-                    print(f"{exx!r}")
-                    response = exx
+                    self.request_last.EXX_TIMEOUT = exx
 
-                    if retry_count > self.RETRY_LIMIT:
-                        pass
-                    else:
-                        time.sleep(self.RETRY_TIMEOUT)
-                        continue
+            if self.request_last.check_success():
+                retry_count = 0
+                self.STACK.popleft()
+                continue
 
-                if response is not None:
-                    retry_count = 0
-                    self._response_apply(response)
+            print()
+            print(f"{self.request_last=}")
+            print(f"{self.STACK=}")
 
-        # FINISH ------------------------------------------
-        self.in_progress = False
-
-    def _response_apply(self, response: Type_Response) -> None:
-        # print()
-        # print()
-        # print()
-        # print(f"{response=}")
-        self.que_posted += 1
-        # print(f"{self.que_posted=}")
-        # print(f"{self.que=}")
-        # print(f"{self.que[self.que_posted]=}")
-        self.que[self.que_posted].update({"response": response})
+            if retry_count >= self.RETRY_LIMIT:
+                break
+            else:
+                retry_count += 1
+                time.sleep(self.RETRY_TIMEOUT)
 
     def post(self, body: Optional[dict] = None):
-        # TODO: add locker
+        # TODO: add locker???
         body = body or {}
-        self.que_len += 1
-        print(f"[{self.que_len}]{body=}")
-        self.que.update({self.que_len: {"body": body}})
-        print(11)
+        item = RequestItem(body)
+        self.STACK.append(item)
         self.start()
 
 
