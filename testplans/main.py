@@ -42,6 +42,7 @@ class RequestItem_ToMiddleware(RequestItem):
     PORT: int = 8080
     ROUTE: str = "results"
 
+
 class HttpClient_Tp(HttpClientStack):
     REQUEST_CLS = RequestItem_ToMiddleware
 
