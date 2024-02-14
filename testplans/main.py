@@ -3,7 +3,6 @@ from .tc import TestCaseBase
 from .devices import DutBase, DeviceBase
 from .gui import TpGuiBase
 from .api import TpApi
-from .http_client import HttpClientStack, RequestItem
 
 from typing import *
 import json
@@ -13,7 +12,7 @@ from importlib import import_module
 import asyncio
 
 from pyqt_templates import *
-from server_templates import ServerAiohttpBase
+from server_templates import ServerAiohttpBase, HttpClientStack, RequestItem
 from object_info import ObjectInfo
 from private_values import PrivateJson
 
@@ -36,18 +35,6 @@ class Exx__TcSettingsIncorrect(Exception):
 
 
 # =====================================================================================================================
-class RequestItem_ToMiddleware(RequestItem):
-    pass
-    HOST: str = "192.168.74.20"
-    PORT: int = 8080
-    ROUTE: str = "results"
-
-
-class HttpClient_Tp(HttpClientStack):
-    REQUEST_CLS = RequestItem_ToMiddleware
-
-
-# =====================================================================================================================
 class TpMultyDutBase(QThread):
     signal__tp_start = pyqtSignal()
     signal__tp_stop = pyqtSignal()
@@ -67,7 +54,7 @@ class TpMultyDutBase(QThread):
     START_GUI: bool = True
     CLS_GUI: Type[TpGuiBase] = TpGuiBase
 
-    POST: HttpClientStack = HttpClient_Tp()
+    POST: HttpClientStack = HttpClientStack()
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"

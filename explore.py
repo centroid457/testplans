@@ -1,12 +1,26 @@
 from testplans import *
 from testplans.main import TpMultyDutBase
-from testplans.http_client import HttpClientStack
+from server_templates import ServerAiohttpBase, HttpClientStack, RequestItem
 
 from DEVICES import dut_example1
 
 
 # =====================================================================================================================
+class RequestItem_To(RequestItem):
+    pass
+    HOST: str = "192.168.74.20"
+    PORT: int = 8080
+    ROUTE: str = "results"
+
+
+class HttpClientStack_Tp(HttpClientStack):
+    REQUEST_CLS = RequestItem_To
+
+
+# =====================================================================================================================
 class TestPlan_example1(TpMultyDutBase):
+    POST: HttpClientStack = HttpClientStack_Tp()
+
     def duts_generate(self) -> None:
         for value in [*[True, ] * 1, *[False, ] * 1, ]:
             self.DUTS.append(dut_example1.Device(value))
