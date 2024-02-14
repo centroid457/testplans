@@ -75,7 +75,7 @@ class RequestItem(UrlCreator, QThread):
         return result
 
     def __str__(self) -> str:
-        return f"[{self.index=}/{self.attempt_all=}/{self.check_success()=}]{self.EXX_TIMEOUT=}/{self.RESPONSE=}"
+        return f"[{self.index=}/{self.attempt_all=}/{self.attempt_circle=}/{self.check_success()=}]{self.EXX_TIMEOUT=}/{self.RESPONSE=}"
 
     def __repr__(self) -> str:
         return str(self)
@@ -134,14 +134,22 @@ class HttpClientStack(QThread):
     def run(self):
         stack_attempt = 0
         while len(self.STACK):
+            stack_attempt += 1
+
             # NEXT -----------------------------------------
+            # change last
             if self.request_last is None or self.request_last.check_success():
                 stack_attempt = 0
                 self.request_last = self.STACK[0]
 
+                if self.request_last.check_success():
+                    self.STACK.popleft()
+                continue
+
             # WORK -----------------------------------------
-            stack_attempt += 1
+            print()
             print(f"{stack_attempt=}")
+            print(f"len={len(self.STACK)}")
             self.request_last.run()
 
             if self.request_last.check_success():
@@ -149,17 +157,17 @@ class HttpClientStack(QThread):
                 continue
 
             print(f"len={len(self.STACK)}/{self.STACK=}")
-            if stack_attempt < 2:
-                time.sleep(1)
-            else:
+            if stack_attempt == 2:
                 break
+            else:
+                time.sleep(1)
 
     def post(self, body: Optional[dict] = None):
         # TODO: add locker???
         body = body or {}
         item = self.REQUEST_CLS(body)
         self.STACK.append(item)
-        print(f"len={len(self.STACK)}")
+        # print(f"len={len(self.STACK)}")
         self.start()
 
 
