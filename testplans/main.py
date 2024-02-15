@@ -12,7 +12,7 @@ from importlib import import_module
 import asyncio
 
 from pyqt_templates import *
-from server_templates import ServerAiohttpBase, HttpClientStack, RequestItem
+from server_templates import ServerAiohttpBase, RequestsStack, RequestItem
 from object_info import ObjectInfo
 from private_values import PrivateJson
 
@@ -47,14 +47,14 @@ class TpMultyDutBase(QThread):
     STAND_TYPE: Optional[str] = "stand_type"
     STAND_DESCRIPTION: Optional[str] = "stand_description"
 
-    START_API: bool = True
-    CLS_API: Type[ServerAiohttpBase] = TpApi
-    api: ServerAiohttpBase
+    API_SERVER__START: bool = True
+    API_SERVER__CLS: Type[ServerAiohttpBase] = TpApi
+    api_server: ServerAiohttpBase
 
-    START_GUI: bool = True
-    CLS_GUI: Type[TpGuiBase] = TpGuiBase
+    GUI__START: bool = True
+    GUI__CLS: Type[TpGuiBase] = TpGuiBase
 
-    POST: HttpClientStack = HttpClientStack()
+    api_client: RequestsStack = RequestsStack()
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"
@@ -99,12 +99,12 @@ class TpMultyDutBase(QThread):
         self.reinit()
         self.slots_connect()
 
-        self.api = self.CLS_API(self)
-        if self.START_API:
-            self.api.start()
+        self.api_server = self.API_SERVER__CLS(self)
+        if self.API_SERVER__START:
+            self.api_server.start()
 
-        self.gui = self.CLS_GUI(self)
-        if self.START_GUI:
+        self.gui = self.GUI__CLS(self)
+        if self.GUI__START:
             # this will BLOCK process
             # this will BLOCK process
             # this will BLOCK process
@@ -319,7 +319,7 @@ class TpMultyDutBase(QThread):
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
             **tc_inst.get__results(),
         }
-        self.POST.post(body=body)
+        self.api_client.send(body=body)
 
 
 # =====================================================================================================================

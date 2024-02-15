@@ -17,7 +17,7 @@ class TpApi(ServerAiohttpBase):
 
         # RESPONSE --------------------------------------------------
         page_name = "API_INDEX"
-        html = self.html_create(name=page_name, data=html_block, redirect_time=2, request=request)
+        html = self.html_create(data=html_block, redirect_time=2, request=request)
         return web.Response(text=html, content_type='text/html')
 
     @decorator__log_request_response

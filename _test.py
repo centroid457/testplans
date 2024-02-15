@@ -32,7 +32,7 @@ class Tc1_reverse(TestCaseBase):
 
 # -------------------------------------------
 class Tp1(TpMultyDutBase):
-    START_GUI = False
+    GUI__START = False
     TCS = {
         Tc1: True,
         Tc1_reverse: False
@@ -65,7 +65,7 @@ class Test__1:
 
         # -------------------------------------------
         class TestPlan2(TpMultyDutBase):
-            START_GUI = False
+            GUI__START = False
             TCS = {
                 Tc1: True,
                 Tc1_reverse: False
@@ -83,7 +83,7 @@ class Test__1:
 
     def test__acync(self):
         class Tp1(TpMultyDutBase):
-            START_GUI = False
+            GUI__START = False
             TCS = {
                 Tc1: True,
             }
@@ -116,7 +116,7 @@ class Test__1:
 
     def test__skip(self):
         class Tp1(TpMultyDutBase):
-            START_GUI = False
+            GUI__START = False
             TCS = {
                 Tc1: False,
             }
@@ -135,7 +135,7 @@ class Test__1:
 
     def test__GUI(self):
         class Tp(Tp1):
-            START_GUI = True
+            GUI__START = True
 
         with pytest.raises(SystemExit) as exx:
             Tp()
