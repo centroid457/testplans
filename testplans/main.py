@@ -12,7 +12,7 @@ from importlib import import_module
 import asyncio
 
 from pyqt_templates import *
-from server_templates import ServerAiohttpBase, RequestsStack, RequestItem
+from server_templates import ServerAiohttpBase, Client_RequestItem, Client_RequestsStack
 from object_info import ObjectInfo
 from private_values import PrivateJson
 
@@ -54,7 +54,7 @@ class TpMultyDutBase(QThread):
     GUI__START: bool = True
     GUI__CLS: Type[TpGuiBase] = TpGuiBase
 
-    api_client: RequestsStack = RequestsStack()
+    api_client: Client_RequestsStack = Client_RequestsStack()
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"
