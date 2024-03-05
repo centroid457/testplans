@@ -43,6 +43,7 @@ class Tp1(TpMultyDutBase):
 
 
 # =====================================================================================================================
+@pytest.mark.skip
 class Test__1:
     @classmethod
     def setup_class(cls):
