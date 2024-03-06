@@ -6,6 +6,7 @@ from .tc import TestCaseBase
 
 # =====================================================================================================================
 class DeviceBase:
+    con: Any = None
     present: Optional[bool] = None
 
     def mark_present(self) -> None:
@@ -23,8 +24,8 @@ class DutBase(DeviceBase):
     # AUX -----------------------------------
     SN: str = None
     TP_RESULTS: Dict[Type[TestCaseBase], TestCaseBase] = None   # dict is very convenient!!!
-    INDEX: Optional[int] = 0
-    DUTS: List['DutBase'] = []
+    INDEX: int = 0
+    DUTS: List[Self] = []
 
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls)
