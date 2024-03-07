@@ -15,6 +15,12 @@ class DeviceBase:
     def check_present(self) -> bool:
         return True
 
+    def selftest(self) -> Optional[bool]:
+        """
+        :return: None - not implemented (lets decide it!)
+        """
+        pass
+
 
 # =====================================================================================================================
 class DutBase(DeviceBase):
