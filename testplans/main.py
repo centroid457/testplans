@@ -171,10 +171,10 @@ class TpMultyDutBase(QThread):
         # print(f"{tc_cls.SETTINGS=}")
 
         # FINISH ------------------------------------------------------------
-        self._duts_results_tp_init()
+        self._duts__results_init()
         self._tcs__check_ready()
 
-    def _tcs__check_ready(self):
+    def _tcs__check_ready(self) -> None:
         for tc in self.TCS:
             tc.ready = tc.check_ready__all()
 
@@ -207,7 +207,7 @@ class TpMultyDutBase(QThread):
         for dut in self.DUTS:
             dut.mark_present()
 
-    def _duts_results_tp_init(self) -> None:
+    def _duts__results_init(self) -> None:
         for dut in self.DUTS:
             dut.TP_RESULTS = dict()
             for tc in self.TCS:
@@ -216,6 +216,25 @@ class TpMultyDutBase(QThread):
     def _duts_results_tc_clear(self) -> None:
         for dut in self.DUTS:
             dut.results_tc_clear()
+
+    # =================================================================================================================
+    def tp__startup(self) -> bool:
+        """
+        Overwrite with super!
+        """
+        self.progress = 1
+        self._duts_mark_presented()
+        self._duts_results_tc_clear()
+        self._tcs__check_ready()
+        return True
+
+    def tp__teardown(self) -> None:
+        """
+        Overwrite with super!
+        """
+        self.tc_active = None
+        self.progress = 100
+        self.signal__tp_finished.emit()
 
     # =================================================================================================================
     def terminate(self) -> None:
@@ -228,17 +247,15 @@ class TpMultyDutBase(QThread):
         if self.tc_active:
             self.tc_active.terminate__all()
 
-        self.tc_active = None
+        self.tp__teardown()
         self.progress = 0
-        self.signal__tp_finished.emit()
 
     def run(self) -> None:
         if self.tp_check_active():
             return
 
-        self.progress = 1
-        self._duts_mark_presented()
-        self._duts_results_tc_clear()
+        if not self.tp__startup():
+            return
 
         for step, tc in enumerate(self.TCS, start=1):
             self.progress = int(step / len(self.TCS) * 100) - 1
@@ -246,9 +263,7 @@ class TpMultyDutBase(QThread):
             tc.run__all()
 
         # FINISH TPlan ---------------------------------------------------
-        self.tc_active = None
-        self.progress = 100
-        self.signal__tp_finished.emit()
+        self.tp__teardown()
 
     # =================================================================================================================
     def get__info(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
