@@ -10,9 +10,9 @@ from private_values import PrivateJson
 
 # =====================================================================================================================
 class TcReadyState(Enum):
-    READY = auto()
-    WARN = auto()
-    FAIL = auto()
+    READY = "FULLY READY TO GO"
+    WARN = "could start but would have some errors!"
+    FAIL = "CANT START OR WORTHLESS STATES"
     NOT_CHECKED = auto()
 
 
@@ -244,6 +244,9 @@ class TestCaseBase(_TestCaseBase, QThread):
         """run TC on batch duts
         prefered using in thread on upper level!
         """
+        if cls.ready == TcReadyState.FAIL:
+            return
+
         if not cls.DUTS:
             return
 
