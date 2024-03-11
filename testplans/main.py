@@ -220,7 +220,7 @@ class TpMultyDutBase(QThread):
     # =================================================================================================================
     def tp__startup(self) -> bool:
         """
-        Overwrite with super!
+        Overwrite with super! super first!
         """
         self.progress = 1
         self._duts_mark_presented()
@@ -228,12 +228,14 @@ class TpMultyDutBase(QThread):
         self._tcs__check_ready()
         return True
 
-    def tp__teardown(self) -> None:
+    def tp__teardown(self, progress: int = 100) -> None:
         """
-        Overwrite with super!
+        Overwrite with super! super last!
         """
+        if progress is None:
+            progress = 100
         self.tc_active = None
-        self.progress = 100
+        self.progress = progress
         self.signal__tp_finished.emit()
 
     # =================================================================================================================
@@ -247,8 +249,7 @@ class TpMultyDutBase(QThread):
         if self.tc_active:
             self.tc_active.terminate__all()
 
-        self.tp__teardown()
-        self.progress = 0
+        self.tp__teardown(0)
 
     def run(self) -> None:
         if self.tp_check_active():
