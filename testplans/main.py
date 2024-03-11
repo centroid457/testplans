@@ -115,7 +115,7 @@ class TpMultyDutBase(QThread):
     def slots_connect(self) -> None:
         self.signal__tp_start.connect(self.start)
         self.signal__tp_stop.connect(self.terminate)
-        self._signal__tp_reset_duts_sn.connect(self._reset_duts_sn)
+        self._signal__tp_reset_duts_sn.connect(self._duts__reset_sn)
 
         TestCaseBase.signals.signal__tc_state_changed.connect(self.post__tc_results)
 
@@ -195,10 +195,6 @@ class TpMultyDutBase(QThread):
         return result
 
     # =================================================================================================================
-    def _reset_duts_sn(self) -> None:
-        for dut in self.DUTS:
-            dut._reset_sn()
-
     def duts_generate(self) -> None:
         # raise NotImplemented
         pass
@@ -216,6 +212,10 @@ class TpMultyDutBase(QThread):
     def _duts_results_tc_clear(self) -> None:
         for dut in self.DUTS:
             dut.results_tc_clear()
+
+    def _duts__reset_sn(self) -> None:
+        for dut in self.DUTS:
+            dut._reset_sn()
 
     # =================================================================================================================
     def tp__startup(self) -> bool:
