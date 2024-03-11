@@ -6,6 +6,7 @@ from PyQt5.QtGui import *
 from pyqt_templates import TableModelTemplate
 
 # from .tp import TpMultyDutBase
+from .tc import TcReadyState
 
 
 # =====================================================================================================================
@@ -14,12 +15,13 @@ class TpTableModel(TableModelTemplate):
 
     # AUX -------------------------------------------
     open__settings: Optional[bool] = None
+    _ADDITIONAL_COLUMNS: int = 3
 
     def rowCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.TCS)
 
     def columnCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
-        return len(self.DATA.DUTS) + 2
+        return len(self.DATA.DUTS) + self._ADDITIONAL_COLUMNS
 
     def headerData(self, section: Any, orientation: Qt.Orientation, role: int = Qt.DisplayRole) -> str:
         if role == Qt.DisplayRole:
@@ -28,9 +30,11 @@ class TpTableModel(TableModelTemplate):
                 if section == 0:
                     return "ТЕСТКЕЙС"
                 if section == 1:
+                    return "READY"
+                if section == 2:
                     return "ASYNC"
-                if section > 1:
-                    return f"{section-1}"
+                if section >= self._ADDITIONAL_COLUMNS:
+                    return f"{section-self._ADDITIONAL_COLUMNS+1}"
             # ------------------------------
             if orientation == Qt.Vertical:
                 return str(section + 1)
@@ -47,9 +51,11 @@ class TpTableModel(TableModelTemplate):
             flags |= Qt.ItemIsUserCheckable
             # flags |= Qt.ItemIsSelectable
         if col == 1:
+            pass
+        if col == 2:
             if self.open__settings:
                 flags |= Qt.ItemIsUserCheckable
-        if col > 1:
+        if col >= self._ADDITIONAL_COLUMNS:
             if self.open__settings:
                 flags |= Qt.ItemIsUserCheckable
                 # flags |= Qt.ItemIsSelectable
@@ -66,8 +72,8 @@ class TpTableModel(TableModelTemplate):
 
         dut = None
         tc_dut = None
-        if col > 1:
-            dut = self.DATA.DUTS[col-2]
+        if col >= self._ADDITIONAL_COLUMNS:
+            dut = self.DATA.DUTS[col - self._ADDITIONAL_COLUMNS]
             tc_dut = dut.TP_RESULTS[tc]
 
         # -------------------------------------------------------------------------------------------------------------
@@ -75,8 +81,10 @@ class TpTableModel(TableModelTemplate):
             if col == 0:
                 return f'{tc.NAME}\n{tc.DESCRIPTION}'
             if col == 1:
+                return '+' if tc.ready else '-'
+            if col == 2:
                 return '+' if tc.ASYNC else '-'
-            if col > 1:
+            if col >= self._ADDITIONAL_COLUMNS:
                 if tc_dut:
                     if tc_dut.result is None:
                         return ""
@@ -123,8 +131,15 @@ class TpTableModel(TableModelTemplate):
         if role == Qt.BackgroundColorRole:
             if tc.SKIP:
                 return QColor('#e2e2e2')
+            if col == 1:
+                if tc.ready == TcReadyState.READY:
+                    return QColor("#50FF50")
+                if tc.ready == TcReadyState.WARN:
+                    return QColor("#5050FF")
+                if tc.ready == TcReadyState.FAIL:
+                    return QColor("#FF5050")
 
-            if col > 1:
+            if col >= self._ADDITIONAL_COLUMNS:
                 if tc_dut.skip_tc_dut or not dut.present or dut.SKIP:
                     return QColor('#e2e2e2')
                 if tc_dut.result is True:
@@ -144,12 +159,15 @@ class TpTableModel(TableModelTemplate):
                         return Qt.Checked
 
                 if col == 1:
+                    pass
+
+                if col == 2:
                     if tc.ASYNC:
                         return Qt.Checked
                     else:
                         return Qt.Unchecked
 
-                if col > 1:
+                if col >= self._ADDITIONAL_COLUMNS:
                     if not tc_dut.SKIP and not dut.SKIP:
                         if tc_dut.skip_tc_dut:
                             return Qt.Unchecked
@@ -183,7 +201,7 @@ class TpTableModel(TableModelTemplate):
 
         dut = None
         tc_dut = None
-        if col > 1:
+        if col > 2:
             dut = self.DATA.DUTS[col-2]
             tc_dut = dut.TP_RESULTS[tc]
 
@@ -192,10 +210,13 @@ class TpTableModel(TableModelTemplate):
             if col == 0:
                 tc.SKIP = value == Qt.Unchecked
 
-            if col == 1:
+            if col == 2:
+                pass
+
+            if col == 2:
                 tc.ASYNC = value == Qt.Checked
 
-            if col > 1:
+            if col > 2:
                 if tc_dut:
                     tc_dut.skip_tc_dut = value == Qt.Unchecked
 
