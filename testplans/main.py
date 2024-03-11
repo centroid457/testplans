@@ -112,6 +112,13 @@ class TpMultyDutBase(QThread):
             # this will BLOCK process
             self.gui.run()
 
+    def slots_connect(self) -> None:
+        self.signal__tp_start.connect(self.start)
+        self.signal__tp_stop.connect(self.terminate)
+        self._signal__tp_reset_duts_sn.connect(self._reset_duts_sn)
+
+        TestCaseBase.signals.signal__tc_state_changed.connect(self.post__tc_results)
+
     # =================================================================================================================
     def reinit(self, tcs: Optional[Dict[Type[TestCaseBase], Optional[bool]]] = None) -> Optional[NoReturn]:
         # DUTS --------------------------------------------------------------
@@ -165,13 +172,11 @@ class TpMultyDutBase(QThread):
 
         # FINISH ------------------------------------------------------------
         self._duts_results_tp_init()
+        self._tcs__check_ready()
 
-    def slots_connect(self) -> None:
-        self.signal__tp_start.connect(self.start)
-        self.signal__tp_stop.connect(self.terminate)
-        self._signal__tp_reset_duts_sn.connect(self._reset_duts_sn)
-
-        TestCaseBase.signals.signal__tc_state_changed.connect(self.post__tc_results)
+    def _tcs__check_ready(self):
+        for tc in self.TCS:
+            tc.ready = tc.check_ready__all()
 
     # =================================================================================================================
     @property
@@ -221,7 +226,7 @@ class TpMultyDutBase(QThread):
 
         # finish current ----------------------------
         if self.tc_active:
-            self.tc_active.terminate_all()
+            self.tc_active.terminate__all()
 
         self.tc_active = None
         self.progress = 0
@@ -238,7 +243,7 @@ class TpMultyDutBase(QThread):
         for step, tc in enumerate(self.TCS, start=1):
             self.progress = int(step / len(self.TCS) * 100) - 1
             self.tc_active = tc
-            tc.run_all()
+            tc.run__all()
 
         # FINISH TPlan ---------------------------------------------------
         self.tc_active = None

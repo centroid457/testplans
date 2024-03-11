@@ -1,10 +1,19 @@
 import pathlib
 from typing import *
 import json
+from enum import Enum, auto
 from PyQt5.QtCore import QThread
 
 from pyqt_templates import *
 from private_values import PrivateJson
+
+
+# =====================================================================================================================
+class TcReadyState(Enum):
+    READY = auto()
+    WARN = auto()
+    FAIL = auto()
+    NOT_CHECKED = auto()
 
 
 # =====================================================================================================================
@@ -42,6 +51,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     DUT: Any
     SETTINGS: PrivateJson = None
 
+    ready: TcReadyState = TcReadyState.NOT_CHECKED
     __result: Optional[bool]
     details: Dict[str, Any]
     exx: Optional[Exception]
@@ -174,14 +184,14 @@ class TestCaseBase(_TestCaseBase, QThread):
     @classmethod
     def results_get_all(cls) -> List[Dict[str, Any]]:
         results = []
-        for tc_dut in cls.TCS_dut_all:
+        for tc_dut in cls.TCS_dut__all:
             results.append(tc_dut.get__results())
         return results
 
     # =================================================================================================================
     @classmethod
     @property
-    def TCS_dut_all(cls) -> List['TestCaseBase']:
+    def TCS_dut__all(cls) -> List['TestCaseBase']:
         """
         get existed tc objects for all DUTs, if not existed - create it in all DUTs
         """
@@ -208,11 +218,11 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.progress = progress
 
     @classmethod
-    def terminate_all(cls) -> None:
-        for tc_dut in cls.TCS_dut_all:
+    def terminate__all(cls) -> None:
+        for tc_dut in cls.TCS_dut__all:
             tc_dut.terminate()
 
-        cls.teardown_all()
+        cls.teardown__all()
 
     # =================================================================================================================
     def run(self) -> None:
@@ -230,7 +240,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.teardown()
 
     @classmethod
-    def run_all(cls) -> None:
+    def run__all(cls) -> None:
         """run TC on batch duts
         prefered using in thread on upper level!
         """
@@ -240,11 +250,11 @@ class TestCaseBase(_TestCaseBase, QThread):
         if cls.SKIP:
             return
 
-        if not cls.startup_all():
+        if not cls.startup__all():
             return
 
         # BATCH --------------------------
-        for tc_dut in cls.TCS_dut_all:
+        for tc_dut in cls.TCS_dut__all:
             if tc_dut.skip_tc_dut:
                 continue
 
@@ -254,17 +264,21 @@ class TestCaseBase(_TestCaseBase, QThread):
 
         # FINISH --------------------------
         if cls.ASYNC:
-            for tc_dut in cls.TCS_dut_all:
+            for tc_dut in cls.TCS_dut__all:
                 tc_dut.wait()
 
-        cls.teardown_all()
+        cls.teardown__all()
 
     # REDEFINE ========================================================================================================
-    pass
+    @classmethod
+    def check_ready__all(cls) -> TcReadyState:
+        """check if TcCls prepared correct and ready to work
+        """
+        return TcReadyState.READY
 
     # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
     @classmethod
-    def startup_all(cls) -> bool:
+    def startup__all(cls) -> bool:
         """before batch work
         """
         return True
@@ -277,7 +291,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.progress = 100
 
     @classmethod
-    def teardown_all(cls):
+    def teardown__all(cls):
         pass
 
     # RUN -------------------------------------------------------------------------------------------------------------
