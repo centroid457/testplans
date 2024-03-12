@@ -4,5 +4,7 @@ from testplans import DutBase
 
 
 class Device(DutBase):
-    def __init__(self, value: Any):
-        self.VALUE = value
+    @property
+    def VALUE(self) -> bool:
+        return self.INDEX % 2 == 0
+

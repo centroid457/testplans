@@ -131,7 +131,7 @@ class TpGuiBase(Gui):
 
     def TV_hh_sectionClicked(self, index: int) -> None:
         if index > 1:
-            dut = self.DATA.DUTS[index - self.TM.ADDITIONAL_COLUMNS]
+            dut = self.DATA.DEVICES.LIST_DUT[index - self.TM.ADDITIONAL_COLUMNS]
             dut._SKIP_reverse()
             self.TM._data_reread()
 
@@ -153,7 +153,7 @@ class TpGuiBase(Gui):
             return
 
         tc = list(self.DATA.TCS)[row]
-        dut = self.DATA.DUTS[col-2]
+        dut = self.DATA.DEVICES.LIST_DUT[col-2]
         self.PTE.setPlainText(dut.TP_RESULTS[tc].info_pretty())
 
         # print(f"{row=}/{section=}/{dut=}/{tc=}")

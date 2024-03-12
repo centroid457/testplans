@@ -7,6 +7,8 @@ from PyQt5.QtCore import QThread
 from pyqt_templates import *
 from private_values import PrivateJson
 
+# from .devices import TpDevicesIndexed
+
 
 # =====================================================================================================================
 class TcReadyState(Enum):
@@ -47,8 +49,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
 
     # INSTANCE ------------------------------------
-    DUTS: List[Any]     # applied for CLS!
-    DUT: Any
+    DEVICES: 'TpDevicesIndexed'
     SETTINGS: PrivateJson = None
 
     ready: TcReadyState = TcReadyState.NOT_CHECKED
@@ -57,13 +58,10 @@ class TestCaseBase(_TestCaseBase, QThread):
     exx: Optional[Exception]
     progress: int
 
-    # DEVICES ------------------------------------
-    # device1: DEVICES.dut_example1.Device    # APPLY any if need!
-
     # def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
-    def __init__(self, dut: Any):
+    def __init__(self, index: int = None):
         super().__init__()
-        self.DUT = dut
+        self.__class__.DEVICES.INDEX = index
         self.clear()
 
         # if _settings_files is not None:
@@ -72,8 +70,8 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.SETTINGS = PrivateJson(_dict=self.settings_read())
 
     @classmethod
-    def DUTS_input(cls, duts: List[Any]):
-        cls.DUTS = duts
+    def devices__set(cls, devices: 'TpDevicesIndexed') -> None:
+        cls.DEVICES = devices
 
     @classmethod
     def settings_read(cls, files: Union[None, pathlib.Path, List[pathlib.Path]] = None) -> dict:
@@ -128,7 +126,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         result += f"SKIP={self.SKIP}\n"
         result += f"skip_tc_dut={self.skip_tc_dut}\n"
         result += f"ASYNC={self.ASYNC}\n"
-        result += f"DUT.INDEX={self.DUT.INDEX}\n"
+        result += f"DUT.INDEX={self.DEVICES.DUT.INDEX}\n"
         result += f"result={self.result}\n"
         result += f"progress={self.progress}\n"
         result += f"exx={self.exx}\n"
@@ -161,10 +159,10 @@ class TestCaseBase(_TestCaseBase, QThread):
     def get__results(self) -> Dict[str, Any]:
         result = {
             # COORDINATES
-            "DUT_INDEX": self.DUT.INDEX,
-            "DUT_SKIP": self.DUT.SKIP,
+            "DUT_INDEX": self.DEVICES.DUT.INDEX,
+            "DUT_SKIP": self.DEVICES.DUT.SKIP,
             "DUT_SKIP_TC": self.skip_tc_dut,
-            "DUT_SN": self.DUT.SN,
+            "DUT_SN": self.DEVICES.DUT.SN,
 
             # INFO
             "TC_NAME": self.NAME,
@@ -196,7 +194,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         get existed tc objects for all DUTs, if not existed - create it in all DUTs
         """
         result = []
-        for dut in cls.DUTS:
+        for dut in cls.DEVICES.LIST__DUT:
             try:
                 tc_dut = dut.TP_RESULTS[cls]
             except:
@@ -228,7 +226,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     def run(self) -> None:
         # PREPARE --------
         self.clear()
-        if not self.DUT.present or self.DUT.SKIP:
+        if not self.DEVICES.DUT.present or self.DEVICES.DUT.SKIP:
             return
 
         # WORK --------
@@ -247,7 +245,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         if cls.ready == TcReadyState.FAIL:
             return
 
-        if not cls.DUTS:
+        if not cls.DEVICES.DUTS:
             return
 
         if cls.SKIP:

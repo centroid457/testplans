@@ -36,17 +36,6 @@ class DutBase(DeviceBase):
     SN: str = None
     TP_RESULTS: Dict[Type[TestCaseBase], TestCaseBase] = None   # dict is very convenient!!!
     INDEX: int = None
-    # DUTS: List[Self] = []
-
-    # def __new__(cls, *args, **kwargs):
-    #     # FIXME: DECIDE/TRY NOT TO USE IT!!!
-    #     instance = super().__new__(cls)
-    #     # instance.INDEX = cls.INDEX
-    #     # cls.INDEX += 1
-    #     instance.INDEX = len(cls.DUTS)
-    #     instance.SN = uuid.uuid4().hex
-    #     cls.DUTS.append(instance)
-    #     return instance
 
     def __init__(self, index: int):
         self.INDEX = index
@@ -94,10 +83,10 @@ class TpDevicesIndexed:
     # SETTINGS ----------------------
     COUNT: int = 2
 
-    # CLS_LIST__DUT: Callable[[int, ...], DutBase]
-    # LIST__DUT: List[DutBase]
-    # DUT: DutBase
-    #
+    CLS_LIST__DUT: Type[DutBase] = DutBase
+    LIST__DUT: List[DutBase]
+    DUT: DutBase
+
     # CLS_SINGLE__ATC: Callable[..., DeviceBase]
     # ATC: DeviceBase
 
@@ -166,10 +155,13 @@ class TpDevicesIndexed:
 
     @classmethod
     def duts__results_init(cls, tcs: List[Any]) -> None:
-        for dut in cls.LIST__DUT:
+        for tc in tcs:
+            tc.devices__set(cls())
+
+        for index, dut in enumerate(cls.LIST__DUT):
             dut.TP_RESULTS = dict()
             for tc in tcs:
-                dut.TP_RESULTS.update({tc: tc(dut)})
+                dut.TP_RESULTS.update({tc: tc(index)})  # FIXME: try use duts in tc as devices not step by step like here!!!
 
     @classmethod
     def duts__results_clear(cls) -> None:
@@ -185,10 +177,6 @@ class TpDevicesIndexed:
 # ---------------------------------------------------------------------------------------------------------------------
 class DevicesIndexed_Example(TpDevicesIndexed):
     COUNT: int = 2
-
-    CLS_LIST__DUT: Type[DutBase] = DutBase
-    LIST__DUT: List[DutBase]
-    DUT: DutBase
 
     CLS_SINGLE__ATC: Type[DeviceBase] = DeviceBase
     ATC: DeviceBase

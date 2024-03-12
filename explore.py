@@ -1,8 +1,13 @@
 from testplans import *
-from testplans.main import TpMultyDutBase
+from testplans.main import TpMultyDutBase, TpDevicesIndexed
 from server_templates import ServerAiohttpBase, Client_RequestsStack, Client_RequestItem
 
 from DEVICES import dut_example1
+
+
+# =====================================================================================================================
+class TpDevicesIndexed__Example(TpDevicesIndexed):
+    CLS_LIST__DUT = dut_example1.Device
 
 
 # =====================================================================================================================
@@ -20,10 +25,7 @@ class Client_RequestsStack_Tp(Client_RequestsStack):
 # =====================================================================================================================
 class TestPlan_example1(TpMultyDutBase):
     api_client: Client_RequestsStack = Client_RequestsStack_Tp()
-
-    def duts_generate(self) -> None:
-        for value in [*[True, ] * 1, *[False, ] * 1, ]:
-            self.DUTS.append(dut_example1.Device(value))
+    DEVICES = TpDevicesIndexed__Example()
 
 
 # =====================================================================================================================
