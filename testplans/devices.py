@@ -172,7 +172,7 @@ class TpDevicesIndexed:
 
     @classmethod
     def _duts__reset_sn(cls) -> None:
-        for dut in cls.LIST__DUTS:
+        for dut in cls.LIST__DUT:
             dut._debug__reset_sn()
 
 

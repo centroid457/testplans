@@ -51,6 +51,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     # INSTANCE ------------------------------------
     DEVICES: 'TpDevicesIndexed'
     SETTINGS: PrivateJson = None
+    INDEX: int = None
 
     ready: TcReadyState = TcReadyState.NOT_CHECKED
     __result: Optional[bool]
@@ -61,13 +62,24 @@ class TestCaseBase(_TestCaseBase, QThread):
     # def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
     def __init__(self, index: int = None):
         super().__init__()
-        self.__class__.DEVICES.INDEX = index
+        self.INDEX = index
         self.clear()
 
         # if _settings_files is not None:
         #     self.SETTINGS_FILES = _settings_files
 
         self.SETTINGS = PrivateJson(_dict=self.settings_read())
+
+    @property
+    def DUT(self) -> Optional['DutBase']:
+        if self.INDEX is None:
+            return
+
+        try:
+            return self.DEVICES.LIST__DUT[self.INDEX]
+        except:
+            msg = f"[ERROR] WRONG INDEX {self.INDEX=}"
+            print(msg)
 
     @classmethod
     def devices__set(cls, devices: 'TpDevicesIndexed') -> None:
@@ -126,7 +138,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         result += f"SKIP={self.SKIP}\n"
         result += f"skip_tc_dut={self.skip_tc_dut}\n"
         result += f"ASYNC={self.ASYNC}\n"
-        result += f"DUT.INDEX={self.DEVICES.DUT.INDEX}\n"
+        result += f"DUT.INDEX={self.INDEX}\n"
         result += f"result={self.result}\n"
         result += f"progress={self.progress}\n"
         result += f"exx={self.exx}\n"
@@ -159,10 +171,10 @@ class TestCaseBase(_TestCaseBase, QThread):
     def get__results(self) -> Dict[str, Any]:
         result = {
             # COORDINATES
-            "DUT_INDEX": self.DEVICES.DUT.INDEX,
-            "DUT_SKIP": self.DEVICES.DUT.SKIP,
+            "DUT_INDEX": self.INDEX,
+            "DUT_SKIP": self.DUT.SKIP,
             "DUT_SKIP_TC": self.skip_tc_dut,
-            "DUT_SN": self.DEVICES.DUT.SN,
+            "DUT_SN": self.DUT.SN,
 
             # INFO
             "TC_NAME": self.NAME,
@@ -226,7 +238,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     def run(self) -> None:
         # PREPARE --------
         self.clear()
-        if not self.DEVICES.DUT.PRESENT or self.DEVICES.DUT.SKIP:
+        if not self.DUT or not self.DUT.PRESENT or self.DUT.SKIP:
             return
 
         # WORK --------
