@@ -1,6 +1,6 @@
 # from . import *
 from .tc import TestCaseBase
-from .devices import DutBase, DeviceBase
+from .devices import DutBase, DeviceBase, TpDevicesIndexed, DevicesIndexed_Example
 from .gui import TpGuiBase
 from .api import TpApi
 
@@ -62,6 +62,8 @@ class TpMultyDutBase(QThread):
     SETTINGS_BASE_NAME: Union[str, Path] = "SETTINGS_BASE.json"
     SETTINGS_BASE_FILEPATH: Path
 
+    DEVICES: Type[TpDevicesIndexed] = DevicesIndexed_Example
+
     # AUX -----------------------------------------------------------
     TCS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}
     # {
@@ -115,7 +117,7 @@ class TpMultyDutBase(QThread):
     def slots_connect(self) -> None:
         self.signal__tp_start.connect(self.start)
         self.signal__tp_stop.connect(self.terminate)
-        self._signal__tp_reset_duts_sn.connect(self._duts__reset_sn)
+        self._signal__tp_reset_duts_sn.connect(self.DEVICES._duts__reset_sn)
 
         TestCaseBase.signals.signal__tc_state_changed.connect(self.post__tc_results)
 
@@ -123,8 +125,8 @@ class TpMultyDutBase(QThread):
     def reinit(self, tcs: Optional[Dict[Type[TestCaseBase], Optional[bool]]] = None) -> Optional[NoReturn]:
         # DUTS --------------------------------------------------------------
         self.DUTS = []
-        self.duts_generate()
-        self._duts_mark_presented()
+        self.DEVICES.generate()
+        self.DEVICES.mark_present()
 
         # TCS --------------------------------------------------------------
         tcs = tcs or dict(self.TCS)
@@ -171,7 +173,7 @@ class TpMultyDutBase(QThread):
         # print(f"{tc_cls.SETTINGS=}")
 
         # FINISH ------------------------------------------------------------
-        self._duts__results_init()
+        self.DEVICES.duts__results_init(list(self.TCS))
         self._tcs__check_ready()
 
     def _tcs__check_ready(self) -> None:
@@ -195,36 +197,13 @@ class TpMultyDutBase(QThread):
         return result
 
     # =================================================================================================================
-    def duts_generate(self) -> None:
-        # raise NotImplemented
-        pass
-
-    def _duts_mark_presented(self) -> None:
-        for dut in self.DUTS:
-            dut.mark_present()
-
-    def _duts__results_init(self) -> None:
-        for dut in self.DUTS:
-            dut.TP_RESULTS = dict()
-            for tc in self.TCS:
-                dut.TP_RESULTS.update({tc: tc(dut)})
-
-    def _duts_results_tc_clear(self) -> None:
-        for dut in self.DUTS:
-            dut.results_tc_clear()
-
-    def _duts__reset_sn(self) -> None:
-        for dut in self.DUTS:
-            dut._reset_sn()
-
-    # =================================================================================================================
     def tp__startup(self) -> bool:
         """
         Overwrite with super! super first!
         """
         self.progress = 1
-        self._duts_mark_presented()
-        self._duts_results_tc_clear()
+        self.DEVICES.mark_present()
+        self.DEVICES.duts__results_clear()
         self._tcs__check_ready()
         return True
 

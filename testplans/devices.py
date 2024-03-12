@@ -69,7 +69,9 @@ class DutBase(DeviceBase):
                 return tc.result
         return True
 
-    def results_tc_clear(self) -> None:
+    def results__clear(self) -> None:
+        if not self.TP_RESULTS:
+            return
         for tc in self.TP_RESULTS.values():
             if tc is not None:
                 tc.clear()
@@ -105,13 +107,18 @@ class TpDevicesIndexed:
 
     _STARTSWITH__DEVICES_LIST: str = "LIST__"
 
+    _GROUPS: Dict[str, Union[DeviceBase, List[DeviceBase]]] = {}
+
     # instance ---
     INDEX: int = None
 
-    def __init__(self, index: int):
+    def __init__(self, index: int = None):
         self.INDEX = index
 
-    def __getattr__(self, item: str) -> DeviceBase:
+    def __getattr__(self, item: str) -> Optional[DeviceBase]:
+        if self.INDEX is None:
+            return
+
         devs_attr_name = f"{self._STARTSWITH__DEVICES_LIST}{item}"
         try:
             result = getattr(self, devs_attr_name)[self.INDEX]
@@ -123,22 +130,56 @@ class TpDevicesIndexed:
         return result
 
     @classmethod
-    def generate__all(cls) -> None:
+    def generate(cls) -> None:
+        cls._GROUPS = {}
         for attr_name in dir(cls):
             if attr_name.startswith(cls._STARTSWITH__CLS_LIST):
-                dev_list__name = f"{cls._STARTSWITH__DEVICES_LIST}{attr_name.removeprefix(cls._STARTSWITH__CLS_LIST)}"
+                group_name = attr_name.removeprefix(cls._STARTSWITH__CLS_LIST)
+                dev_list__name = f"{cls._STARTSWITH__DEVICES_LIST}{group_name}"
                 dev_list__value = []
-                setattr(cls, dev_list__name, dev_list__value)
                 for index in range(cls.COUNT):
                     # FIXME: add Try sentence
                     dev_instance = getattr(cls, attr_name)(index)
                     dev_list__value.append(dev_instance)
 
+                # apply -------
+                setattr(cls, dev_list__name, dev_list__value)
+                cls._GROUPS.update({group_name: dev_list__value})
+
             elif attr_name.startswith(cls._STARTSWITH__CLS_SINGLE):
-                dev_single__name = attr_name.removeprefix(cls._STARTSWITH__CLS_SINGLE)
+                group_name = attr_name.removeprefix(cls._STARTSWITH__CLS_SINGLE)
                 # FIXME: add Try sentence
                 dev_instance = getattr(cls, attr_name)()
-                setattr(cls, dev_single__name, dev_instance)
+
+                # apply -------
+                setattr(cls, group_name, dev_instance)
+                cls._GROUPS.update({group_name: dev_instance})
+
+    @classmethod
+    def mark_present(cls) -> None:
+        for group_name, group_value in cls._GROUPS.items():
+            if isinstance(group_value, list):
+                for device in group_value:
+                    device.mark_present()
+            else:
+                group_value.mark_present()
+
+    @classmethod
+    def duts__results_init(cls, tcs: List[Any]) -> None:
+        for dut in cls.LIST__DUT:
+            dut.TP_RESULTS = dict()
+            for tc in tcs:
+                dut.TP_RESULTS.update({tc: tc(dut)})
+
+    @classmethod
+    def duts__results_clear(cls) -> None:
+        for dut in cls.LIST__DUT:
+            dut.results__clear()
+
+    @classmethod
+    def _duts__reset_sn(cls) -> None:
+        for dut in cls.LIST__DUTS:
+            dut._reset_sn()
 
 
 # ---------------------------------------------------------------------------------------------------------------------
