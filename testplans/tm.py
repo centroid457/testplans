@@ -21,7 +21,7 @@ class TpTableModel(TableModelTemplate):
         return len(self.DATA.TCS)
 
     def columnCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
-        return len(self.DATA.DEVICES.LIST_DUT) + self.ADDITIONAL_COLUMNS
+        return len(self.DATA.DEVICES.LIST__DUT) + self.ADDITIONAL_COLUMNS
 
     def headerData(self, section: Any, orientation: Qt.Orientation, role: int = Qt.DisplayRole) -> str:
         if role == Qt.DisplayRole:
@@ -73,7 +73,7 @@ class TpTableModel(TableModelTemplate):
         dut = None
         tc_dut = None
         if col >= self.ADDITIONAL_COLUMNS:
-            dut = self.DATA.DEVICES.LIST_DUT[col - self.ADDITIONAL_COLUMNS]
+            dut = self.DATA.DEVICES.LIST__DUT[col - self.ADDITIONAL_COLUMNS]
             tc_dut = dut.TP_RESULTS[tc]
 
         # -------------------------------------------------------------------------------------------------------------
@@ -202,7 +202,7 @@ class TpTableModel(TableModelTemplate):
         dut = None
         tc_dut = None
         if col >= self.ADDITIONAL_COLUMNS:
-            dut = self.DATA.DEVICES.LIST_DUT[col - self.ADDITIONAL_COLUMNS]
+            dut = self.DATA.DEVICES.LIST__DUT[col - self.ADDITIONAL_COLUMNS]
             tc_dut = dut.TP_RESULTS[tc]
 
         # -------------------------------------------------------------------------------------------------------------

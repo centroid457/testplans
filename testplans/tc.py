@@ -198,7 +198,7 @@ class TestCaseBase(_TestCaseBase, QThread):
             try:
                 tc_dut = dut.TP_RESULTS[cls]
             except:
-                tc_dut = cls(dut)
+                tc_dut = cls(dut.INDEX)
                 if not hasattr(dut, "TP_RESULTS"):
                     setattr(dut, "TP_RESULTS", dict())
                 dut.TP_RESULTS.update({cls: tc_dut})
@@ -245,7 +245,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         if cls.ready == TcReadyState.FAIL:
             return
 
-        if not cls.DEVICES.DUTS:
+        if not cls.DEVICES.LIST__DUT:
             return
 
         if cls.SKIP:

@@ -183,7 +183,7 @@ class TpMultyDutBase(QThread):
         result = []
 
         if self.tc_active:
-            for dut in self.DEVICES.LIST_DUT:
+            for dut in self.DEVICES.LIST__DUT:
                 tc_dut = dut.TP_RESULTS[self.tc_active]
                 if not tc_dut.skip_tc_dut:
                     result.append(tc_dut)

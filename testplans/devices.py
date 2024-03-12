@@ -34,21 +34,12 @@ class DutBase(DeviceBase):
 
     # AUX -----------------------------------
     SN: str = None
-    TP_RESULTS: Dict[Type[TestCaseBase], TestCaseBase] = None   # dict is very convenient!!!
+    TP_RESULTS: Dict[Type[TestCaseBase], TestCaseBase]   # dict is very convenient!!! to find exact tc!!!
     INDEX: int = None
 
-    def __init__(self, index: int):
+    def __init__(self, index: int = None):
         self.INDEX = index
-
-    def _reset_sn(self) -> None:
-        """this is only for testing middleware"""
-        self.SN = uuid.uuid4().hex
-
-    def _SKIP_reverse(self) -> None:
-        """
-        this is only for testing purpose
-        """
-        self.SKIP = not bool(self.SKIP)
+        self.TP_RESULTS = {}
 
     def check_result_final(self) -> Optional[bool]:
         for tc in self.TP_RESULTS.values():
@@ -64,6 +55,17 @@ class DutBase(DeviceBase):
         for tc in self.TP_RESULTS.values():
             if tc is not None:
                 tc.clear()
+
+    # DEBUG PURPOSE ---------------------------------------------------------------------------------------------------
+    def _debug__reset_sn(self) -> None:
+        """this is only for testing middleware"""
+        self.SN = uuid.uuid4().hex
+
+    def _bebug__SKIP_reverse(self) -> None:
+        """
+        this is only for testing purpose
+        """
+        self.SKIP = not bool(self.SKIP)
 
 
 # =====================================================================================================================
@@ -171,7 +173,7 @@ class TpDevicesIndexed:
     @classmethod
     def _duts__reset_sn(cls) -> None:
         for dut in cls.LIST__DUTS:
-            dut._reset_sn()
+            dut._debug__reset_sn()
 
 
 # ---------------------------------------------------------------------------------------------------------------------
