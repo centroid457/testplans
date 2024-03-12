@@ -116,7 +116,7 @@ class TpMultyDutBase(QThread):
     def slots_connect(self) -> None:
         self.signal__tp_start.connect(self.start)
         self.signal__tp_stop.connect(self.terminate)
-        self._signal__tp_reset_duts_sn.connect(self.DEVICES._duts__reset_sn)
+        self._signal__tp_reset_duts_sn.connect(self.DEVICES._debug__duts__reset_sn)
 
         TestCaseBase.signals.signal__tc_state_changed.connect(self.post__tc_results)
 
