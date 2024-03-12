@@ -121,22 +121,26 @@ class TpMultyDutBase(QThread):
         TestCaseBase.signals.signal__tc_state_changed.connect(self.post__tc_results)
 
     # =================================================================================================================
-    def reinit(self, tcs: Optional[Dict[Type[TestCaseBase], Optional[bool]]] = None) -> Optional[NoReturn]:
-        # DUTS --------------------------------------------------------------
-        self.DEVICES.generate()
-        self.DEVICES.mark_present()
-
-        # TCS --------------------------------------------------------------
-        tcs = tcs or dict(self.TCS)
-        self.TCS = {}
-
+    def reinit(self) -> Optional[NoReturn]:
         # # SETTINGS BASE ----------------------------------------
         # settings_base = {}
         # if self.SETTINGS_BASE_FILEPATH.exists():
         #     settings_base = json.loads(self.SETTINGS_BASE_FILEPATH.read_text())
 
-        # WORK ----------------------------------------
-        for item, using in tcs.items():
+        # DUTS --------------------------------------------------------------
+        self.DEVICES.generate()
+        self.DEVICES.mark_present()
+
+        # TCS --------------------------------------------------------------
+        self._tcs__apply_classes()
+        self._tcs__apply_settings()
+        self._tcs__generate_for_dut()
+        self.DEVICES.duts__results_init(list(self.TCS))     # FIXME: DELETE!!!!
+        self._tcs__check_ready()
+
+    def _tcs__apply_classes(self) -> None:
+        result = {}
+        for item, using in self.TCS.items():
             # print(dir(TESTCASES))
             if isinstance(item, str):   # filename
                 # tc_cls = import_module(item, "TESTCASES").TestCase    # not working!
@@ -155,12 +159,15 @@ class TpMultyDutBase(QThread):
                 raise Exx__TcItemType(msg)
 
             tc_cls.SKIP = not using
-            self.TCS.update({tc_cls: using})
+            result.update({tc_cls: using})
 
-            # SETTINGS TC ----------------------------------------
+        self.TCS = result
+
+    def _tcs__apply_settings(self) -> None:
+        for tc_cls in self.TCS:
             tc_cls.SETTINGS_FILES = [self.SETTINGS_BASE_FILEPATH, ]
 
-            settings_tc_filepath = self.DIRPATH_TCS.joinpath(f"{item}.json")
+            settings_tc_filepath = self.DIRPATH_TCS.joinpath(f"{tc_cls.__name__}.json")
             if settings_tc_filepath.exists():
                 tc_cls.SETTINGS_FILES.append(settings_tc_filepath)
             else:
@@ -169,9 +176,9 @@ class TpMultyDutBase(QThread):
 
         # print(f"{tc_cls.SETTINGS=}")
 
-        # FINISH ------------------------------------------------------------
-        self.DEVICES.duts__results_init(list(self.TCS))
-        self._tcs__check_ready()
+    def _tcs__generate_for_dut(self) -> None:
+        for tc in self.TCS:
+            tc.TCS_ON_DUTS__generate()
 
     def _tcs__check_ready(self) -> None:
         for tc in self.TCS:

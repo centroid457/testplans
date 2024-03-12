@@ -47,6 +47,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     # AUXILIARY -----------------------------------
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
+    TCS_ON_DUTS: List['TestCaseBase']
 
     # INSTANCE ------------------------------------
     DEVICES: 'TpDevicesIndexed'
@@ -80,6 +81,19 @@ class TestCaseBase(_TestCaseBase, QThread):
         except:
             msg = f"[ERROR] WRONG INDEX {self.INDEX=}"
             print(msg)
+
+    @classmethod
+    def TCS_ON_DUTS__generate(cls) -> None:
+        """
+        create tc objects for all DUTs, if not existed - create it in all DUTs
+        """
+        result = []
+        for index in cls.DEVICES.COUNT:
+            tc_on_dut = cls(index)
+            result.append(tc_on_dut)
+
+        cls.TCS_ON_DUTS = result
+        # FIXME: if some TC on one base - it would be incorrect!!!???
 
     @classmethod
     def devices__set(cls, devices: 'TpDevicesIndexed') -> None:
@@ -194,30 +208,9 @@ class TestCaseBase(_TestCaseBase, QThread):
     @classmethod
     def results_get_all(cls) -> List[Dict[str, Any]]:
         results = []
-        for tc_dut in cls.TCS_dut__all:
+        for tc_dut in cls.TCS_ON_DUTS:
             results.append(tc_dut.get__results())
         return results
-
-    # =================================================================================================================
-    @classmethod
-    @property
-    def TCS_dut__all(cls) -> List['TestCaseBase']:
-        """
-        get existed tc objects for all DUTs, if not existed - create it in all DUTs
-        """
-        result = []
-        for dut in cls.DEVICES.LIST__DUT:
-            try:
-                tc_dut = dut.TP_RESULTS[cls]
-            except:
-                tc_dut = cls(dut.INDEX)
-                if not hasattr(dut, "TP_RESULTS"):
-                    setattr(dut, "TP_RESULTS", dict())
-                dut.TP_RESULTS.update({cls: tc_dut})
-
-            result.append(tc_dut)
-
-        return result
 
     # =================================================================================================================
     def terminate(self) -> None:
@@ -229,7 +222,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     @classmethod
     def terminate__cls(cls) -> None:
-        for tc_dut in cls.TCS_dut__all:
+        for tc_dut in cls.TCS_ON_DUTS:
             tc_dut.terminate()
 
         cls.teardown__cls()
@@ -267,7 +260,7 @@ class TestCaseBase(_TestCaseBase, QThread):
             return
 
         # BATCH --------------------------
-        for tc_dut in cls.TCS_dut__all:
+        for tc_dut in cls.TCS_ON_DUTS:
             if tc_dut.skip_tc_dut:
                 continue
 
@@ -277,7 +270,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
         # FINISH --------------------------
         if cls.ASYNC:
-            for tc_dut in cls.TCS_dut__all:
+            for tc_dut in cls.TCS_ON_DUTS:
                 tc_dut.wait()
 
         cls.teardown__cls()

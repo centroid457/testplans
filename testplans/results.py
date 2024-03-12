@@ -6,17 +6,16 @@ class TpResults:
     """
     Results for whole testplan at one dut!!!
     """
-    TCS: List[Any]
+    TCS: Dict[Type['TC'], List['TC']]
 
-    def __init__(self, tc: Any):
+    def __init__(self, tc: 'TC'):
         pass
         self.TC = tc
 
     @classmethod
-    def set__tcs(cls, tcs=None):
-        cls.TCS = tcs
+    def set__tcs(cls, tcs):
         for tc in tcs:
-            pass
+            cls.TCS.update({tc: []})
 
     def clear(self, cls=None):
         pass
