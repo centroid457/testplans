@@ -153,7 +153,7 @@ class TpGuiBase(Gui):
             return
 
         tc = list(self.DATA.TCS)[row]
-        dut = self.DATA.DEVICES.LIST__DUT[col-2]
+        dut = self.DATA.DEVICES.LIST__DUT[col - self.TM.ADDITIONAL_COLUMNS]
         self.PTE.setPlainText(dut.TP_RESULTS[tc].info_pretty())
 
         # print(f"{row=}/{section=}/{dut=}/{tc=}")
