@@ -226,7 +226,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     def run(self) -> None:
         # PREPARE --------
         self.clear()
-        if not self.DEVICES.DUT.present or self.DEVICES.DUT.SKIP:
+        if not self.DEVICES.DUT.PRESENT or self.DEVICES.DUT.SKIP:
             return
 
         # WORK --------

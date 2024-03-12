@@ -140,7 +140,7 @@ class TpTableModel(TableModelTemplate):
                     return QColor("#FF5050")
 
             if col >= self.ADDITIONAL_COLUMNS:
-                if tc_dut.skip_tc_dut or not dut.present or dut.SKIP:
+                if tc_dut.skip_tc_dut or not dut.PRESENT or dut.SKIP:
                     return QColor('#e2e2e2')
                 if tc_dut.result is True:
                     return QColor("#00FF00")

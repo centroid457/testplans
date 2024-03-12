@@ -12,10 +12,10 @@ class Exx__DevCantAccess(Exception):
 # =====================================================================================================================
 class DeviceBase:
     con: Any = None
-    present: Optional[bool] = None
+    PRESENT: Optional[bool] = None
 
     def mark_present(self) -> None:
-        self.present = self.check_present()
+        self.PRESENT = self.check_present()
 
     def check_present(self) -> bool:
         return True
@@ -77,7 +77,7 @@ class TpDevicesIndexed:
 
     so you could
     - pass just one instance into all other classes!
-    - check all devices for present (or else) in one place!
+    - check all devices for PRESENT (or else) in one place!
     - init all and check correctness for all
     """
     # SETTINGS ----------------------
