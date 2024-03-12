@@ -74,7 +74,7 @@ class TpTableModel(TableModelTemplate):
         tc_dut = None
         if col >= self.ADDITIONAL_COLUMNS:
             dut = self.DATA.DEVICES.LIST__DUT[col - self.ADDITIONAL_COLUMNS]
-            tc_dut = dut.TP_RESULTS[tc]
+            tc_dut = tc.TCS_ON_DUTS[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:
@@ -203,7 +203,7 @@ class TpTableModel(TableModelTemplate):
         tc_dut = None
         if col >= self.ADDITIONAL_COLUMNS:
             dut = self.DATA.DEVICES.LIST__DUT[col - self.ADDITIONAL_COLUMNS]
-            tc_dut = dut.TP_RESULTS[tc]
+            tc_dut = tc.TCS_ON_DUTS[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:

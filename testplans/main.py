@@ -134,8 +134,7 @@ class TpMultyDutBase(QThread):
         # TCS --------------------------------------------------------------
         self._tcs__apply_classes()
         self._tcs__apply_settings()
-        self._tcs__generate_for_dut()
-        self.DEVICES.duts__results_init(list(self.TCS))     # FIXME: DELETE!!!!
+        self._tcs__apply_devices()
         self._tcs__check_ready()
 
     def _tcs__apply_classes(self) -> None:
@@ -176,8 +175,9 @@ class TpMultyDutBase(QThread):
 
         # print(f"{tc_cls.SETTINGS=}")
 
-    def _tcs__generate_for_dut(self) -> None:
+    def _tcs__apply_devices(self) -> None:
         for tc in self.TCS:
+            tc.devices__set(self.DEVICES)
             tc.TCS_ON_DUTS__generate()
 
     def _tcs__check_ready(self) -> None:
@@ -185,17 +185,6 @@ class TpMultyDutBase(QThread):
             tc.ready = tc.check_ready__cls()
 
     # =================================================================================================================
-    @property
-    def tcs_active(self) -> List[TestCaseBase]:
-        result = []
-
-        if self.tc_active:
-            for dut in self.DEVICES.LIST__DUT:
-                tc_dut = dut.TP_RESULTS[self.tc_active]
-                if not tc_dut.skip_tc_dut:
-                    result.append(tc_dut)
-        return result
-
     def tp_check_active(self) -> bool:
         result = self.tc_active is not None and self.progress not in [0, 100]
         return result

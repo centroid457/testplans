@@ -34,27 +34,10 @@ class DutBase(DeviceBase):
 
     # AUX -----------------------------------
     SN: str = None
-    TP_RESULTS: Dict[Type[TestCaseBase], TestCaseBase]   # dict is very convenient!!! to find exact tc!!!
     INDEX: int = None
 
     def __init__(self, index: int = None):
         self.INDEX = index
-        self.TP_RESULTS = {}
-
-    def check_result_final(self) -> Optional[bool]:
-        for tc in self.TP_RESULTS.values():
-            if tc.SKIP:
-                continue
-            if not tc.result:
-                return tc.result
-        return True
-
-    def results__clear(self) -> None:
-        if not self.TP_RESULTS:
-            return
-        for tc in self.TP_RESULTS.values():
-            if tc is not None:
-                tc.clear()
 
     # DEBUG PURPOSE ---------------------------------------------------------------------------------------------------
     def _debug__reset_sn(self) -> None:
@@ -154,16 +137,6 @@ class TpDevicesIndexed:
                     device.mark_present()
             else:
                 group_value.mark_present()
-
-    @classmethod
-    def duts__results_init(cls, tcs: List[Any]) -> None:
-        for tc in tcs:
-            tc.devices__set(cls())
-
-        for index, dut in enumerate(cls.LIST__DUT):
-            dut.TP_RESULTS = dict()
-            for tc in tcs:
-                dut.TP_RESULTS.update({tc: tc(index)})  # FIXME: try use duts in tc as devices not step by step like here!!!
 
     @classmethod
     def duts__results_clear(cls) -> None:

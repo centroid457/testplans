@@ -88,12 +88,12 @@ class TestCaseBase(_TestCaseBase, QThread):
         create tc objects for all DUTs, if not existed - create it in all DUTs
         """
         result = []
-        for index in cls.DEVICES.COUNT:
+        for index in range(cls.DEVICES.COUNT):
             tc_on_dut = cls(index)
             result.append(tc_on_dut)
 
         cls.TCS_ON_DUTS = result
-        # FIXME: if some TC on one base - it would be incorrect!!!???
+        # FIXME: check if some TC on one base - it would be incorrect!!!???
 
     @classmethod
     def devices__set(cls, devices: 'TpDevicesIndexed') -> None:
