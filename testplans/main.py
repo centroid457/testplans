@@ -175,7 +175,7 @@ class TpMultyDutBase(QThread):
 
     def _tcs__check_ready(self) -> None:
         for tc in self.TCS:
-            tc.ready = tc.check_ready__all()
+            tc.ready = tc.check_ready__cls()
 
     # =================================================================================================================
     @property
@@ -223,7 +223,7 @@ class TpMultyDutBase(QThread):
 
         # finish current ----------------------------
         if self.tc_active:
-            self.tc_active.terminate__all()
+            self.tc_active.terminate__cls()
 
         self.tp__teardown(0)
 
@@ -237,7 +237,7 @@ class TpMultyDutBase(QThread):
         for step, tc in enumerate(self.TCS, start=1):
             self.progress = int(step / len(self.TCS) * 100) - 1
             self.tc_active = tc
-            tc.run__all()
+            tc.run__cls()
 
         # FINISH TP ---------------------------------------------------
         self.tp__teardown()

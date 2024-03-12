@@ -228,11 +228,11 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.progress = progress
 
     @classmethod
-    def terminate__all(cls) -> None:
+    def terminate__cls(cls) -> None:
         for tc_dut in cls.TCS_dut__all:
             tc_dut.terminate()
 
-        cls.teardown__all()
+        cls.teardown__cls()
 
     # =================================================================================================================
     def run(self) -> None:
@@ -250,7 +250,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.teardown()
 
     @classmethod
-    def run__all(cls) -> None:
+    def run__cls(cls) -> None:
         """run TC on batch duts
         prefered using in thread on upper level!
         """
@@ -263,7 +263,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         if cls.SKIP:
             return
 
-        if not cls.startup__all():
+        if not cls.startup__cls():
             return
 
         # BATCH --------------------------
@@ -280,18 +280,18 @@ class TestCaseBase(_TestCaseBase, QThread):
             for tc_dut in cls.TCS_dut__all:
                 tc_dut.wait()
 
-        cls.teardown__all()
+        cls.teardown__cls()
 
     # REDEFINE ========================================================================================================
     @classmethod
-    def check_ready__all(cls) -> TcReadyState:
+    def check_ready__cls(cls) -> TcReadyState:
         """check if TcCls prepared correct and ready to work
         """
         return TcReadyState.READY
 
     # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
     @classmethod
-    def startup__all(cls) -> bool:
+    def startup__cls(cls) -> bool:
         """before batch work
         """
         return True
@@ -304,7 +304,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.progress = 100
 
     @classmethod
-    def teardown__all(cls):
+    def teardown__cls(cls):
         pass
 
     # RUN -------------------------------------------------------------------------------------------------------------
