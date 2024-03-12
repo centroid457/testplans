@@ -196,7 +196,6 @@ class TpMultyDutBase(QThread):
         """
         self.progress = 1
         self.DEVICES.mark_present()
-        self.DEVICES.duts__results_clear()
         self._tcs__check_ready()
         return True
 

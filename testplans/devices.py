@@ -139,11 +139,6 @@ class TpDevicesIndexed:
                 group_value.mark_present()
 
     @classmethod
-    def duts__results_clear(cls) -> None:
-        for dut in cls.LIST__DUT:
-            dut.results__clear()
-
-    @classmethod
     def _duts__reset_sn(cls) -> None:
         for dut in cls.LIST__DUT:
             dut._debug__reset_sn()
