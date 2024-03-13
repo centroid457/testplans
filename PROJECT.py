@@ -55,7 +55,7 @@ designed to apply testplan for several DUTs
     - каждый тесткейс выполняется на всех устройствах либо асинхронно, либо синхронно в зависимости от настройки,
     - работа тесткейса полностью управляется классом тесткейса на серии устройств (возможно выполнение парных тестов с выбором нужных пар внутри тесткейса),
 - результаты
-    - хранение результатов тесткейса на каждом устройстве
+    - все результаты находятся в пока в обьекте тесткейса
     - итогового (result)
     - промежуточных результатов (details)
 - настройки
@@ -67,14 +67,12 @@ designed to apply testplan for several DUTs
         - для каждого тесткейса и общие для тестплана (кейсовые накладываются на плановые)
 - GUI тестплана
     - запуск GUI опциональный,
-    - старт/стоп тестплана
-    - отображение текущего тесткейса
+    - старт/стоп тестплана,
+    - отображение текущего тесткейса,
     - отображение результата тескейса на каждом тестируемом устройстве,
     - отображение промежуточных результатов (details)
 - API 
-    - минимальное API и опциональный запуск
-    - Пока есть запуск и остановка по простому GET запросу (с HTML страницей), осталось только добавить его в код
-
+    - минимальное API и запуск
 """
 
     FEATURES: List[str] = [
@@ -87,20 +85,19 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 0, 16)
+    VERSION: Tuple[int, int, int] = (0, 1, 0)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
         "add version for all jsons for future api_server",
+        "[RESULTS] try separate"
     ]
     FIXME: List[str] = [
         "TP progress",
         "NEED TESTS!!!"
     ]
     NEWS: List[str] = [
-
-
-
+        "BIG REF!!!",
         "[devises] keep all in one object + generate",
         "[TP] add startup/teardown",
         "[HELP] add schema",

@@ -3,15 +3,23 @@
 ********************************************************************************
 ## TODO
 1. add meta for settings in tcs, it is better then applying in manually in TP!  
-2. close all (api+tpThreads) on GUI close!  
-3. add version for all jsons for future api  
+2. close all (api_server+tpThreads) on GUI close!  
+3. add version for all jsons for future api_server  
 
 ********************************************************************************
 ## FIXME
 1. TP progress  
+2. NEED TESTS!!!  
 
 ********************************************************************************
 ## NEWS
+
+0.1.0 (2024/03/13 12:07:03)
+------------------------------
+- BIG REF!!!  
+- [devises] keep all in one object + generate  
+- [TP] add startup/teardown  
+- [HELP] add schema  
 
 0.0.16 (2024/02/14 17:50:52)
 ------------------------------
