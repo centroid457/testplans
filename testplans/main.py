@@ -166,7 +166,7 @@ class TpMultyDutBase(QThread):
         for tc_cls in self.TCS:
             tc_cls.SETTINGS_FILES = [self.SETTINGS_BASE_FILEPATH, ]
 
-            settings_tc_filepath = self.DIRPATH_TCS.joinpath(f"{tc_cls.__name__}.json")
+            settings_tc_filepath = self.DIRPATH_TCS.joinpath(f"{tc_cls.NAME}.json")
             if settings_tc_filepath.exists():
                 tc_cls.SETTINGS_FILES.append(settings_tc_filepath)
             else:

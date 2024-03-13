@@ -11,6 +11,7 @@ class TpResults:
     def __init__(self, tc: 'TC'):
         pass
         self.TC = tc
+        # index will get from TC!!!
 
     @classmethod
     def set__tcs(cls, tcs):
