@@ -99,6 +99,9 @@ class TpDevicesIndexed:
     def __init__(self, index: int = None):
         self.INDEX = index
 
+    def __del__(self):
+        self.disconnect__cls()
+
     def __getattr__(self, item: str) -> Optional[DeviceBase]:
         if self.INDEX is None:
             return
