@@ -19,6 +19,12 @@ class DeviceBase:
     def __init__(self, index: int = None):
         self.INDEX = index
 
+    # OVERWRITE =======================================================================================================
+    pass
+    pass
+    pass
+    pass
+
     # CONNECT ---------------------------------
     def connect(self) -> bool:
         return True
@@ -33,12 +39,18 @@ class DeviceBase:
     def check_present(self) -> bool:
         return True
 
-    # PRESENT -----------------------------------
+    # TESTS -----------------------------------
     def selftest(self) -> Optional[bool]:
         """
         :return: None - not implemented (lets decide it!)
         """
         pass
+
+    # UNIQUE ==========================================================================================================
+    pass
+    pass
+    pass
+    pass
 
 
 # =====================================================================================================================
