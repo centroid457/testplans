@@ -33,7 +33,7 @@ class DeviceBase:
         return
 
     # PRESENT ---------------------------------
-    def mark_present(self) -> None:
+    def _mark_present(self) -> None:
         self.PRESENT = self.check_present()
 
     def check_present(self) -> bool:
@@ -164,7 +164,7 @@ class TpDevicesIndexed:
                 devices = [group_value, ]
 
             for device in devices:
-                device.mark_present()
+                device._mark_present()
 
     @classmethod
     def connect__cls(cls) -> None:

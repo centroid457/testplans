@@ -32,7 +32,7 @@ class Test__DeviceBase:
         assert victim.PRESENT is None
         assert victim.check_present() is True
         assert victim.PRESENT is None
-        victim.mark_present()
+        victim._mark_present()
         assert victim.PRESENT is True
 
 
@@ -59,7 +59,7 @@ class Test__DutBase:
         assert victim.PRESENT is None
         assert victim.check_present() is True
         assert victim.PRESENT is None
-        victim.mark_present()
+        victim._mark_present()
         assert victim.PRESENT is True
 
     def test__2(self):
@@ -71,7 +71,7 @@ class Test__DutBase:
 
         assert victim.check_present() is True
         assert victim.PRESENT is None
-        victim.mark_present()
+        victim._mark_present()
         assert victim.PRESENT is True
 
 
