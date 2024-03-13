@@ -276,6 +276,13 @@ class TestCaseBase(_TestCaseBase, QThread):
         cls.teardown__cls()
 
     # REDEFINE ========================================================================================================
+    pass
+    pass
+    pass
+    pass
+    pass
+    pass
+
     @classmethod
     def check_ready__cls(cls) -> TcReadyState:
         """check if TcCls prepared correct and ready to work
