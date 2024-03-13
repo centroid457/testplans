@@ -98,7 +98,12 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!!"
     ]
     NEWS: List[str] = [
-        "move http_client.py into server_templates",
+
+
+
+        "[devises] keep all in one object + generate",
+        "[TP] add startup/teardown",
+        "[HELP] add schema",
     ]
 
     # FINALIZE -----------------------------------------------
