@@ -23,14 +23,14 @@ class Client_RequestsStack_Tp(Client_RequestsStack):
 
 
 # =====================================================================================================================
-class TestPlan_example1(TpMultyDutBase):
+class Tp_Example(TpMultyDutBase):
     api_client: Client_RequestsStack = Client_RequestsStack_Tp()
     DEVICES = TpDevicesIndexed__Example()
 
 
 # =====================================================================================================================
 if __name__ == "__main__":
-    Tp_obj = TestPlan_example1()
+    Tp_obj = Tp_Example()
 
 
 # =====================================================================================================================
