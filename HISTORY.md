@@ -5,6 +5,7 @@
 1. add meta for settings in tcs, it is better then applying in manually in TP!  
 2. close all (api_server+tpThreads) on GUI close!  
 3. add version for all jsons for future api_server  
+4. [RESULTS] try separate  
 
 ********************************************************************************
 ## FIXME
@@ -13,6 +14,10 @@
 
 ********************************************************************************
 ## NEWS
+
+0.1.1 (2024/03/13 14:12:29)
+------------------------------
+- [DEVICES] add connect__cls/disconnect  
 
 0.1.0 (2024/03/13 12:07:03)
 ------------------------------
