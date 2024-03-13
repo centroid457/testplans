@@ -11,15 +11,29 @@ class Exx__DevCantAccess(Exception):
 
 # =====================================================================================================================
 class DeviceBase:
+    # AUX -----------------------------------
     con: Any = None
     PRESENT: Optional[bool] = None
+    INDEX: int = None
 
+    def __init__(self, index: int = None):
+        self.INDEX = index
+
+    # CONNECT ---------------------------------
+    def connect(self) -> bool:
+        return True
+
+    def disconnect(self) -> None:
+        return
+
+    # PRESENT ---------------------------------
     def mark_present(self) -> None:
         self.PRESENT = self.check_present()
 
     def check_present(self) -> bool:
         return True
 
+    # PRESENT -----------------------------------
     def selftest(self) -> Optional[bool]:
         """
         :return: None - not implemented (lets decide it!)
@@ -34,10 +48,6 @@ class DutBase(DeviceBase):
 
     # AUX -----------------------------------
     SN: str = None
-    INDEX: int = None
-
-    def __init__(self, index: int = None):
-        self.INDEX = index
 
     # DEBUG PURPOSE ---------------------------------------------------------------------------------------------------
     def _debug__reset_sn(self) -> None:
@@ -104,7 +114,7 @@ class TpDevicesIndexed:
         return result
 
     @classmethod
-    def generate(cls) -> None:
+    def generate__cls(cls) -> None:
         cls._GROUPS = {}
         for attr_name in dir(cls):
             if attr_name.startswith(cls._STARTSWITH__CLS_LIST):
@@ -130,14 +140,42 @@ class TpDevicesIndexed:
                 cls._GROUPS.update({group_name: dev_instance})
 
     @classmethod
-    def mark_present(cls) -> None:
+    def mark_present__cls(cls) -> None:
         for group_name, group_value in cls._GROUPS.items():
+            devices = []
             if isinstance(group_value, list):
-                for device in group_value:
-                    device.mark_present()
+                devices = group_value
             else:
-                group_value.mark_present()
+                devices = [group_value, ]
 
+            for device in devices:
+                device.mark_present()
+
+    @classmethod
+    def connect__cls(cls) -> None:
+        for group_name, group_value in cls._GROUPS.items():
+            devices = []
+            if isinstance(group_value, list):
+                devices = group_value
+            else:
+                devices = [group_value, ]
+
+            for device in devices:
+                device.connect()
+
+    @classmethod
+    def disconnect__cls(cls) -> None:
+        for group_name, group_value in cls._GROUPS.items():
+            devices = []
+            if isinstance(group_value, list):
+                devices = group_value
+            else:
+                devices = [group_value, ]
+
+            for device in devices:
+                device.disconnect()
+
+    # DEBUG PURPOSE ---------------------------------------------------------------------------------------------------
     @classmethod
     def _debug__duts__reset_sn(cls) -> None:
         for dut in cls.LIST__DUT:
