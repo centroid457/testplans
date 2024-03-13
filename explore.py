@@ -7,6 +7,7 @@ from DEVICES import dut_example1
 
 # =====================================================================================================================
 class TpDevicesIndexed__Example(TpDevicesIndexed):
+    COUNT = 4
     CLS_LIST__DUT = dut_example1.Device
 
 

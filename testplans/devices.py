@@ -66,7 +66,7 @@ class TpDevicesIndexed:
     - init all and check correctness for all
     """
     # SETTINGS ----------------------
-    COUNT: int = 2
+    COUNT: int = 1
 
     CLS_LIST__DUT: Type[DutBase] = DutBase
     LIST__DUT: List[DutBase]
