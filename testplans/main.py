@@ -92,12 +92,10 @@ class TpMultyDutBase(QThread):
             print(msg)
             raise Exx__TcsPathNotExists(msg)
 
-        if not self.TCS:
-            for file in self.DIRPATH_TCS.glob("*.py"):
-                if not file.stem.startswith("__"):
-                    self.TCS.update({file.stem: True})
+        self.DEVICES.generate()
+        self.DEVICES.mark_present()
 
-        self.reinit()
+        self.tcs__reinit()
         self.slots_connect()
 
         self.api_server = self.API_SERVER__CLS(self)
@@ -121,21 +119,19 @@ class TpMultyDutBase(QThread):
         TestCaseBase.signals.signal__tc_state_changed.connect(self.post__tc_results)
 
     # =================================================================================================================
-    def reinit(self) -> Optional[NoReturn]:
-        # # SETTINGS BASE ----------------------------------------
-        # settings_base = {}
-        # if self.SETTINGS_BASE_FILEPATH.exists():
-        #     settings_base = json.loads(self.SETTINGS_BASE_FILEPATH.read_text())
-
-        # DUTS --------------------------------------------------------------
-        self.DEVICES.generate()
-        self.DEVICES.mark_present()
-
-        # TCS --------------------------------------------------------------
+    def tcs__reinit(self) -> None:
+        if not self.TCS:
+            self._tcs__load_from_files()
         self._tcs__apply_classes()
         self._tcs__apply_settings()
         self._tcs__apply_devices()
         self._tcs__check_ready()
+
+    def _tcs__load_from_files(self) -> None:
+        self.TCS = {}
+        for file in self.DIRPATH_TCS.glob("*.py"):
+            if not file.stem.startswith("__"):
+                self.TCS.update({file.stem: True})
 
     def _tcs__apply_classes(self) -> None:
         result = {}
