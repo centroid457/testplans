@@ -185,7 +185,7 @@ class TpMultyDutBase(QThread):
             tc.ready = tc.check_ready__cls()
 
     # =================================================================================================================
-    def tp_check_active(self) -> bool:
+    def tp__check_active(self) -> bool:
         result = self.tc_active is not None and self.progress not in [0, 100]
         return result
 
@@ -223,7 +223,7 @@ class TpMultyDutBase(QThread):
         self.tp__teardown(0)
 
     def run(self) -> None:
-        if self.tp_check_active():
+        if self.tp__check_active():
             return
 
         if not self.tp__startup():
