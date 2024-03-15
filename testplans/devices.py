@@ -111,9 +111,13 @@ class TpDevicesIndexed:
     def __init__(self, index: int = None):
         self.INDEX = index
 
+        if not self._GROUPS:
+            self.generate__cls()
+
     def __del__(self):
         self.disconnect__cls()
 
+    # -----------------------------------------------------------------------------------------------------------------
     def __getattr__(self, item: str) -> Optional[DeviceBase]:
         if self.INDEX is None:
             return
@@ -128,6 +132,20 @@ class TpDevicesIndexed:
 
         return result
 
+    @classmethod
+    def check_exists_group__(cls, name: str) -> bool:
+        return name in cls._GROUPS
+
+    def check_present_instance__(self, name: str) -> bool:
+        result = False
+        try:
+            device: DeviceBase = getattr(self, name)
+            result = device.PRESENT
+        except:
+            pass
+        return result
+
+    # -----------------------------------------------------------------------------------------------------------------
     @classmethod
     def generate__cls(cls) -> None:
         cls._GROUPS = {}
