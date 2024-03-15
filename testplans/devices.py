@@ -5,7 +5,11 @@ from .tc import TestCaseBase
 
 
 # =====================================================================================================================
-class Exx__DevCantAccess(Exception):
+class Exx__DevCantAccessIndex(Exception):
+    pass
+
+
+class Exx__DevListNotExists(Exception):
     pass
 
 
@@ -112,7 +116,7 @@ class TpDevicesIndexed:
         self.INDEX = index
 
         if not self._GROUPS:
-            self.generate__cls()
+            self.init__devices()
 
     def __del__(self):
         self.disconnect__cls()
@@ -123,20 +127,26 @@ class TpDevicesIndexed:
             return
 
         devs_attr_name = f"{self._STARTSWITH__DEVICES_LIST}{item}"
+
+        # if not hasattr(self, devs_attr_name):     # recursion exx
+        if devs_attr_name not in dir(self):
+            msg = f"{item=}/{self.INDEX=}"
+            print(msg)
+            raise Exx__DevListNotExists(msg)
         try:
             result = getattr(self, devs_attr_name)[self.INDEX]
         except:
             msg = f"{item=}/{self.INDEX=}"
             print(msg)
-            raise Exx__DevCantAccess(msg)
+            raise Exx__DevCantAccessIndex(msg)
 
         return result
 
     @classmethod
-    def check_exists_group__(cls, name: str) -> bool:
+    def check_exists__group__(cls, name: str) -> bool:
         return name in cls._GROUPS
 
-    def check_present_instance__(self, name: str) -> bool:
+    def check_present__instance__(self, name: str) -> bool:
         result = False
         try:
             device: DeviceBase = getattr(self, name)
@@ -147,7 +157,13 @@ class TpDevicesIndexed:
 
     # -----------------------------------------------------------------------------------------------------------------
     @classmethod
-    def generate__cls(cls) -> None:
+    def init__devices(cls) -> None:
+        cls._generate__cls()
+        cls._connect__cls()
+        cls._mark_present__cls()
+
+    @classmethod
+    def _generate__cls(cls) -> None:
         cls._GROUPS = {}
         for attr_name in dir(cls):
             if attr_name.startswith(cls._STARTSWITH__CLS_LIST):
@@ -173,19 +189,7 @@ class TpDevicesIndexed:
                 cls._GROUPS.update({group_name: dev_instance})
 
     @classmethod
-    def mark_present__cls(cls) -> None:
-        for group_name, group_value in cls._GROUPS.items():
-            devices = []
-            if isinstance(group_value, list):
-                devices = group_value
-            else:
-                devices = [group_value, ]
-
-            for device in devices:
-                device._mark_present()
-
-    @classmethod
-    def connect__cls(cls) -> None:
+    def _connect__cls(cls) -> None:
         for group_name, group_value in cls._GROUPS.items():
             devices = []
             if isinstance(group_value, list):
@@ -207,6 +211,18 @@ class TpDevicesIndexed:
 
             for device in devices:
                 device.disconnect()
+
+    @classmethod
+    def _mark_present__cls(cls) -> None:
+        for group_name, group_value in cls._GROUPS.items():
+            devices = []
+            if isinstance(group_value, list):
+                devices = group_value
+            else:
+                devices = [group_value, ]
+
+            for device in devices:
+                device._mark_present()
 
     # DEBUG PURPOSE ---------------------------------------------------------------------------------------------------
     @classmethod
