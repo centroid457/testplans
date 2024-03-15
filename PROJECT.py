@@ -85,7 +85,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 1, 1)
+    VERSION: Tuple[int, int, int] = (0, 1, 2)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -94,10 +94,13 @@ designed to apply testplan for several DUTs
     ]
     FIXME: List[str] = [
         "TP progress",
-        "NEED TESTS!!!"
+        "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "[DEVICES] add connect__cls/disconnect",
+        ["[TpDevicesIndexed]",
+            "add init__devices,  check_exists__group__/check_present__instance__",
+            "TESTS FINISHED! add Test__TpDevicesIndexed ",
+         ]
     ]
 
     # FINALIZE -----------------------------------------------
