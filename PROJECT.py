@@ -79,28 +79,33 @@ designed to apply testplan for several DUTs
         # "feat1",
         # ["feat2", "block1", "block2"],
 
-        "thread safe",
-        "safe stop process at any moment by terminate thread",
-        ["skip", "tc", "tc on dut", "dut"],
+        ["[THREADS]",
+            "safe work in independent TCs",
+            "safe stop process at any moment by terminate",
+         ],
+        ["[SKIP]",
+            "tc", "tc on dut", "dut"
+         ],
+        ["[DEVICES]",
+            "keep all in one instance",
+            "use variants: single device for all duts or list for pairing each dut",
+         ],
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 1, 2)
+    VERSION: Tuple[int, int, int] = (0, 1, 3)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
         "add version for all jsons for future api_server",
-        "[RESULTS] try separate"
+        "[RESULTS] try separate",
     ]
     FIXME: List[str] = [
         "TP progress",
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        ["[TpDevicesIndexed]",
-            "add init__devices,  check_exists__group__/check_present__instance__",
-            "TESTS FINISHED! add Test__TpDevicesIndexed ",
-         ]
+        "[Tp/Tc] clear separate DEVICES__CLS/DEVICES__BY_INDEX",
     ]
 
     # FINALIZE -----------------------------------------------

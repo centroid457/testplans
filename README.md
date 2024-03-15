@@ -1,4 +1,4 @@
-# testplans (v0.1.2)
+# testplans (v0.1.3)
 
 ## DESCRIPTION_SHORT
 simple testplan framework for several DUTs
@@ -49,12 +49,16 @@ designed to apply testplan for several DUTs
 
 
 ## Features
-1. thread safe  
-2. safe stop process at any moment by terminate thread  
-3. skip:  
+1. [THREADS]:  
+	- safe work in independent TCs  
+	- safe stop process at any moment by terminate  
+2. [SKIP]:  
 	- tc  
 	- tc on dut  
 	- dut  
+3. [DEVICES]:  
+	- keep all in one instance  
+	- use variants: single device for all duts or list for pairing each dut  
 
 
 ********************************************************************************
