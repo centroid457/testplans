@@ -9,5 +9,5 @@ class TestCase(example_tc1_direct.TestCase):
 
     def run_wrapped(self) -> bool:
         time.sleep(0.5)
-        self.details_update({"detail_value": not self.DUT.VALUE})
-        return not self.DUT.VALUE
+        self.details_update({"detail_value": not self.DEVICES__BY_INDEX.DUT.VALUE})
+        return not self.DEVICES__BY_INDEX.DUT.VALUE

@@ -9,5 +9,5 @@ class TestCase(TestCaseBase):
 
     def run_wrapped(self) -> bool:
         time.sleep(0.2)
-        self.details_update({"detail_value": self.DUT.VALUE})
-        return self.DUT.VALUE
+        self.details_update({"detail_value": self.DEVICES__BY_INDEX.DUT.VALUE})
+        return self.DEVICES__BY_INDEX.DUT.VALUE

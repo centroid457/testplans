@@ -26,7 +26,7 @@ class Client_RequestsStack_Tp(Client_RequestsStack):
 # =====================================================================================================================
 class Tp_Example(TpMultyDutBase):
     api_client: Client_RequestsStack = Client_RequestsStack_Tp()
-    DEVICES = TpDevicesIndexed__Example()
+    DEVICES__CLS = TpDevicesIndexed__Example
 
 
 # =====================================================================================================================

@@ -62,7 +62,7 @@ class TpMultyDutBase(QThread):
     SETTINGS_BASE_NAME: Union[str, Path] = "SETTINGS_BASE.json"
     SETTINGS_BASE_FILEPATH: Path
 
-    DEVICES: Type[TpDevicesIndexed] = DevicesIndexed_Example
+    DEVICES__CLS: Type[TpDevicesIndexed] = DevicesIndexed_Example
 
     # AUX -----------------------------------------------------------
     TCS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}
@@ -92,8 +92,7 @@ class TpMultyDutBase(QThread):
             print(msg)
             raise Exx__TcsPathNotExists(msg)
 
-        self.DEVICES._generate__cls()
-        self.DEVICES._mark_present__cls()
+        self.DEVICES__CLS.init__devices()
 
         self.tcs__reinit()
         self.slots_connect()
@@ -114,7 +113,7 @@ class TpMultyDutBase(QThread):
     def slots_connect(self) -> None:
         self.signal__tp_start.connect(self.start)
         self.signal__tp_stop.connect(self.terminate)
-        self._signal__tp_reset_duts_sn.connect(self.DEVICES._debug__duts__reset_sn)
+        self._signal__tp_reset_duts_sn.connect(self.DEVICES__CLS._debug__duts__reset_sn)
 
         TestCaseBase.signals.signal__tc_state_changed.connect(self.post__tc_results)
 
@@ -173,8 +172,7 @@ class TpMultyDutBase(QThread):
 
     def _tcs__apply_devices(self) -> None:
         for tc in self.TCS:
-            tc.devices__set(self.DEVICES)
-            tc.TCS_ON_DUTS__generate()
+            tc.devices__apply(self.DEVICES__CLS)
 
     def _tcs__check_ready(self) -> None:
         for tc in self.TCS:
@@ -191,8 +189,7 @@ class TpMultyDutBase(QThread):
         Overwrite with super! super first!
         """
         self.progress = 1
-        self.DEVICES._connect__cls()
-        self.DEVICES._mark_present__cls()
+        self.DEVICES__CLS.init__devices()
         self._tcs__check_ready()
         return True
 
@@ -204,7 +201,7 @@ class TpMultyDutBase(QThread):
             progress = 100
         self.tc_active = None
         self.progress = progress
-        self.DEVICES.disconnect__cls()
+        self.DEVICES__CLS.disconnect__cls()
         self.signal__tp_finished.emit()
 
     # =================================================================================================================
@@ -252,7 +249,7 @@ class TpMultyDutBase(QThread):
 
             # AUX
             "TP_TCS_COUNT": len(self.TCS),
-            "TP_DUTS_COUNT": self.DEVICES.COUNT,
+            "TP_DUTS_COUNT": self.DEVICES__CLS.COUNT,
 
             # SETTINGS
             "TP_SETTINGS_BASE": TestCaseBase.settings_read(files=self.SETTINGS_BASE_FILEPATH),

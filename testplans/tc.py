@@ -50,9 +50,11 @@ class TestCaseBase(_TestCaseBase, QThread):
     TCS_ON_DUTS: List['TestCaseBase']
 
     # INSTANCE ------------------------------------
-    DEVICES: 'TpDevicesIndexed'
+    DEVICES__CLS: Type['TpDevicesIndexed'] = None
+    DEVICES__BY_INDEX: 'TpDevicesIndexed' = None
+
     SETTINGS: PrivateJson = None
-    INDEX: int = None
+    INDEX: int = 0
 
     ready: TcReadyState = TcReadyState.NOT_CHECKED
     __result: Optional[bool]
@@ -61,9 +63,13 @@ class TestCaseBase(_TestCaseBase, QThread):
     progress: int
 
     # def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
-    def __init__(self, index: int = None):
+    def __init__(self, index: int = 0):
         super().__init__()
         self.INDEX = index
+
+        if self.DEVICES__CLS:
+            self.DEVICES__BY_INDEX = self.DEVICES__CLS(self.INDEX)
+
         self.clear()
 
         # if _settings_files is not None:
@@ -73,31 +79,27 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     @property
     def DUT(self) -> Optional['DutBase']:
-        if self.INDEX is None:
-            return
-
-        try:
-            return self.DEVICES.LIST__DUT[self.INDEX]
-        except:
-            msg = f"[ERROR] WRONG INDEX {self.INDEX=}"
-            print(msg)
+        return self.DEVICES__BY_INDEX.DUT
 
     @classmethod
-    def TCS_ON_DUTS__generate(cls) -> None:
+    def _TCS_ON_DUTS__generate(cls) -> None:
         """
         create tc objects for all DUTs, if not existed - create it in all DUTs
         """
         result = []
-        for index in range(cls.DEVICES.COUNT):
-            tc_on_dut = cls(index)
+        for index in range(cls.DEVICES__CLS.COUNT):
+            tc_on_dut = cls(index=index)
             result.append(tc_on_dut)
 
         cls.TCS_ON_DUTS = result
         # FIXME: check if some TC on one base - it would be incorrect!!!???
 
     @classmethod
-    def devices__set(cls, devices: 'TpDevicesIndexed') -> None:
-        cls.DEVICES = devices
+    def devices__apply(cls, devices_cls: Type['TpDevicesIndexed'] = None) -> None:
+        if devices_cls is not None:
+            cls.DEVICES__CLS = devices_cls
+        if cls.DEVICES__CLS:
+            cls._TCS_ON_DUTS__generate()
 
     @classmethod
     def settings_read(cls, files: Union[None, pathlib.Path, List[pathlib.Path]] = None) -> dict:
@@ -152,7 +154,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         result += f"SKIP={self.SKIP}\n"
         result += f"skip_tc_dut={self.skip_tc_dut}\n"
         result += f"ASYNC={self.ASYNC}\n"
-        result += f"DUT.INDEX={self.INDEX}\n"
+        result += f"INDEX={self.INDEX}\n"
         result += f"result={self.result}\n"
         result += f"progress={self.progress}\n"
         result += f"exx={self.exx}\n"
@@ -186,9 +188,9 @@ class TestCaseBase(_TestCaseBase, QThread):
         result = {
             # COORDINATES
             "DUT_INDEX": self.INDEX,
-            "DUT_SKIP": self.DUT.SKIP,
+            "DUT_SKIP": self.DEVICES__BY_INDEX.DUT.SKIP,
             "DUT_SKIP_TC": self.skip_tc_dut,
-            "DUT_SN": self.DUT.SN,
+            "DUT_SN": self.DEVICES__BY_INDEX.DUT.SN,
 
             # INFO
             "TC_NAME": self.NAME,
@@ -231,7 +233,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     def run(self) -> None:
         # PREPARE --------
         self.clear()
-        if not self.DUT or not self.DUT.PRESENT or self.DUT.SKIP:
+        if not self.DEVICES__BY_INDEX.DUT or not self.DEVICES__BY_INDEX.DUT.PRESENT or self.DEVICES__BY_INDEX.DUT.SKIP:
             return
 
         # WORK --------
@@ -250,7 +252,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         if cls.ready == TcReadyState.FAIL:
             return
 
-        if not cls.DEVICES.LIST__DUT:
+        if not cls.DEVICES__CLS.LIST__DUT:
             return
 
         if cls.SKIP:
