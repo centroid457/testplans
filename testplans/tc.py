@@ -47,7 +47,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     # AUXILIARY -----------------------------------
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
-    TCS_ON_DUTS: List['TestCaseBase']
+    TCS__INST: List['TestCaseBase']
 
     # INSTANCE ------------------------------------
     DEVICES__CLS: Type['TpDevicesIndexed'] = None
@@ -62,6 +62,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     exx: Optional[Exception]
     progress: int
 
+    # =================================================================================================================
     # def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
     def __init__(self, index: int = 0):
         super().__init__()
@@ -77,6 +78,26 @@ class TestCaseBase(_TestCaseBase, QThread):
 
         self.SETTINGS = PrivateJson(_dict=self.settings_read())
 
+    @classmethod
+    def devices__apply(cls, devices_cls: Type['TpDevicesIndexed'] = None) -> None:
+        if devices_cls is not None:
+            cls.DEVICES__CLS = devices_cls
+        if cls.DEVICES__CLS:
+            cls._TCS__INST__generate()
+
+    @classmethod
+    def _TCS__INST__generate(cls) -> None:
+        """
+        create tc objects for all DUTs, if not existed - create it in all DUTs
+        """
+        cls.TCS__INST = []
+        for index in range(cls.DEVICES__CLS.COUNT):
+            tc_on_dut = cls(index=index)
+            cls.TCS__INST.append(tc_on_dut)
+
+        # FIXME: check if some TC on one base - it would be incorrect!!!???
+
+    # =================================================================================================================
     @property
     def DUT(self) -> Optional['DutBase']:
         """
@@ -85,26 +106,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         """
         return self.DEVICES__BY_INDEX.DUT
 
-    @classmethod
-    def _TCS_ON_DUTS__generate(cls) -> None:
-        """
-        create tc objects for all DUTs, if not existed - create it in all DUTs
-        """
-        result = []
-        for index in range(cls.DEVICES__CLS.COUNT):
-            tc_on_dut = cls(index=index)
-            result.append(tc_on_dut)
-
-        cls.TCS_ON_DUTS = result
-        # FIXME: check if some TC on one base - it would be incorrect!!!???
-
-    @classmethod
-    def devices__apply(cls, devices_cls: Type['TpDevicesIndexed'] = None) -> None:
-        if devices_cls is not None:
-            cls.DEVICES__CLS = devices_cls
-        if cls.DEVICES__CLS:
-            cls._TCS_ON_DUTS__generate()
-
+    # =================================================================================================================
     @classmethod
     def settings_read(cls, files: Union[None, pathlib.Path, List[pathlib.Path]] = None) -> dict:
         result = {}
@@ -214,7 +216,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     @classmethod
     def results_get_all(cls) -> List[Dict[str, Any]]:
         results = []
-        for tc_dut in cls.TCS_ON_DUTS:
+        for tc_dut in cls.TCS__INST:
             results.append(tc_dut.get__results())
         return results
 
@@ -228,7 +230,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     @classmethod
     def terminate__cls(cls) -> None:
-        for tc_dut in cls.TCS_ON_DUTS:
+        for tc_dut in cls.TCS__INST:
             tc_dut.terminate()
 
         cls.teardown__cls()
@@ -266,7 +268,7 @@ class TestCaseBase(_TestCaseBase, QThread):
             return
 
         # BATCH --------------------------
-        for tc_dut in cls.TCS_ON_DUTS:
+        for tc_dut in cls.TCS__INST:
             if tc_dut.skip_tc_dut:
                 continue
 
@@ -276,7 +278,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
         # FINISH --------------------------
         if cls.ASYNC:
-            for tc_dut in cls.TCS_ON_DUTS:
+            for tc_dut in cls.TCS__INST:
                 tc_dut.wait()
 
         cls.teardown__cls()
