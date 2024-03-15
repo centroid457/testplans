@@ -18,7 +18,7 @@ class TpTableModel(TableModelTemplate):
     ADDITIONAL_COLUMNS: int = 3
 
     def rowCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
-        return len(self.DATA.TCS)
+        return len(self.DATA.TCS__CLS)
 
     def columnCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.DEVICES__CLS.LIST__DUT) + self.ADDITIONAL_COLUMNS
@@ -68,7 +68,7 @@ class TpTableModel(TableModelTemplate):
         # PREPARE -----------------------------------------------------------------------------------------------------
         col = index.column()
         row = index.row()
-        tc = list(self.DATA.TCS)[row]
+        tc = list(self.DATA.TCS__CLS)[row]
 
         dut = None
         tc_dut = None
@@ -197,7 +197,7 @@ class TpTableModel(TableModelTemplate):
         # PREPARE -----------------------------------------------------------------------------------------------------
         row = index.row()
         col = index.column()
-        tc = list(self.DATA.TCS)[row]
+        tc = list(self.DATA.TCS__CLS)[row]
 
         dut = None
         tc_dut = None

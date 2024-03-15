@@ -152,7 +152,7 @@ class TpGuiBase(Gui):
         if not col > 1:
             return
 
-        tc = list(self.DATA.TCS)[row]
+        tc = list(self.DATA.TCS__CLS)[row]
         dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.TM.ADDITIONAL_COLUMNS]
         self.PTE.setPlainText(tc.TCS_ON_DUTS[dut.INDEX].info_pretty())
 

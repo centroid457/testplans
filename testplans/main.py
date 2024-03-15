@@ -65,7 +65,7 @@ class TpMultyDutBase(QThread):
     DEVICES__CLS: Type[TpDevicesIndexed] = DevicesIndexed_Example
 
     # AUX -----------------------------------------------------------
-    TCS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}
+    TCS__CLS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}
     # {
     #     Tc1: True,
     #     Tc2: True
@@ -119,7 +119,7 @@ class TpMultyDutBase(QThread):
 
     # =================================================================================================================
     def tcs__reinit(self) -> None:
-        if not self.TCS:
+        if not self.TCS__CLS:
             self._tcs__load_from_files()
         self._tcs__apply_classes()
         self._tcs__apply_settings()
@@ -127,14 +127,14 @@ class TpMultyDutBase(QThread):
         self._tcs__check_ready()
 
     def _tcs__load_from_files(self) -> None:
-        self.TCS = {}
+        self.TCS__CLS = {}
         for file in self.DIRPATH_TCS.glob("*.py"):
             if not file.stem.startswith("__"):
-                self.TCS.update({file.stem: True})
+                self.TCS__CLS.update({file.stem: True})
 
     def _tcs__apply_classes(self) -> None:
         result = {}
-        for item, using in self.TCS.items():
+        for item, using in self.TCS__CLS.items():
             # print(dir(TESTCASES))
             if isinstance(item, str):   # filename
                 # tc_cls = import_module(item, "TESTCASES").TestCase    # not working!
@@ -155,10 +155,10 @@ class TpMultyDutBase(QThread):
             tc_cls.SKIP = not using
             result.update({tc_cls: using})
 
-        self.TCS = result
+        self.TCS__CLS = result
 
     def _tcs__apply_settings(self) -> None:
-        for tc_cls in self.TCS:
+        for tc_cls in self.TCS__CLS:
             tc_cls.SETTINGS_FILES = [self.SETTINGS_BASE_FILEPATH, ]
 
             settings_tc_filepath = self.DIRPATH_TCS.joinpath(f"{tc_cls.NAME}.json")
@@ -171,11 +171,11 @@ class TpMultyDutBase(QThread):
         # print(f"{tc_cls.SETTINGS=}")
 
     def _tcs__apply_devices(self) -> None:
-        for tc in self.TCS:
+        for tc in self.TCS__CLS:
             tc.devices__apply(self.DEVICES__CLS)
 
     def _tcs__check_ready(self) -> None:
-        for tc in self.TCS:
+        for tc in self.TCS__CLS:
             tc.ready = tc.check_ready__cls()
 
     # =================================================================================================================
@@ -224,8 +224,8 @@ class TpMultyDutBase(QThread):
         if not self.tp__startup():
             return
 
-        for step, tc in enumerate(self.TCS, start=1):
-            self.progress = int(step / len(self.TCS) * 100) - 1
+        for step, tc in enumerate(self.TCS__CLS, start=1):
+            self.progress = int(step / len(self.TCS__CLS) * 100) - 1
             self.tc_active = tc
             tc.run__cls()
 
@@ -238,7 +238,7 @@ class TpMultyDutBase(QThread):
         get info/structure about stand/TP
         """
         TP_TCS = []
-        for tc in self.TCS:
+        for tc in self.TCS__CLS:
             TP_TCS.append(tc.get__info())
 
         result = {
@@ -248,7 +248,7 @@ class TpMultyDutBase(QThread):
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
 
             # AUX
-            "TP_TCS_COUNT": len(self.TCS),
+            "TP_TCS_COUNT": len(self.TCS__CLS),
             "TP_DUTS_COUNT": self.DEVICES__CLS.COUNT,
 
             # SETTINGS
@@ -274,7 +274,7 @@ class TpMultyDutBase(QThread):
         get all results for stand/TP
         """
         TCS_RESULTS = []
-        for tc in self.TCS:
+        for tc in self.TCS__CLS:
             TCS_RESULTS.append(tc.results_get_all())
 
         result = {

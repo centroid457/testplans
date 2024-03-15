@@ -79,6 +79,10 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     @property
     def DUT(self) -> Optional['DutBase']:
+        """
+        this is only for convenience!
+        but recommended to use from DEVICES__BY_INDEX! - # TODO: solve it!!!
+        """
         return self.DEVICES__BY_INDEX.DUT
 
     @classmethod

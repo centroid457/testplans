@@ -33,7 +33,7 @@ class Tc1_reverse(TestCaseBase):
 # -------------------------------------------
 class Tp1(TpMultyDutBase):
     GUI__START = False
-    TCS = {
+    TCS__CLS = {
         Tc1: True,
         Tc1_reverse: False
     }
@@ -67,7 +67,7 @@ class Test__1:
         # -------------------------------------------
         class TestPlan2(TpMultyDutBase):
             GUI__START = False
-            TCS = {
+            TCS__CLS = {
                 Tc1: True,
                 Tc1_reverse: False
             }
@@ -85,7 +85,7 @@ class Test__1:
     def test__acync(self):
         class Tp1(TpMultyDutBase):
             GUI__START = False
-            TCS = {
+            TCS__CLS = {
                 Tc1: True,
             }
             def duts_generate(self) -> None:
@@ -118,7 +118,7 @@ class Test__1:
     def test__skip(self):
         class Tp1(TpMultyDutBase):
             GUI__START = False
-            TCS = {
+            TCS__CLS = {
                 Tc1: False,
             }
             def duts_generate(self) -> None:

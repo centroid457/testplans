@@ -6,7 +6,7 @@ class TpResults:
     """
     Results for whole testplan at one dut!!!
     """
-    TCS: Dict[Type['TC'], List['TC']]
+    TCS__CLS: Dict[Type['TC'], List['TC']]
 
     def __init__(self, tc: 'TC'):
         pass
@@ -16,7 +16,7 @@ class TpResults:
     @classmethod
     def set__tcs(cls, tcs):
         for tc in tcs:
-            cls.TCS.update({tc: []})
+            cls.TCS__CLS.update({tc: []})
 
     def clear(self, cls=None):
         pass
