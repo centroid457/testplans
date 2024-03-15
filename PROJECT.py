@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 1, 3)
+    VERSION: Tuple[int, int, int] = (0, 1, 5)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,7 +105,7 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "[Tp/Tc] clear separate DEVICES__CLS/DEVICES__BY_INDEX",
+        "[Tp/Tc] clear rename to TCS__INST/*CLS",
     ]
 
     # FINALIZE -----------------------------------------------
