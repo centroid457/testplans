@@ -176,7 +176,7 @@ class TpMultyDutBase(QThread):
 
     def _tcs__mark_ready(self) -> None:
         for tc in self.TCS__CLS:
-            tc.mark_ready__cls()
+            tc._mark_ready__cls()
 
     # =================================================================================================================
     def tp__check_active(self) -> bool:
