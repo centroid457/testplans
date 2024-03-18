@@ -107,7 +107,7 @@ class TpDevicesIndexed:
 
     _STARTSWITH__DEVICES_LIST: str = "LIST__"
 
-    _GROUPS: Dict[str, Union[DeviceBase, List[DeviceBase]]] = {}
+    _GROUPS: Dict[str, Union[DeviceBase, List[DeviceBase]]] = None
 
     # instance ---
     INDEX: int = None
