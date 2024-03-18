@@ -114,9 +114,7 @@ class TpDevicesIndexed:
 
     def __init__(self, index: int = None):
         self.INDEX = index
-
-        if not self._GROUPS:
-            self.init__devices()
+        self.init__devices()
 
     def __del__(self):
         self.disconnect__cls()

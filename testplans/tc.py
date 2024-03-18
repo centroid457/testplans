@@ -47,7 +47,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     # AUXILIARY -----------------------------------
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
-    TCS__INST: List['TestCaseBase']
+    TCS__INST: List['TestCaseBase'] = None
 
     # INSTANCE ------------------------------------
     DEVICES__CLS: Type['TpDevicesIndexed'] = None
