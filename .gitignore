@@ -1,6 +1,7 @@
 # ==========================
 # VERSION = (0, 0, 1)#use build as broadcast/nested
 # VERSION = (0, 0, 2)#add BACKUPS + start HELP
+# VERSION = (0, 0, 3)#add DrawIo *.dtmp
 
 # HELP
 # 1=NESTING
@@ -55,6 +56,8 @@ todo.org
 # TEMP ---------------------
 TEMPORARY/
 -*
+# DrawIo
+*.dtmp
 
 # user saved data ----------
 USERDATA/
