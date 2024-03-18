@@ -164,6 +164,10 @@ class TpDevicesIndexed:
 
     @classmethod
     def _generate__cls(cls) -> None:
+        if cls._GROUPS:
+            return
+
+        # WORK --------------------------------------
         cls._GROUPS = {}
         for attr_name in dir(cls):
             if attr_name.startswith(cls._STARTSWITH__CLS_LIST):

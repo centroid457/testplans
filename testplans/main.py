@@ -189,9 +189,9 @@ class TpMultyDutBase(QThread):
         Overwrite with super! super first!
         """
         self.progress = 1
-        # self.DEVICES__CLS.init__devices()
-        self.DEVICES__CLS.connect__cls()
-        self._tcs__mark_ready()
+        self.DEVICES__CLS.init__devices()
+        # self.DEVICES__CLS.connect__cls()
+        # self._tcs__mark_ready()
         return True
 
     def tp__teardown(self, progress: int = 100) -> None:
