@@ -141,6 +141,8 @@ class Test__TpDevicesIndexed:
         assert type(self.Victim._GROUPS["DUT"]) == list
         assert type(self.Victim._GROUPS["ATC"]) == DeviceBase
 
+        atc_old = self.Victim._GROUPS["ATC"]
+
         assert hasattr(self.Victim, "LIST__DUT") is True
         assert hasattr(self.Victim, "LIST__ATC") is False
 
@@ -150,6 +152,15 @@ class Test__TpDevicesIndexed:
         assert self.Victim.check_exists__group__("DUT") is True
         assert self.Victim.check_exists__group__("ATC") is True
         assert self.Victim.check_exists__group__("PTS") is False
+
+        # DISCONNECT
+        self.Victim.disconnect__cls()
+        assert id(atc_old) == id(self.Victim.ATC)
+        assert atc_old is self.Victim.ATC
+
+        self.Victim.init__devices()
+        assert id(atc_old) == id(self.Victim.ATC)
+        assert atc_old is self.Victim.ATC
 
     def test__CLS_SINGLE__INSTANCE(self):
         self.Victim.COUNT = 2
@@ -247,5 +258,13 @@ class Test__TpDevicesIndexed:
         assert victim.check_present__instance__("ATC") is False
         assert victim.check_present__instance__("PTS") is True
 
+    # -----------------------------------------------------------------------------------------------------------------
+    def test__double_init(self):
+        # insts is the same!
+        pass
+
+
+
+    # def reconnect
 
 # =====================================================================================================================
