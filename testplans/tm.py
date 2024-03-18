@@ -81,7 +81,7 @@ class TpTableModel(TableModelTemplate):
             if col == 0:
                 return f'{tc.NAME}\n{tc.DESCRIPTION}'
             if col == 1:
-                return '+' if tc.ready else '-'
+                return '+' if tc.ready == TcReadyState.READY else '-'
             if col == 2:
                 return '+' if tc.ASYNC else '-'
             if col >= self.ADDITIONAL_COLUMNS:
