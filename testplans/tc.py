@@ -297,6 +297,12 @@ class TestCaseBase(_TestCaseBase, QThread):
         """
         return TcReadyState.READY
 
+    @classmethod
+    def mark_ready__cls(cls) -> None:
+        """check if TcCls prepared correct and ready to work
+        """
+        cls.ready = cls.check_ready__cls()
+
     # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
     @classmethod
     def startup__cls(cls) -> bool:

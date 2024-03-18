@@ -124,7 +124,7 @@ class TpMultyDutBase(QThread):
         self._tcs__apply_classes()
         self._tcs__apply_settings()
         self._tcs__apply_devices()
-        self._tcs__check_ready()
+        self._tcs__mark_ready()
 
     def _tcs__load_from_files(self) -> None:
         self.TCS__CLS = {}
@@ -174,9 +174,9 @@ class TpMultyDutBase(QThread):
         for tc in self.TCS__CLS:
             tc.devices__apply(self.DEVICES__CLS)
 
-    def _tcs__check_ready(self) -> None:
+    def _tcs__mark_ready(self) -> None:
         for tc in self.TCS__CLS:
-            tc.ready = tc.check_ready__cls()
+            tc.mark_ready__cls()
 
     # =================================================================================================================
     def tp__check_active(self) -> bool:
@@ -189,8 +189,9 @@ class TpMultyDutBase(QThread):
         Overwrite with super! super first!
         """
         self.progress = 1
-        self.DEVICES__CLS.init__devices()
-        self._tcs__check_ready()
+        # self.DEVICES__CLS.init__devices()
+        self.DEVICES__CLS.connect__cls()
+        self._tcs__mark_ready()
         return True
 
     def tp__teardown(self, progress: int = 100) -> None:

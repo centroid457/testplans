@@ -159,7 +159,7 @@ class TpDevicesIndexed:
     @classmethod
     def init__devices(cls) -> None:
         cls._generate__cls()
-        cls._connect__cls()
+        cls.connect__cls()
         cls._mark_present__cls()
 
     @classmethod
@@ -189,7 +189,7 @@ class TpDevicesIndexed:
                 cls._GROUPS.update({group_name: dev_instance})
 
     @classmethod
-    def _connect__cls(cls) -> None:
+    def connect__cls(cls) -> None:
         for group_name, group_value in cls._GROUPS.items():
             devices = []
             if isinstance(group_value, list):

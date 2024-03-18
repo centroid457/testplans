@@ -13,7 +13,7 @@ class TpGuiBase(Gui):
     # OVERWRITTEN -----------------------------------
     START = False
 
-    TITLE = "[TestPlan] Universal"
+    TITLE = "[TestPlan] Title"
     SIZE = (600, 300)
 
     # NEW -------------------------------------------
