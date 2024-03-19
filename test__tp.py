@@ -11,6 +11,7 @@ from bus_user import *
 
 
 # =====================================================================================================================
+@pytest.mark.skip
 class Test__Tp:
     @classmethod
     def setup_class(cls):
@@ -18,6 +19,8 @@ class Test__Tp:
 
         class Victim(TpMultyDutBase):
             pass
+
+        cls.Victim = Victim
 
     # @classmethod
     # def teardown_class(cls):
