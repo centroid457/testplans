@@ -7,14 +7,17 @@ import shutil
 from typing import *
 
 from testplans import *
+from bus_user import *
 
 
 # =====================================================================================================================
-class Test__TestCaseBase:
+class Test__Tp:
     @classmethod
     def setup_class(cls):
         pass
-        cls.Victim = type("Victim", (TestCaseBase,), {})
+
+        class Victim(TpMultyDutBase):
+            pass
 
     # @classmethod
     # def teardown_class(cls):
