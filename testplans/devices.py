@@ -160,8 +160,8 @@ class DevicesIndexed_Base:
     def init__devices(cls) -> None:
         if not cls._GROUPS:
             cls._generate__cls()
-            cls.connect__cls()
-            cls._mark_present__cls()
+            cls.connect__cls()          # here - run only if not cls._GROUPS!!!
+            cls._mark_present__cls()    # here - run only if not cls._GROUPS!!!
 
     @classmethod
     def _generate__cls(cls) -> None:
