@@ -105,7 +105,13 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "zero refs*3",
+
+
+
+
+
+
+        "[DevicesIndexed]separate DevicesIndexed_WithDut from DevicesIndexed_Base",
     ]
 
     # FINALIZE -----------------------------------------------

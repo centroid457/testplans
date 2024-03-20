@@ -1,6 +1,6 @@
 # from . import *
 from .tc import TestCaseBase
-from .devices import DutBase, DeviceBase, TpDevicesIndexed, DevicesIndexed_Example
+from .devices import DutBase, DeviceBase, DevicesIndexed_WithDut, DevicesIndexed_Example
 from .gui import TpGuiBase
 from .api import TpApi
 
@@ -62,7 +62,7 @@ class TpMultyDutBase(QThread):
     SETTINGS_BASE_NAME: Union[str, Path] = "SETTINGS_BASE.json"
     SETTINGS_BASE_FILEPATH: Path
 
-    DEVICES__CLS: Type[TpDevicesIndexed] = DevicesIndexed_Example
+    DEVICES__CLS: Type[DevicesIndexed_WithDut] = DevicesIndexed_Example
 
     # AUX -----------------------------------------------------------
     TCS__CLS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}

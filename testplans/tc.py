@@ -7,7 +7,7 @@ from PyQt5.QtCore import QThread
 from pyqt_templates import *
 from private_values import PrivateJson
 
-# from .devices import TpDevicesIndexed
+# from .devices import DevicesIndexed_WithDut
 
 
 # =====================================================================================================================
@@ -50,8 +50,8 @@ class TestCaseBase(_TestCaseBase, QThread):
     TCS__INST: List['TestCaseBase'] = None
 
     # INSTANCE ------------------------------------
-    DEVICES__CLS: Type['TpDevicesIndexed'] = None
-    DEVICES__BY_INDEX: 'TpDevicesIndexed' = None
+    DEVICES__CLS: Type['DevicesIndexed_WithDut'] = None
+    DEVICES__BY_INDEX: 'DevicesIndexed_WithDut' = None
 
     SETTINGS: PrivateJson = None
     INDEX: int = 0
@@ -79,7 +79,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.SETTINGS = PrivateJson(_dict=self.settings_read())
 
     @classmethod
-    def devices__apply(cls, devices_cls: Type['TpDevicesIndexed'] = None) -> None:
+    def devices__apply(cls, devices_cls: Type['DevicesIndexed_WithDut'] = None) -> None:
         if devices_cls is not None:
             cls.DEVICES__CLS = devices_cls
         if cls.DEVICES__CLS:

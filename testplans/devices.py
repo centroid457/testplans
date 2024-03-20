@@ -79,7 +79,7 @@ class DutBase(DeviceBase):
 
 
 # =====================================================================================================================
-class TpDevicesIndexed:
+class DevicesIndexed_Base:
     """
     object which keep all devices in one place!
     useful for multyDut-like systems.
@@ -95,9 +95,9 @@ class TpDevicesIndexed:
     # SETTINGS ----------------------
     COUNT: int = 1
 
-    CLS_LIST__DUT: Type[DutBase] = DutBase
-    LIST__DUT: List[DutBase]
-    DUT: DutBase
+    # CLS_LIST__DUT: Type[DutBase] = DutBase
+    # LIST__DUT: List[DutBase]
+    # DUT: DutBase
 
     # CLS_SINGLE__ATC: Callable[..., DeviceBase]
     # ATC: DeviceBase
@@ -235,8 +235,15 @@ class TpDevicesIndexed:
             dut._debug__reset_sn()
 
 
-# ---------------------------------------------------------------------------------------------------------------------
-class DevicesIndexed_Example(TpDevicesIndexed):
+# =====================================================================================================================
+class DevicesIndexed_WithDut(DevicesIndexed_Base):
+    CLS_LIST__DUT: Type[DutBase] = DutBase
+    LIST__DUT: List[DutBase]
+    DUT: DutBase
+
+
+# =====================================================================================================================
+class DevicesIndexed_Example(DevicesIndexed_WithDut):
     COUNT: int = 2
 
     CLS_SINGLE__ATC: Type[DeviceBase] = DeviceBase

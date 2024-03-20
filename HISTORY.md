@@ -37,7 +37,7 @@
 
 0.1.2 (2024/03/15 15:29:56)
 ------------------------------
-- [TpDevicesIndexed]:  
+- [DevicesIndexed_WithDut]:  
 	- add init__devices,  check_exists__group__/check_present__instance__  
 	- TESTS FINISHED! add Test__TpDevicesIndexed   
 
