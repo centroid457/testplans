@@ -56,7 +56,8 @@ class TestCaseBase(_TestCaseBase, QThread):
     SETTINGS: PrivateJson = None
     INDEX: int = 0
 
-    ready: TcReadyState = TcReadyState.NOT_CHECKED
+    result__cls_ready: TcReadyState = TcReadyState.NOT_CHECKED
+    result__cls_startup: Optional[bool] = None
     __result: Optional[bool]
     details: Dict[str, Any]
     exx: Optional[Exception]
@@ -124,10 +125,17 @@ class TestCaseBase(_TestCaseBase, QThread):
         return result
 
     def clear(self) -> None:
-        self.__result = None
+        self.result = None
         self.details = {}
         self.exx = None
         self.progress = 0
+
+    @classmethod
+    def clear__cls(cls):
+        cls.result__cls_ready = TcReadyState.NOT_CHECKED
+        cls.result__cls_startup = None
+        # for tc in cls.TCS__INST:
+        #     tc.clear()
 
     # @classmethod
     # @property
@@ -144,6 +152,31 @@ class TestCaseBase(_TestCaseBase, QThread):
     def result(self, value: Optional[bool]) -> None:
         self.__result = value
         self.signals.signal__tc_state_changed.emit(self)
+
+    # # ---------------------------------------------------------
+    # @classmethod
+    # @property
+    # def result__cls_ready(cls) -> TcReadyState:
+    #     return cls.__result__cls_ready
+    #
+    # @classmethod
+    # @result__cls_ready.setter
+    # def result__cls_ready(cls, value: Optional[TcReadyState]) -> None:
+    #     value = value or TcReadyState.NOT_CHECKED
+    #     cls.__result__cls_ready = value
+    #     # cls.signals.signal__tc_state_changed.emit(cls)
+    #
+    # # ---------------------------------------------------------
+    # @classmethod
+    # @property
+    # def result__cls_startup(cls) -> Optional[bool]:
+    #     return cls.__result__cls_startup
+    #
+    # @classmethod
+    # @result__cls_startup.setter
+    # def result__cls_startup(cls, value: Optional[bool]) -> None:
+    #     cls.__result__cls_startup = value
+    #     # cls.signals.signal__tc_state_changed.emit(cls)
 
     # DETAILS ---------------------------------------------------------------------------------------------------------
     def details_update(self, details: Dict[str, Any]) -> None:
@@ -252,19 +285,25 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     @classmethod
     def run__cls(cls) -> None:
-        """run TC on batch duts
+        """run TC on batch duts(??? may be INDEXES???)
         prefered using in thread on upper level!
         """
-        if cls.ready == TcReadyState.FAIL:
-            return
-
-        if not cls.DEVICES__CLS.LIST__DUT:
-            return
+        # if not cls.DEVICES__CLS.LIST__DUT:
+        #     return
 
         if cls.SKIP:
             return
 
-        if not cls.startup__cls():
+        # ---------------------------------
+        cls.clear__cls()
+
+        # recheck cls
+        cls.result__cls_ready = cls.check_ready__cls()
+        if cls.result__cls_ready == TcReadyState.FAIL:
+            return
+
+        cls.result__cls_startup = cls.startup__cls()
+        if not cls.result__cls_startup:
             return
 
         # BATCH --------------------------
@@ -293,15 +332,15 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     @classmethod
     def check_ready__cls(cls) -> TcReadyState:
-        """check if TcCls prepared correct and ready to work
+        """check if TcCls prepared correct and result__cls_ready to work
         """
         return TcReadyState.READY
 
     @classmethod
     def _mark_ready__cls(cls) -> None:
-        """check if TcCls prepared correct and ready to work
+        """check if TcCls prepared correct and result__cls_ready to work
         """
-        cls.ready = cls.check_ready__cls()
+        cls.result__cls_ready = cls.check_ready__cls()
 
     # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
     @classmethod

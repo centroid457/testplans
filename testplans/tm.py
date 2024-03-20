@@ -81,7 +81,7 @@ class TpTableModel(TableModelTemplate):
             if col == 0:
                 return f'{tc.NAME}\n{tc.DESCRIPTION}'
             if col == 1:
-                return '+' if tc.ready == TcReadyState.READY else '-'
+                return '+' if tc.result__cls_ready == TcReadyState.READY else '-'
             if col == 2:
                 return '+' if tc.ASYNC else '-'
             if col >= self.ADDITIONAL_COLUMNS:
@@ -132,11 +132,11 @@ class TpTableModel(TableModelTemplate):
             if tc.SKIP:
                 return QColor('#e2e2e2')
             if col == 1:
-                if tc.ready == TcReadyState.READY:
+                if tc.result__cls_ready == TcReadyState.READY:
                     return QColor("#50FF50")
-                if tc.ready == TcReadyState.WARN:
+                if tc.result__cls_ready == TcReadyState.WARN:
                     return QColor("#5050FF")
-                if tc.ready == TcReadyState.FAIL:
+                if tc.result__cls_ready == TcReadyState.FAIL:
                     return QColor("#FF5050")
 
             if col >= self.ADDITIONAL_COLUMNS:
