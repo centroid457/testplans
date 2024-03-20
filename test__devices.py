@@ -268,30 +268,3 @@ class Test__TpDevicesIndexed:
 
 
 # =====================================================================================================================
-@pytest.mark.skip
-class Test__TpDevicesIndexed_OnSerial:
-    @classmethod
-    def setup_class(cls):
-        pass
-
-    @classmethod
-    def teardown_class(cls):
-        pass
-
-    def setup_method(self, method):
-        pass
-        self.Victim: Type[DevicesIndexed_WithDut] = type("Victim", (DevicesIndexed_WithDut,), {})
-        self.Victim.COUNT = 2
-
-    def teardown_method(self, method):
-        pass
-
-    # -----------------------------------------------------------------------------------------------------------------
-    def test__DUT_COUNT(self):
-        # 1 -----------------------------------------------------
-        self.Victim.COUNT = 1
-        assert self.Victim._GROUPS == {}
-        self.Victim.init__devices()
-
-
-# =====================================================================================================================

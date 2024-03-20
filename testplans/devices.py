@@ -158,9 +158,10 @@ class DevicesIndexed_Base:
     # -----------------------------------------------------------------------------------------------------------------
     @classmethod
     def init__devices(cls) -> None:
-        cls._generate__cls()
-        cls.connect__cls()
-        cls._mark_present__cls()
+        if not cls._GROUPS:
+            cls._generate__cls()
+            cls.connect__cls()
+            cls._mark_present__cls()
 
     @classmethod
     def _generate__cls(cls) -> None:
