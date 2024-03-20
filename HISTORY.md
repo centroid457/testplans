@@ -15,6 +15,10 @@
 ********************************************************************************
 ## NEWS
 
+0.1.10 (2024/03/20 15:37:32)
+------------------------------
+- [GUI/TC] add+apply result__cls_ready/startup  
+
 0.1.9 (2024/03/20 12:27:52)
 ------------------------------
 - [DevicesIndexed]separate DevicesIndexed_WithDut from DevicesIndexed_Base  
