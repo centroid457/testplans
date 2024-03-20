@@ -21,6 +21,7 @@ class DeviceBase:
     INDEX: int = None
 
     def __init__(self, index: int = None):
+        super().__init__()
         self.INDEX = index
 
     # OVERWRITE =======================================================================================================
@@ -113,6 +114,7 @@ class TpDevicesIndexed:
     INDEX: int = None
 
     def __init__(self, index: int = None):
+        super().__init__()
         self.INDEX = index
         self.init__devices()
 
