@@ -15,7 +15,7 @@ class TpTableModel(TableModelTemplate):
 
     # AUX -------------------------------------------
     open__settings: Optional[bool] = None
-    ADDITIONAL_COLUMNS: int = 3
+    ADDITIONAL_COLUMNS: int = 4
 
     def rowCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.TCS__CLS)
@@ -32,6 +32,8 @@ class TpTableModel(TableModelTemplate):
                 if section == 1:
                     return "READY"
                 if section == 2:
+                    return "STARTUP"
+                if section == 3:
                     return "ASYNC"
                 if section >= self.ADDITIONAL_COLUMNS:
                     return f"{section - self.ADDITIONAL_COLUMNS + 1}"
@@ -50,18 +52,18 @@ class TpTableModel(TableModelTemplate):
         if col == 0:
             flags |= Qt.ItemIsUserCheckable
             # flags |= Qt.ItemIsSelectable
-        if col == 1:
-            pass
-        if col == 2:
-            if self.open__settings:
-                flags |= Qt.ItemIsUserCheckable
-        if col >= self.ADDITIONAL_COLUMNS:
+        elif col >= self.ADDITIONAL_COLUMNS - 1:
             if self.open__settings:
                 flags |= Qt.ItemIsUserCheckable
                 # flags |= Qt.ItemIsSelectable
         else:
             # flags -= Qt.ItemIsSelectable
             pass
+
+        # clear SELECTABLE ---------
+        # if not col >= self.ADDITIONAL_COLUMNS:
+        #     flags -= Qt.ItemIsSelectable
+
         return flags
 
     def data(self, index: QModelIndex, role: int = Qt.DisplayRole) -> Any:
@@ -83,6 +85,13 @@ class TpTableModel(TableModelTemplate):
             if col == 1:
                 return '+' if tc.result__cls_ready == TcReadyState.READY else '-'
             if col == 2:
+                if tc.result__cls_startup is True:
+                    return '+'
+                elif tc.result__cls_startup is False:
+                    return '-'
+                else:
+                    return
+            if col == 3:
                 return '+' if tc.ASYNC else '-'
             if col >= self.ADDITIONAL_COLUMNS:
                 if tc_dut:
@@ -139,6 +148,15 @@ class TpTableModel(TableModelTemplate):
                 if tc.result__cls_ready == TcReadyState.FAIL:
                     return QColor("#FF5050")
 
+            if col == 2:
+                if tc.result__cls_startup is True:
+                    return QColor("#50FF50")
+                if tc.result__cls_startup is False:
+                    return QColor("#FF5050")
+
+            if col == 3:
+                return
+
             if col >= self.ADDITIONAL_COLUMNS:
                 if tc_dut.skip_tc_dut or not dut.PRESENT or dut.SKIP:
                     return QColor('#e2e2e2')
@@ -158,10 +176,7 @@ class TpTableModel(TableModelTemplate):
                     else:
                         return Qt.Checked
 
-                if col == 1:
-                    pass
-
-                if col == 2:
+                if col == 3:
                     if tc.ASYNC:
                         return Qt.Checked
                     else:
@@ -210,10 +225,7 @@ class TpTableModel(TableModelTemplate):
             if col == 0:
                 tc.SKIP = value == Qt.Unchecked
 
-            if col == 1:
-                pass
-
-            if col == 2:
+            if col == 3:
                 tc.ASYNC = value == Qt.Checked
 
             if col >= self.ADDITIONAL_COLUMNS:
