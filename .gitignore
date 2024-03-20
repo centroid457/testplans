@@ -2,8 +2,9 @@
 # VERSION = (0, 0, 1)#use build as broadcast/nested
 # VERSION = (0, 0, 2)#add BACKUPS + start HELP
 # VERSION = (0, 0, 3)#add DrawIo *.dtmp
+# VERSION = (0, 0, 4)#add LOGS
 
-# HELP
+# HELP ---------------------
 # 1=NESTING
 # (*.xyz) or the same (**/*.xyz) - files in any nested directory!
 # (*xyz/) or the same (**/*xyz/) same as for directories
@@ -43,6 +44,9 @@ dist/
 
 # BACKUPS ------------------
 *.bkp
+
+# LOGS ---------------------
+*.log
 
 # some other ---------------
 htmlcov/
