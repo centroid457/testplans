@@ -9,7 +9,7 @@ class Exx__DevCantAccessIndex(Exception):
     pass
 
 
-class Exx__DevListNotExists(Exception):
+class Exx__DevNotExists(Exception):
     pass
 
 
@@ -113,34 +113,31 @@ class DevicesIndexed_Base:
     # instance ---
     INDEX: int = None
 
-    def __init__(self, index: int = None):
+    def __init__(self, index: int):
         super().__init__()
         self.INDEX = index
-        self.init__devices()
+        self.generate__devices()
 
     def __del__(self):
         self.disconnect__cls()
 
     # -----------------------------------------------------------------------------------------------------------------
-    def __getattr__(self, item: str) -> Optional[DeviceBase]:
+    def __getattr__(self, item: str) -> Union[DeviceBase, NoReturn]:
         if self.INDEX is None:
             return
 
-        devs_attr_name = f"{self._STARTSWITH__DEVICES_LIST}{item}"
+        if item in self._GROUPS:
+            devs = self._GROUPS[item]
+            if isinstance(devs, list):
+                device = devs[self.INDEX]
+            else:
+                device = devs
+            return device
 
-        # if not hasattr(self, devs_attr_name):     # recursion exx
-        if devs_attr_name not in dir(self):
+        else:
             msg = f"{item=}/{self.INDEX=}"
             print(msg)
-            raise Exx__DevListNotExists(msg)
-        try:
-            result = getattr(self, devs_attr_name)[self.INDEX]
-        except:
-            msg = f"{item=}/{self.INDEX=}"
-            print(msg)
-            raise Exx__DevCantAccessIndex(msg)
-
-        return result
+            raise Exx__DevNotExists(msg)
 
     @classmethod
     def check_exists__group__(cls, name: str) -> bool:
@@ -148,12 +145,7 @@ class DevicesIndexed_Base:
 
     # -----------------------------------------------------------------------------------------------------------------
     @classmethod
-    def init__devices(cls) -> None:
-        if not cls._GROUPS:
-            cls._generate__cls()
-
-    @classmethod
-    def _generate__cls(cls) -> None:
+    def generate__devices(cls) -> None:
         if cls._GROUPS:
             return
 

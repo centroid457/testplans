@@ -92,7 +92,7 @@ class TpMultyDutBase(QThread):
             print(msg)
             raise Exx__TcsPathNotExists(msg)
 
-        self.DEVICES__CLS.init__devices()
+        self.DEVICES__CLS.generate__devices()
 
         self.tcs__reinit()
         self.slots_connect()
@@ -184,7 +184,6 @@ class TpMultyDutBase(QThread):
         Overwrite with super! super first!
         """
         self.progress = 1
-        self.DEVICES__CLS.init__devices()
         # self.DEVICES__CLS.connect__cls()
         return True
 

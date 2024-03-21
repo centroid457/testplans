@@ -83,7 +83,7 @@ class Test__TpDevicesIndexed:
         # 1 -----------------------------------------------------
         self.Victim.COUNT = 1
         assert self.Victim._GROUPS == {}
-        self.Victim.init__devices()
+        self.Victim.generate__devices()
 
         assert set(self.Victim._GROUPS) == {"DUT", }
         assert len(self.Victim._GROUPS["DUT"]) == 1
@@ -97,7 +97,7 @@ class Test__TpDevicesIndexed:
         # 2 ------------------------------------------------------
         self.Victim.COUNT = 2
         self.Victim._GROUPS = {}
-        self.Victim.init__devices()
+        self.Victim.generate__devices()
 
         assert set(self.Victim._GROUPS) == {"DUT", }
         assert len(self.Victim._GROUPS["DUT"]) == 2
@@ -120,7 +120,7 @@ class Test__TpDevicesIndexed:
     def test__CLS_SINGLE__CLS(self):
         self.Victim.COUNT = 2
         self.Victim.CLS_SINGLE__ATC = DeviceBase
-        self.Victim.init__devices()
+        self.Victim.generate__devices()
 
         assert set(self.Victim._GROUPS) == {"DUT", "ATC"}
 
@@ -144,7 +144,7 @@ class Test__TpDevicesIndexed:
         assert id(atc_old) == id(self.Victim.ATC)
         assert atc_old is self.Victim.ATC
 
-        self.Victim.init__devices()
+        self.Victim.generate__devices()
         assert id(atc_old) == id(self.Victim.ATC)
         assert atc_old is self.Victim.ATC
 
@@ -184,7 +184,7 @@ class Test__TpDevicesIndexed:
     def test__CLS_LIST__CLS(self):
         self.Victim.COUNT = 2
         self.Victim.CLS_LIST__PTS = DeviceBase
-        self.Victim.init__devices()
+        self.Victim.generate__devices()
 
         assert set(self.Victim._GROUPS) == {"DUT", "PTS"}
 
