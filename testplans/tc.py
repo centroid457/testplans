@@ -11,14 +11,6 @@ from private_values import PrivateJson
 
 
 # =====================================================================================================================
-class TcReadyState(Enum):
-    READY = "FULLY READY TO GO"
-    WARN = "could start but would have some errors!"
-    FAIL = "CANT START OR WORTHLESS STATES"
-    NOT_CHECKED = auto()
-
-
-# =====================================================================================================================
 class _TestCaseBase:
     # just to use in Signals before defining exact
     pass
@@ -56,7 +48,6 @@ class TestCaseBase(_TestCaseBase, QThread):
     SETTINGS: PrivateJson = None
     INDEX: int = 0
 
-    result__cls_ready: TcReadyState = TcReadyState.NOT_CHECKED
     result__cls_startup: Optional[bool] = None
     __result: Optional[bool]
     details: Dict[str, Any]
@@ -132,7 +123,6 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     @classmethod
     def clear__cls(cls):
-        cls.result__cls_ready = TcReadyState.NOT_CHECKED
         cls.result__cls_startup = None
         # for tc in cls.TCS__INST:
         #     tc.clear()
@@ -153,19 +143,6 @@ class TestCaseBase(_TestCaseBase, QThread):
         self.__result = value
         self.signals.signal__tc_state_changed.emit(self)
 
-    # # ---------------------------------------------------------
-    # @classmethod
-    # @property
-    # def result__cls_ready(cls) -> TcReadyState:
-    #     return cls.__result__cls_ready
-    #
-    # @classmethod
-    # @result__cls_ready.setter
-    # def result__cls_ready(cls, value: Optional[TcReadyState]) -> None:
-    #     value = value or TcReadyState.NOT_CHECKED
-    #     cls.__result__cls_ready = value
-    #     # cls.signals.signal__tc_state_changed.emit(cls)
-    #
     # # ---------------------------------------------------------
     # @classmethod
     # @property
@@ -297,11 +274,6 @@ class TestCaseBase(_TestCaseBase, QThread):
         # ---------------------------------
         cls.clear__cls()
 
-        # recheck cls
-        cls.result__cls_ready = cls.check_ready__cls()
-        if cls.result__cls_ready == TcReadyState.FAIL:
-            return
-
         cls.result__cls_startup = cls.startup__cls()
         if not cls.result__cls_startup:
             return
@@ -329,18 +301,6 @@ class TestCaseBase(_TestCaseBase, QThread):
     pass
     pass
     pass
-
-    @classmethod
-    def check_ready__cls(cls) -> TcReadyState:
-        """check if TcCls prepared correct and result__cls_ready to work
-        """
-        return TcReadyState.READY
-
-    @classmethod
-    def _mark_ready__cls(cls) -> None:
-        """check if TcCls prepared correct and result__cls_ready to work
-        """
-        cls.result__cls_ready = cls.check_ready__cls()
 
     # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
     @classmethod

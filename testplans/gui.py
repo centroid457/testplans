@@ -88,7 +88,7 @@ class TpGuiBase(Gui):
 
         #
         hh = self.TV.horizontalHeader()
-        hh.setSectionHidden(self.TM.ADDITIONAL_COLUMNS - 1, True)
+        # hh.setSectionHidden(self.TM.ADDITIONAL_COLUMNS - 1, True)
         hh.setSectionsClickable(False)
         # hh.setStretchLastSection(True)
 
@@ -124,7 +124,7 @@ class TpGuiBase(Gui):
 
     def BTN_settings__toggled(self, state: Optional[bool] = None) -> None:
         # print(f"BTN_select_tc_on_duts__toggled {state=}")
-        self.TV.horizontalHeader().setSectionHidden(self.TM.ADDITIONAL_COLUMNS - 1, not state)
+        # self.TV.horizontalHeader().setSectionHidden(self.TM.ADDITIONAL_COLUMNS - 1, not state)
         self.TV.horizontalHeader().setSectionsClickable(state)
         self.TM.open__settings = state
         self.TM._data_reread()

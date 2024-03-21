@@ -39,7 +39,6 @@ class Test__Tp:
         assert not victim.DEVICES__BY_INDEX
         assert not victim.INDEX
         assert not victim.TCS__INST
-        assert victim.ready == TcReadyState.NOT_CHECKED
 
         assert not victim.result
         assert not victim.details

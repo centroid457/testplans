@@ -105,7 +105,13 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "[GUI/TC] add+apply result__cls_ready/startup",
+
+
+
+
+
+        
+        "[GUI/TC] delete *READY*",
     ]
 
     # FINALIZE -----------------------------------------------

@@ -6,7 +6,6 @@ from PyQt5.QtGui import *
 from pyqt_templates import TableModelTemplate
 
 # from .tp import TpMultyDutBase
-from .tc import TcReadyState
 
 
 # =====================================================================================================================
@@ -15,7 +14,7 @@ class TpTableModel(TableModelTemplate):
 
     # AUX -------------------------------------------
     open__settings: Optional[bool] = None
-    ADDITIONAL_COLUMNS: int = 4
+    ADDITIONAL_COLUMNS: int = 3
 
     def rowCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.TCS__CLS)
@@ -30,11 +29,9 @@ class TpTableModel(TableModelTemplate):
                 if section == 0:
                     return "ТЕСТКЕЙС"
                 if section == 1:
-                    return "READY"
+                    return "ASYNC"
                 if section == 2:
                     return "STARTUP"
-                if section == 3:
-                    return "ASYNC"
                 if section >= self.ADDITIONAL_COLUMNS:
                     return f"{section - self.ADDITIONAL_COLUMNS + 1}"
             # ------------------------------
@@ -83,7 +80,7 @@ class TpTableModel(TableModelTemplate):
             if col == 0:
                 return f'{tc.NAME}\n{tc.DESCRIPTION}'
             if col == 1:
-                return '+' if tc.result__cls_ready == TcReadyState.READY else '-'
+                return '+' if tc.ASYNC else '-'
             if col == 2:
                 if tc.result__cls_startup is True:
                     return '+'
@@ -91,8 +88,6 @@ class TpTableModel(TableModelTemplate):
                     return '-'
                 else:
                     return
-            if col == 3:
-                return '+' if tc.ASYNC else '-'
             if col >= self.ADDITIONAL_COLUMNS:
                 if tc_dut:
                     if tc_dut.result is None:
@@ -140,23 +135,11 @@ class TpTableModel(TableModelTemplate):
         if role == Qt.BackgroundColorRole:
             if tc.SKIP:
                 return QColor('#e2e2e2')
-            if col == 1:
-                if tc.result__cls_ready == TcReadyState.READY:
-                    return QColor("#50FF50")
-                if tc.result__cls_ready == TcReadyState.WARN:
-                    return QColor("#5050FF")
-                if tc.result__cls_ready == TcReadyState.FAIL:
-                    return QColor("#FF5050")
-
             if col == 2:
                 if tc.result__cls_startup is True:
                     return QColor("#50FF50")
                 if tc.result__cls_startup is False:
                     return QColor("#FF5050")
-
-            if col == 3:
-                return
-
             if col >= self.ADDITIONAL_COLUMNS:
                 if tc_dut.skip_tc_dut or not dut.PRESENT or dut.SKIP:
                     return QColor('#e2e2e2')
@@ -175,13 +158,11 @@ class TpTableModel(TableModelTemplate):
                         return Qt.Unchecked
                     else:
                         return Qt.Checked
-
-                if col == 3:
+                if col == 1:
                     if tc.ASYNC:
                         return Qt.Checked
                     else:
                         return Qt.Unchecked
-
                 if col >= self.ADDITIONAL_COLUMNS:
                     if not tc_dut.SKIP and not dut.SKIP:
                         if tc_dut.skip_tc_dut:
@@ -225,7 +206,7 @@ class TpTableModel(TableModelTemplate):
             if col == 0:
                 tc.SKIP = value == Qt.Unchecked
 
-            if col == 3:
+            if col == 1:
                 tc.ASYNC = value == Qt.Checked
 
             if col >= self.ADDITIONAL_COLUMNS:

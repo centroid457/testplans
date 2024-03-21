@@ -124,7 +124,6 @@ class TpMultyDutBase(QThread):
         self._tcs__apply_classes()
         self._tcs__apply_settings()
         self._tcs__apply_devices()
-        self._tcs__mark_ready()
 
     def _tcs__load_from_files(self) -> None:
         self.TCS__CLS = {}
@@ -174,10 +173,6 @@ class TpMultyDutBase(QThread):
         for tc in self.TCS__CLS:
             tc.devices__apply(self.DEVICES__CLS)
 
-    def _tcs__mark_ready(self) -> None:
-        for tc in self.TCS__CLS:
-            tc._mark_ready__cls()
-
     # =================================================================================================================
     def tp__check_active(self) -> bool:
         result = self.tc_active is not None and self.progress not in [0, 100]
@@ -191,7 +186,6 @@ class TpMultyDutBase(QThread):
         self.progress = 1
         self.DEVICES__CLS.init__devices()
         # self.DEVICES__CLS.connect__cls()
-        # self._tcs__mark_ready()
         return True
 
     def tp__teardown(self, progress: int = 100) -> None:
