@@ -79,7 +79,7 @@ class Test__TpDevicesIndexed_OnSerial:
     def test__1(self):
         # 1 -----------------------------------------------------
         assert self.Victim._GROUPS == {}
-        victim = self.Victim()
+        self.Victim.generate__devices()
         assert self.Victim._GROUPS != {}
 
 
