@@ -16,7 +16,7 @@ class Exx__DevListNotExists(Exception):
 # =====================================================================================================================
 class DeviceBase:
     # AUX -----------------------------------
-    con: Any = None
+    conn: Any = None
     INDEX: int = None
 
     def __init__(self, index: int = None):
@@ -31,10 +31,18 @@ class DeviceBase:
 
     # CONNECT ---------------------------------
     def connect(self) -> bool:
+        if self.conn:
+            try:
+                return self.conn.connect()
+            except:
+                return False
         return True
 
     def disconnect(self) -> None:
-        return
+        try:
+            return self.conn.disconnect()
+        except:
+            pass
 
     # TESTS -----------------------------------
     def selftest(self) -> Optional[bool]:

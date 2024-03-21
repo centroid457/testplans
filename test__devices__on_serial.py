@@ -26,7 +26,7 @@ class _Atc_SerialClient(SerialClient):
 
 
 class Atc(DeviceBase):
-    con = _Atc_SerialClient()
+    conn = _Atc_SerialClient()
 
     # OVERWRITE =======================================================================================================
     pass
