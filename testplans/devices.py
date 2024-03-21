@@ -17,7 +17,6 @@ class Exx__DevListNotExists(Exception):
 class DeviceBase:
     # AUX -----------------------------------
     con: Any = None
-    PRESENT: Optional[bool] = None
     INDEX: int = None
 
     def __init__(self, index: int = None):
@@ -36,13 +35,6 @@ class DeviceBase:
 
     def disconnect(self) -> None:
         return
-
-    # PRESENT ---------------------------------
-    def _mark_present(self) -> None:
-        self.PRESENT = self.check_present()
-
-    def check_present(self) -> bool:
-        return True
 
     # TESTS -----------------------------------
     def selftest(self) -> Optional[bool]:
@@ -146,22 +138,11 @@ class DevicesIndexed_Base:
     def check_exists__group__(cls, name: str) -> bool:
         return name in cls._GROUPS
 
-    def check_present__instance__(self, name: str) -> bool:
-        result = False
-        try:
-            device: DeviceBase = getattr(self, name)
-            result = device.PRESENT
-        except:
-            pass
-        return result
-
     # -----------------------------------------------------------------------------------------------------------------
     @classmethod
     def init__devices(cls) -> None:
         if not cls._GROUPS:
             cls._generate__cls()
-            cls.connect__cls()          # here - run only if not cls._GROUPS!!!
-            cls._mark_present__cls()    # here - run only if not cls._GROUPS!!!
 
     @classmethod
     def _generate__cls(cls) -> None:
@@ -216,18 +197,6 @@ class DevicesIndexed_Base:
 
             for device in devices:
                 device.disconnect()
-
-    @classmethod
-    def _mark_present__cls(cls) -> None:
-        for group_name, group_value in cls._GROUPS.items():
-            devices = []
-            if isinstance(group_value, list):
-                devices = group_value
-            else:
-                devices = [group_value, ]
-
-            for device in devices:
-                device._mark_present()
 
     # DEBUG PURPOSE ---------------------------------------------------------------------------------------------------
     @classmethod

@@ -18,6 +18,9 @@ class _Atc_SerialClient(SerialClient):
     _EMULATOR__CLS = SerialServer_Example
     _EMULATOR__START = True
 
+    def connect__validation(self) -> bool:
+        return self.address__answer_validation()
+
     def address__answer_validation(self) -> bool:
         return self.write_read_line_last("upper hello") == "UPPER HELLO"
 
@@ -40,17 +43,6 @@ class Atc(DeviceBase):
             self.con.disconnect()
         except:
             pass
-
-    # PRESENT ---------------------------------
-    def _mark_present(self) -> None:
-        self.PRESENT = self.check_present()
-
-    def check_present(self) -> bool:
-        try:
-            return self.connect() and self.con.address__answer_validation()
-        except:
-            pass
-        return False
 
     # PRESENT -----------------------------------
     def selftest(self) -> Optional[bool]:
@@ -89,7 +81,6 @@ class Test__TpDevicesIndexed_OnSerial:
         assert self.Victim._GROUPS == {}
         victim = self.Victim()
         assert self.Victim._GROUPS != {}
-        assert victim.ATC.check_present() is True
 
 
 # =====================================================================================================================

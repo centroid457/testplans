@@ -30,11 +30,6 @@ class Test__DeviceBase:
     # -----------------------------------------------------------------------------------------------------------------
     def test__1(self):
         victim = self.Victim()
-        assert victim.PRESENT is None
-        assert victim.check_present() is True
-        assert victim.PRESENT is None
-        victim._mark_present()
-        assert victim.PRESENT is True
 
 
 # =====================================================================================================================
@@ -57,11 +52,6 @@ class Test__DutBase:
     # -----------------------------------------------------------------------------------------------------------------
     def test__1(self):
         victim = self.Victim()
-        assert victim.PRESENT is None
-        assert victim.check_present() is True
-        assert victim.PRESENT is None
-        victim._mark_present()
-        assert victim.PRESENT is True
 
     def test__2(self):
         victim = self.Victim()
@@ -69,11 +59,6 @@ class Test__DutBase:
 
         victim = self.Victim(2)
         assert victim.INDEX == 2
-
-        assert victim.check_present() is True
-        assert victim.PRESENT is None
-        victim._mark_present()
-        assert victim.PRESENT is True
 
 
 # =====================================================================================================================
@@ -195,10 +180,6 @@ class Test__TpDevicesIndexed:
         assert victim.check_exists__group__("ATC") is True
         assert victim.check_exists__group__("PTS") is False
 
-        assert victim.check_present__instance__("DUT") is True
-        assert victim.check_present__instance__("ATC") is True
-        assert victim.check_present__instance__("PTS") is False
-
     # -----------------------------------------------------------------------------------------------------------------
     def test__CLS_LIST__CLS(self):
         self.Victim.COUNT = 2
@@ -254,10 +235,6 @@ class Test__TpDevicesIndexed:
         assert victim.check_exists__group__("DUT") is True
         assert victim.check_exists__group__("ATC") is False
         assert victim.check_exists__group__("PTS") is True
-
-        assert victim.check_present__instance__("DUT") is True
-        assert victim.check_present__instance__("ATC") is False
-        assert victim.check_present__instance__("PTS") is True
 
     # -----------------------------------------------------------------------------------------------------------------
     def test__double_init(self):

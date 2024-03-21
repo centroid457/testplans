@@ -249,7 +249,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     def run(self) -> None:
         # PREPARE --------
         self.clear()
-        if not self.DEVICES__BY_INDEX.DUT or not self.DEVICES__BY_INDEX.DUT.PRESENT or self.DEVICES__BY_INDEX.DUT.SKIP:
+        if not self.DEVICES__BY_INDEX.DUT or not self.DEVICES__BY_INDEX.DUT.connect() or self.DEVICES__BY_INDEX.DUT.SKIP:
             return
 
         # WORK --------
