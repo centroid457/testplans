@@ -34,16 +34,6 @@ class Atc(DeviceBase):
     pass
     pass
 
-    # CONNECT ---------------------------------
-    def connect(self) -> bool:
-        return self.con.connect()
-
-    def disconnect(self) -> None:
-        try:
-            self.con.disconnect()
-        except:
-            pass
-
     # PRESENT -----------------------------------
     def selftest(self) -> Optional[bool]:
         """
@@ -81,6 +71,10 @@ class Test__TpDevicesIndexed_OnSerial:
         assert self.Victim._GROUPS == {}
         self.Victim.generate__devices()
         assert self.Victim._GROUPS != {}
+        self.Victim.connect__cls()
+        assert self.Victim.ATC.conn.CONNECTED is True
+        self.Victim.disconnect__cls()
+        assert self.Victim.ATC.conn.CONNECTED is False
 
 
 # =====================================================================================================================
