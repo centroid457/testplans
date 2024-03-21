@@ -70,10 +70,10 @@ class TpTableModel(TableModelTemplate):
         tc = list(self.DATA.TCS__CLS)[row]
 
         dut = None
-        tc_dut = None
+        tc_inst = None
         if col >= self.ADDITIONAL_COLUMNS:
             dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.ADDITIONAL_COLUMNS]
-            tc_dut = tc.TCS__INST[dut.INDEX]
+            tc_inst = tc.TCS__INST[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:
@@ -89,11 +89,11 @@ class TpTableModel(TableModelTemplate):
                 else:
                     return
             if col >= self.ADDITIONAL_COLUMNS:
-                if tc_dut:
-                    if tc_dut.result is None:
+                if tc_inst:
+                    if tc_inst.result is None:
                         return ""
                     else:
-                        return f'{tc_dut.result}'
+                        return f'{tc_inst.result}'
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.TextAlignmentRole:
@@ -141,13 +141,13 @@ class TpTableModel(TableModelTemplate):
                 if tc.result__cls_startup is False:
                     return QColor("#FF5050")
             if col >= self.ADDITIONAL_COLUMNS:
-                if tc_dut.skip_tc_dut or not dut.connect() or dut.SKIP:
+                if tc_inst.skip_tc_dut or not dut.connect() or dut.SKIP:
                     return QColor('#e2e2e2')
-                if tc_dut.result is True:
+                if tc_inst.result is True:
                     return QColor("#00FF00")
-                if tc_dut.result is False:
+                if tc_inst.result is False:
                     return QColor("#FF5050")
-                if tc_dut.progress > 0:
+                if tc_inst.progress > 0:
                     return QColor("#FFFF50")
 
         # -------------------------------------------------------------------------------------------------------------
@@ -164,8 +164,8 @@ class TpTableModel(TableModelTemplate):
                     else:
                         return Qt.Unchecked
                 if col >= self.ADDITIONAL_COLUMNS:
-                    if not tc_dut.SKIP and not dut.SKIP:
-                        if tc_dut.skip_tc_dut:
+                    if not tc_inst.SKIP and not dut.SKIP:
+                        if tc_inst.skip_tc_dut:
                             return Qt.Unchecked
                         else:
                             return Qt.Checked
@@ -196,10 +196,10 @@ class TpTableModel(TableModelTemplate):
         tc = list(self.DATA.TCS__CLS)[row]
 
         dut = None
-        tc_dut = None
+        tc_inst = None
         if col >= self.ADDITIONAL_COLUMNS:
             dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.ADDITIONAL_COLUMNS]
-            tc_dut = tc.TCS__INST[dut.INDEX]
+            tc_inst = tc.TCS__INST[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
@@ -210,8 +210,8 @@ class TpTableModel(TableModelTemplate):
                 tc.ASYNC = value == Qt.Checked
 
             if col >= self.ADDITIONAL_COLUMNS:
-                if tc_dut:
-                    tc_dut.skip_tc_dut = value == Qt.Unchecked
+                if tc_inst:
+                    tc_inst.skip_tc_dut = value == Qt.Unchecked
 
         # FINAL -------------------------------------------------------------------------------------------------------
         self._data_reread()

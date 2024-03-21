@@ -226,8 +226,8 @@ class TestCaseBase(_TestCaseBase, QThread):
     @classmethod
     def results_get_all(cls) -> List[Dict[str, Any]]:
         results = []
-        for tc_dut in cls.TCS__INST:
-            results.append(tc_dut.get__results())
+        for tc_inst in cls.TCS__INST:
+            results.append(tc_inst.get__results())
         return results
 
     # =================================================================================================================
@@ -240,8 +240,8 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     @classmethod
     def terminate__cls(cls) -> None:
-        for tc_dut in cls.TCS__INST:
-            tc_dut.terminate()
+        for tc_inst in cls.TCS__INST:
+            tc_inst.terminate()
 
         cls.teardown__cls()
 
@@ -279,18 +279,18 @@ class TestCaseBase(_TestCaseBase, QThread):
             return
 
         # BATCH --------------------------
-        for tc_dut in cls.TCS__INST:
-            if tc_dut.skip_tc_dut:
+        for tc_inst in cls.TCS__INST:
+            if tc_inst.skip_tc_dut:
                 continue
 
-            tc_dut.start()
+            tc_inst.start()
             if not cls.ASYNC:
-                tc_dut.wait()
+                tc_inst.wait()
 
         # FINISH --------------------------
         if cls.ASYNC:
-            for tc_dut in cls.TCS__INST:
-                tc_dut.wait()
+            for tc_inst in cls.TCS__INST:
+                tc_inst.wait()
 
         cls.teardown__cls()
 

@@ -184,18 +184,22 @@ class TpMultyDutBase(QThread):
         Overwrite with super! super first!
         """
         self.progress = 1
-        # self.DEVICES__CLS.connect__cls()
         return True
 
     def tp__teardown(self, progress: int = 100) -> None:
         """
         Overwrite with super! super last!
         """
+        if self.tc_active:
+            self.tc_active.terminate__cls()
+        self.tc_active = None
+
         if progress is None:
             progress = 100
-        self.tc_active = None
         self.progress = progress
+
         self.DEVICES__CLS.disconnect__cls()
+
         self.signal__tp_finished.emit()
 
     # =================================================================================================================
@@ -206,9 +210,6 @@ class TpMultyDutBase(QThread):
         # ObjectInfo(self.currentThread()).print()    # cant find childs!!!
 
         # finish current ----------------------------
-        if self.tc_active:
-            self.tc_active.terminate__cls()
-
         self.tp__teardown(0)
 
     def run(self) -> None:
