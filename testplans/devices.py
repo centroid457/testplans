@@ -127,11 +127,9 @@ class DevicesIndexed_Base:
             return
 
         if item in self._GROUPS:
-            devs = self._GROUPS[item]
-            if isinstance(devs, list):
-                device = devs[self.INDEX]
-            else:
-                device = devs
+            device = self._GROUPS[item]
+            if isinstance(device, list):
+                device = device[self.INDEX]
             return device
 
         else:
