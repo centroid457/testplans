@@ -34,13 +34,6 @@ class Atc(DeviceBase):
     pass
     pass
 
-    # PRESENT -----------------------------------
-    def selftest(self) -> Optional[bool]:
-        """
-        :return: None - not implemented (lets decide it!)
-        """
-        pass
-
 
 # =====================================================================================================================
 # @pytest.mark.skip
@@ -71,6 +64,8 @@ class Test__TpDevicesIndexed_OnSerial:
         assert self.Victim._GROUPS == {}
         self.Victim.generate__devices()
         assert self.Victim._GROUPS != {}
+
+
         self.Victim.connect__cls()
         assert self.Victim.ATC.conn.CONNECTED is True
         self.Victim.disconnect__cls()
