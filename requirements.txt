@@ -8,10 +8,12 @@ object-info
 
 # ========================================
 # SPECIAL FOR THIS PROJECT ---------------
-PyQt5
 singleton-meta
 pyqt-templates
 server-templates
+funcs-aux
+
+PyQt5
 requests
 
 # ========================================
