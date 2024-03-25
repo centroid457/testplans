@@ -15,6 +15,10 @@
 ********************************************************************************
 ## NEWS
 
+0.1.15 (2024/03/25 19:14:00)
+------------------------------
+- [TC] fix _tcs__apply_classes if not have TestCase class in TC file-2  
+
 0.1.14 (2024/03/25 18:46:07)
 ------------------------------
 - [TC] fix _tcs__apply_classes if not have TestCase class in TC file  

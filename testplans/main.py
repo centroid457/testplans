@@ -142,7 +142,9 @@ class TpMultyDutBase(QThread):
                 try:
                     tc_cls = import_module(f"{self.DIRPATH_TCS.name}.{item}").TestCase
                 except:
-                    pass
+                    msg = f"[WARN] no 'TestCase' class in file [{self.DIRPATH_TCS.name}]"
+                    print(msg)
+                    continue
                 if not tc_cls:
                     msg = f"[ERROR] file not found[{item=}] in /{self.DIRPATH_TCS.name}/"
                     raise Exx__TcItemNotFound(msg)
