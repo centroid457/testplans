@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 1, 15)
+    VERSION: Tuple[int, int, int] = (0, 1, 16)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,7 +105,7 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "[TC] fix _tcs__apply_classes if not have TestCase class in TC file-2",
+        "[GUI] fix selection ASYNC",
     ]
 
     # FINALIZE -----------------------------------------------

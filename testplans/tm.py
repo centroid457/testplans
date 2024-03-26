@@ -46,13 +46,9 @@ class TpTableModel(TableModelTemplate):
         # -------------------------------------------------------------------------------------------------------------
         flags = super().flags(index)
 
-        if col == 0:
+        if col in [0, 1] or col >= self.ADDITIONAL_COLUMNS - 1:
             flags |= Qt.ItemIsUserCheckable
             # flags |= Qt.ItemIsSelectable
-        elif col >= self.ADDITIONAL_COLUMNS - 1:
-            if self.open__settings:
-                flags |= Qt.ItemIsUserCheckable
-                # flags |= Qt.ItemIsSelectable
         else:
             # flags -= Qt.ItemIsSelectable
             pass
