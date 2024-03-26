@@ -54,7 +54,7 @@ class TpMultyDutBase(QThread):
     GUI__START: bool = True
     GUI__CLS: Type[TpGuiBase] = TpGuiBase
 
-    api_client: Client_RequestsStack = Client_RequestsStack()   # todo: USE CLS!!!
+    api_client: Client_RequestsStack = Client_RequestsStack()   # todo: USE CLS!!! + add start
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"
