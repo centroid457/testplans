@@ -54,7 +54,7 @@ class TpMultyDutBase(QThread):
     GUI__START: bool = True
     GUI__CLS: Type[TpGuiBase] = TpGuiBase
 
-    api_client: Client_RequestsStack = Client_RequestsStack()
+    api_client: Client_RequestsStack = Client_RequestsStack()   # todo: USE CLS!!!
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"
@@ -65,7 +65,7 @@ class TpMultyDutBase(QThread):
     DEVICES__CLS: Type[DevicesIndexed_WithDut] = DevicesIndexed_Example
 
     # AUX -----------------------------------------------------------
-    TCS__CLS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}
+    TCS__CLS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}     # todo: RENAME TO clss!!!
     # {
     #     Tc1: True,
     #     Tc2: True
@@ -78,7 +78,7 @@ class TpMultyDutBase(QThread):
     # ]
 
     tc_active: Optional[Type[TestCaseBase]] = None      # TODO:FIXME: use as PROPERTY!!!! not attribute!
-    progress: int = 0
+    progress: int = 0   # todo: use as property? by getting from TCS???
 
     def __init__(self):
         super().__init__()
