@@ -4,39 +4,43 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from pyqt_templates import TableModelTemplate
+from funcs_aux import NamesIndexed_Base, NamesIndexed_Templated
 
 # from .tp import TpMultyDutBase
 
 
 # =====================================================================================================================
+class Headers(NamesIndexed_Base):
+    TESTCASE = 0
+    ASYNC = 1
+    STARTUP = 2
+    DUTS = NamesIndexed_Templated(3, 10)
+    # FIXME: need resolve COUNT over DevicesIndexed!!!
+
+
+# =====================================================================================================================
 class TpTableModel(TableModelTemplate):
     DATA: "TpMultyDutBase"
+    HEADERS: Headers = Headers()
 
     # AUX -------------------------------------------
     open__settings: Optional[bool] = None
-    ADDITIONAL_COLUMNS: int = 3
 
     def rowCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.TCS__CLS)
 
     def columnCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
-        return len(self.DATA.DEVICES__CLS.LIST__DUT) + self.ADDITIONAL_COLUMNS
+        return self.HEADERS.count()
 
-    def headerData(self, section: Any, orientation: Qt.Orientation, role: int = Qt.DisplayRole) -> str:
-        if role == Qt.DisplayRole:
-            # ------------------------------
-            if orientation == Qt.Horizontal:
-                if section == 0:
-                    return "ТЕСТКЕЙС"
-                if section == 1:
-                    return "ASYNC"
-                if section == 2:
-                    return "STARTUP"
-                if section >= self.ADDITIONAL_COLUMNS:
-                    return f"{section - self.ADDITIONAL_COLUMNS + 1}"
-            # ------------------------------
-            if orientation == Qt.Vertical:
-                return str(section + 1)
+    # def headerData(self, section: Any, orientation: Qt.Orientation, role: int = Qt.DisplayRole) -> str:
+    #     if role == Qt.DisplayRole:
+    #         # ------------------------------
+    #         if orientation == Qt.Horizontal:
+    #             return self.HEADERS[section]
+    #
+    #         # ------------------------------
+    #         if orientation == Qt.Vertical:
+    #             return str(section + 1)
 
     def flags(self, index: QModelIndex) -> int:
         # PREPARE -----------------------------------------------------------------------------------------------------
@@ -46,7 +50,7 @@ class TpTableModel(TableModelTemplate):
         # -------------------------------------------------------------------------------------------------------------
         flags = super().flags(index)
 
-        if col in [0, 1] or col >= self.ADDITIONAL_COLUMNS - 1:
+        if col in [self.HEADERS.TESTCASE, self.HEADERS.ASYNC] or col in self.HEADERS.DUTS:
             flags |= Qt.ItemIsUserCheckable
             # flags |= Qt.ItemIsSelectable
         else:
@@ -54,8 +58,6 @@ class TpTableModel(TableModelTemplate):
             pass
 
         # clear SELECTABLE ---------
-        # if not col >= self.ADDITIONAL_COLUMNS:
-        #     flags -= Qt.ItemIsSelectable
 
         return flags
 
@@ -67,24 +69,24 @@ class TpTableModel(TableModelTemplate):
 
         dut = None
         tc_inst = None
-        if col >= self.ADDITIONAL_COLUMNS:
-            dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.ADDITIONAL_COLUMNS]
+        if col in self.HEADERS.DUTS:
+            dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
             tc_inst = tc.TCS__INST[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:
-            if col == 0:
+            if col == self.HEADERS.TESTCASE:
                 return f'{tc.NAME}\n{tc.DESCRIPTION}'
-            if col == 1:
+            if col == self.HEADERS.ASYNC:
                 return '+' if tc.ASYNC else '-'
-            if col == 2:
+            if col == self.HEADERS.STARTUP:
                 if tc.result__cls_startup is True:
                     return '+'
                 elif tc.result__cls_startup is False:
                     return '-'
                 else:
                     return
-            if col >= self.ADDITIONAL_COLUMNS:
+            if col in self.HEADERS.DUTS:
                 if tc_inst:
                     if tc_inst.result is None:
                         return ""
@@ -117,9 +119,9 @@ class TpTableModel(TableModelTemplate):
             AlignHorizontal_Mask = 31   # TOP+RIGHT
             AlignVertical_Mask = 480    # LEFT+VCENTER
             """
-            if col == 0:
+            if col == self.HEADERS.TESTCASE:
                 return Qt.AlignVCenter
-            if col > 0:
+            else:
                 return Qt.AlignCenter
 
         # -------------------------------------------------------------------------------------------------------------
@@ -131,12 +133,12 @@ class TpTableModel(TableModelTemplate):
         if role == Qt.BackgroundColorRole:
             if tc.SKIP:
                 return QColor('#e2e2e2')
-            if col == 2:
+            if col == self.HEADERS.STARTUP:
                 if tc.result__cls_startup is True:
                     return QColor("#50FF50")
                 if tc.result__cls_startup is False:
                     return QColor("#FF5050")
-            if col >= self.ADDITIONAL_COLUMNS:
+            if col in self.HEADERS.DUTS:
                 if tc_inst.skip_tc_dut or not dut.connect() or dut.SKIP:
                     return QColor('#e2e2e2')
                 if tc_inst.result is True:
@@ -149,17 +151,17 @@ class TpTableModel(TableModelTemplate):
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
             if self.open__settings:
-                if col == 0:
+                if col == self.HEADERS.TESTCASE:
                     if tc.SKIP:
                         return Qt.Unchecked
                     else:
                         return Qt.Checked
-                if col == 1:
+                if col == self.HEADERS.ASYNC:
                     if tc.ASYNC:
                         return Qt.Checked
                     else:
                         return Qt.Unchecked
-                if col >= self.ADDITIONAL_COLUMNS:
+                if col in self.HEADERS.DUTS:
                     if not tc_inst.SKIP and not dut.SKIP:
                         if tc_inst.skip_tc_dut:
                             return Qt.Unchecked
@@ -193,19 +195,19 @@ class TpTableModel(TableModelTemplate):
 
         dut = None
         tc_inst = None
-        if col >= self.ADDITIONAL_COLUMNS:
-            dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.ADDITIONAL_COLUMNS]
+        if col in self.HEADERS.DUTS:
+            dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
             tc_inst = tc.TCS__INST[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
-            if col == 0:
+            if col == self.HEADERS.TESTCASE:
                 tc.SKIP = value == Qt.Unchecked
 
-            if col == 1:
+            if col == self.HEADERS.ASYNC:
                 tc.ASYNC = value == Qt.Checked
 
-            if col >= self.ADDITIONAL_COLUMNS:
+            if col in self.HEADERS.DUTS:
                 if tc_inst:
                     tc_inst.skip_tc_dut = value == Qt.Unchecked
 

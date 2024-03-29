@@ -7,7 +7,7 @@ from DEVICES import dut_example1
 
 # =====================================================================================================================
 class DevicesIndexed__Example(DevicesIndexed_WithDut):
-    COUNT = 4
+    COUNT = 10
     CLS_LIST__DUT = dut_example1.Device
 
 
