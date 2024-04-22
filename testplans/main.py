@@ -2,7 +2,7 @@
 from .tc import TestCaseBase
 from .devices import DutBase, DeviceBase, DevicesIndexed_WithDut, DevicesIndexed_Example
 from .gui import TpGuiBase
-from .api import TpApi
+from .api import TpApi_Aiohttp, TpApi_FastApi
 
 from typing import *
 import json
@@ -48,8 +48,8 @@ class TpMultyDutBase(QThread):
     STAND_DESCRIPTION: Optional[str] = "stand_description"
 
     API_SERVER__START: bool = True
-    API_SERVER__CLS: Type[ServerAiohttpBase] = TpApi
-    api_server: ServerAiohttpBase
+    API_SERVER__CLS: Type[TpApi_FastApi] = TpApi_FastApi
+    api_server: TpApi_FastApi
 
     GUI__START: bool = True
     GUI__CLS: Type[TpGuiBase] = TpGuiBase
@@ -97,7 +97,7 @@ class TpMultyDutBase(QThread):
         self.tcs__reinit()
         self.slots_connect()
 
-        self.api_server = self.API_SERVER__CLS(self)
+        self.api_server = self.API_SERVER__CLS(data=self)
         if self.API_SERVER__START:
             self.api_server.start()
 

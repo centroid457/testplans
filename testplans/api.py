@@ -3,10 +3,11 @@ from typing import *
 from object_info import ObjectInfo
 
 from server_templates import ServerAiohttpBase, decorator__log_request_response, web
+from server_templates import *
 
 
 # =====================================================================================================================
-class TpApi(ServerAiohttpBase):
+class TpApi_Aiohttp(ServerAiohttpBase):
     async def response_get_html__(self, request) -> web.Response:
         # --------------------------
         progress = 0
@@ -57,6 +58,43 @@ class TpApi(ServerAiohttpBase):
         # RESPONSE --------------------------------------------------
         body: dict = self.data.get__results()
         return web.json_response(data=body)
+
+
+# =====================================================================================================================
+def create_app__FastApi_Tp(self=None, data: Any = None) -> FastAPI:
+    # UNIVERSAL ------------------------------------------------------
+    app = FastAPI()
+    app.data = data
+
+    # WORK -----------------------------------------------------------
+    @app.get("/")
+    async def redirect() -> Response:
+        return RedirectResponse(url="/docs")
+
+    @app.post("/start")
+    async def start() -> bool:
+        app.data.signal__tp_start.emit()
+        return True
+
+    @app.post("/stop")
+    async def stop() -> bool:
+        app.data.signal__tp_stop.emit()
+        return True
+
+    @app.get("/info")
+    async def info() -> dict:
+        return app.data.get__info()
+
+    @app.get("/results")
+    async def results() -> dict:
+        return app.data.get__results()
+
+    return app
+
+
+# =====================================================================================================================
+class TpApi_FastApi(ServerFastApi_Thread):
+    create_app = create_app__FastApi_Tp
 
 
 # =====================================================================================================================
