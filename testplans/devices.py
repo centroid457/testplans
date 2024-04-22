@@ -62,7 +62,7 @@ class DeviceBase:
             "name": self.NAME or self.__class__.__name__,
             "description": self.DESCRIPTION or self.__class__.__name__,
             "index": self.INDEX,
-            "sn": self.SN,
+            "sn": self.SN or "",
         }
         return ModelDevice(**result)
 

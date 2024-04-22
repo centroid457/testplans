@@ -24,7 +24,7 @@ class ModelTcClsInfo(BaseModel):
     is_async: bool = False
     is_skipped: bool = False
 
-    settings: dict[str, Any] = {
+    settings: dict[str, Union[None, str, bool, int, float, dict, list]] = {
         # CONTENT IS NOT SPECIFIED!
         # "ANY_1": Any,
     }
@@ -32,7 +32,7 @@ class ModelTcClsInfo(BaseModel):
 class ModelTcInstResult(ModelTcClsInfo):
     DEVICE: ModelDevice
 
-    timestamp: float
+    timestamp: float | None = None
     is_active: bool = False
     is_async: bool = False
     is_skipped: bool = False

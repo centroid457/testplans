@@ -202,34 +202,28 @@ class TestCaseBase(_TestCaseBase, QThread):
         return ModelTcClsInfo(**result)
 
     # =================================================================================================================
-    def get__results(self) -> Dict[str, Any]:
+    def get__results(self) -> ModelTcInstResult:
         result = {
-            # COORDINATES
-            "DUT_INDEX": self.INDEX,
-            "DUT_SKIP": self.DEVICES__BY_INDEX.DUT.SKIP,
-            "DUT_SKIP_TC": self.skip_tc_dut,
-            "DUT_SN": self.DEVICES__BY_INDEX.DUT.SN,
+            **self.get__info().dict(),
 
-            # INFO
-            "TC_NAME": self.NAME,
-            "TC_DESCRIPTION": self.DESCRIPTION,
-            "TC_ASYNC": self.ASYNC,
-            "TC_SKIP": self.SKIP,
-            "TC_SETTINGS": self.SETTINGS.dict,
+            "DEVICE": self.DUT.get__info(),
 
             # RESULTS
-            "TC_ACTIVE": self.isRunning(),
-            "TC_PROGRESS": self.progress,
-            "TC_RESULT": self.result,
-            "TC_DETAILS": self.details,
+            "is_active": self.isRunning(),
+            "is_async": self.ASYNC,
+            "is_skipped": self.SKIP,
+
+            "progress": self.progress,
+            "result": self.result,
+            "details": self.details,
         }
-        return result
+        return ModelTcInstResult(**result)
 
     @classmethod
     def results_get_all(cls) -> List[Dict[str, Any]]:
         results = []
         for tc_inst in cls.TCS__INST:
-            results.append(tc_inst.get__results())
+            results.append(tc_inst.get__results().dict())
         return results
 
     # =================================================================================================================
