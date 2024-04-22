@@ -307,7 +307,7 @@ class TpMultyDutBase(QThread):
             "STAND_ID": self.STAND_ID,
             "STAND_TYPE": self.STAND_TYPE,
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
-            **tc_inst.get__results(),
+            **tc_inst.get__results().dict(),
         }
         self.api_client.send(body=body)
 
