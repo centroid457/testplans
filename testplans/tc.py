@@ -8,6 +8,7 @@ from pyqt_templates import *
 from private_values import PrivateJson
 
 # from .devices import DevicesIndexed_WithDut
+from .models import *
 
 
 # =====================================================================================================================
@@ -191,11 +192,11 @@ class TestCaseBase(_TestCaseBase, QThread):
         get info/structure about TC
         """
         result = {
-            "TC_NAME": cls.NAME,
-            "TC_DESCRIPTION": cls.DESCRIPTION,
-            "TC_ASYNC": cls.ASYNC,
-            "TC_SKIP": cls.SKIP,
-            "TC_SETTINGS": cls.settings_read(),
+            "name": cls.NAME,
+            "description": cls.DESCRIPTION,
+            "is_async": cls.ASYNC,
+            "is_skipped": cls.SKIP,
+            "settings": cls.settings_read(),
         }
         return result
 

@@ -3,6 +3,7 @@ from .tc import TestCaseBase
 from .devices import DutBase, DeviceBase, DevicesIndexed_WithDut, DevicesIndexed_Example
 from .gui import TpGuiBase
 from .api import TpApi_Aiohttp, TpApi_FastApi
+from .models import *
 
 from typing import *
 import json
@@ -10,6 +11,7 @@ from pathlib import Path
 from PyQt5.QtCore import QThread
 from importlib import import_module
 import asyncio
+from pydantic import BaseModel
 
 from pyqt_templates import *
 from server_templates import ServerAiohttpBase, Client_RequestItem, Client_RequestsStack
