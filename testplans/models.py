@@ -4,9 +4,10 @@ from pydantic import BaseModel
 
 # =====================================================================================================================
 class ModelStand(BaseModel):
-    name: str           # "Stand PSU"
+    name: str           # "StandPSU"
     description: str    # "test PSU for QCD"
     sn: str
+    settings: dict[str, Any] = {}
 
 
 class ModelDevice(BaseModel):
@@ -40,7 +41,7 @@ class ModelTcInstResult(ModelTcClsInfo):
     progress: int = 0
     result: bool | None = None
 
-    details: dict[str , Any] = {
+    details: dict[str, Any] = {
         # CONTENT IS NOT SPECIFIED!
         # "ANY_2": Any,
     }
@@ -52,7 +53,7 @@ class ModelSendResult(ModelTcInstResult):
 
 class ModelTpInfo(BaseModel):
     STAND: ModelStand
-    TESTCASES: list[ModelTcClsInfo]
+    TESTCASES: List[ModelTcClsInfo]
 
 
 class ModelTpResults(BaseModel):

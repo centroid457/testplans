@@ -20,7 +20,7 @@ class TpGuiBase(Gui):
     DATA: "TpMultyDutBase"
 
     def __init__(self, data):
-        self.TITLE = f"[TestPlan]{data.STAND_ID}/{data.STAND_DESCRIPTION[:20]}"
+        self.TITLE = f"[TestPlan]{data.STAND_NAME}/{data.STAND_DESCRIPTION[:20]}"
         super().__init__(data)
 
     # WINDOW ==========================================================================================================

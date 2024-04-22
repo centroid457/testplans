@@ -45,9 +45,9 @@ class TpMultyDutBase(QThread):
     _signal__tp_reset_duts_sn = pyqtSignal()
 
     # SETTINGS ------------------------------------------------------
-    STAND_ID: Optional[str] = "stand_id__1"
-    STAND_TYPE: Optional[str] = "stand_type"
+    STAND_NAME: Optional[str] = "stand_id__1"
     STAND_DESCRIPTION: Optional[str] = "stand_description"
+    STAND_SN: Optional[str] = "StandSn"
 
     API_SERVER__START: bool = True
     API_SERVER__CLS: Type[TpApi_FastApi] = TpApi_FastApi
@@ -236,7 +236,7 @@ class TpMultyDutBase(QThread):
         self.tp__teardown()
 
     # =================================================================================================================
-    def get__info(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
+    def get__info(self) -> ModelTpInfo:
         """
         get info/structure about stand/TP
         """
@@ -245,21 +245,16 @@ class TpMultyDutBase(QThread):
             TP_TCS.append(tc.get__info())
 
         result = {
-            # BASE STRING INFO
-            "STAND_ID": self.STAND_ID,
-            "STAND_TYPE": self.STAND_TYPE,
-            "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
-
-            # AUX
-            "TP_TCS_COUNT": len(self.TCS__CLS),
-            "TP_DUTS_COUNT": self.DEVICES__CLS.COUNT,
-
-            # SETTINGS
-            "TP_SETTINGS_BASE": TestCaseBase.settings_read(files=self.SETTINGS_BASE_FILEPATH),
+            "STAND": {
+                "name": self.STAND_NAME,
+                "description": self.STAND_DESCRIPTION,
+                "sn": self.STAND_SN,
+                "settings": TestCaseBase.settings_read(files=self.SETTINGS_BASE_FILEPATH),
+            },
 
             # STRUCTURE
-            "TP_TCS": TP_TCS,
-            "TP_DUTS": [],      # TODO: decide how to use
+            "TESTCASES": TP_TCS,
+            # "TP_DUTS": [],      # TODO: decide how to use
             # [
             #     # [{DUT1}, {DUT2}, …]
             #     {
@@ -269,7 +264,7 @@ class TpMultyDutBase(QThread):
             # ]
 
             }
-        return result
+        return ModelTpInfo(**result)
 
     # -----------------------------------------------------------------------------------------------------------------
     def get__results(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
@@ -282,8 +277,7 @@ class TpMultyDutBase(QThread):
 
         result = {
             # BASE STRING INFO
-            "STAND_ID": self.STAND_ID,
-            "STAND_TYPE": self.STAND_TYPE,
+            "STAND_NAME": self.STAND_NAME,
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
 
             # TODO: ADD TP SUMMARY RESULT
@@ -304,8 +298,7 @@ class TpMultyDutBase(QThread):
     # -----------------------------------------------------------------------------------------------------------------
     def post__tc_results(self, tc_inst: TestCaseBase) -> None:
         body = {
-            "STAND_ID": self.STAND_ID,
-            "STAND_TYPE": self.STAND_TYPE,
+            "STAND_NAME": self.STAND_NAME,
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
             **tc_inst.get__results().dict(),
         }

@@ -5,6 +5,8 @@ from object_info import ObjectInfo
 from server_templates import ServerAiohttpBase, decorator__log_request_response, web
 from server_templates import *
 
+from .models import *
+
 
 # =====================================================================================================================
 class TpApi_Aiohttp(ServerAiohttpBase):
@@ -82,7 +84,7 @@ def create_app__FastApi_Tp(self=None, data: Any = None) -> FastAPI:
         return True
 
     @app.get("/info")
-    async def info() -> dict:
+    async def info() -> ModelTpInfo:
         return app.data.get__info()
 
     @app.get("/results")
