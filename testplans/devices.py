@@ -2,6 +2,7 @@ from typing import *
 import uuid
 
 from .tc import TestCaseBase
+from .models import *
 
 
 # =====================================================================================================================
@@ -29,6 +30,11 @@ class DeviceBase:
     pass
     pass
 
+    # AUX -----------------------------------
+    NAME: str = None
+    DESCRIPTION: str = None
+    SN: str = None
+
     # CONNECT ---------------------------------
     def connect(self) -> bool:
         if self.conn:
@@ -51,6 +57,15 @@ class DeviceBase:
         """
         pass
 
+    def get__info(self) -> ModelDevice:
+        result = {
+            "name": self.NAME or self.__class__.__name__,
+            "description": self.DESCRIPTION or self.__class__.__name__,
+            "index": self.INDEX,
+            "sn": self.SN,
+        }
+        return ModelDevice(**result)
+
     # UNIQUE ==========================================================================================================
     pass
     pass
@@ -62,9 +77,6 @@ class DeviceBase:
 class DutBase(DeviceBase):
     # SETTINGS ------------------------------------
     SKIP: Optional[bool] = None
-
-    # AUX -----------------------------------
-    SN: str = None
 
     # DEBUG PURPOSE ---------------------------------------------------------------------------------------------------
     def _debug__reset_sn(self) -> None:
