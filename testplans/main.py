@@ -236,6 +236,15 @@ class TpMultyDutBase(QThread):
         self.tp__teardown()
 
     # =================================================================================================================
+    def get__info__stand(self) -> ModelStand:
+        result = {
+            "name": self.STAND_NAME,
+            "description": self.STAND_DESCRIPTION,
+            "sn": self.STAND_SN,
+            "settings": TestCaseBase.settings_read(files=self.SETTINGS_BASE_FILEPATH),
+        }
+        return ModelStand(**result)
+
     def get__info(self) -> ModelTpInfo:
         """
         get info/structure about stand/TP
@@ -245,14 +254,7 @@ class TpMultyDutBase(QThread):
             TP_TCS.append(tc.get__info())
 
         result = {
-            "STAND": {
-                "name": self.STAND_NAME,
-                "description": self.STAND_DESCRIPTION,
-                "sn": self.STAND_SN,
-                "settings": TestCaseBase.settings_read(files=self.SETTINGS_BASE_FILEPATH),
-            },
-
-            # STRUCTURE
+            "STAND": self.get__info__stand(),
             "TESTCASES": TP_TCS,
             # "TP_DUTS": [],      # TODO: decide how to use
             # [
@@ -267,7 +269,7 @@ class TpMultyDutBase(QThread):
         return ModelTpInfo(**result)
 
     # -----------------------------------------------------------------------------------------------------------------
-    def get__results(self) -> Dict[str, Union[str, None, bool, int, dict, list]]:
+    def get__results(self) -> ModelTpResults:
         """
         get all results for stand/TP
         """
@@ -276,24 +278,10 @@ class TpMultyDutBase(QThread):
             TCS_RESULTS.append(tc.results_get_all())
 
         result = {
-            # BASE STRING INFO
-            "STAND_NAME": self.STAND_NAME,
-            "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
-
-            # TODO: ADD TP SUMMARY RESULT
-            # TODO: ADD TP SUMMARY RESULT
-            # TODO: ADD TP SUMMARY RESULT
-            # TODO: ADD TP SUMMARY RESULT
-            # TODO: ADD TP SUMMARY RESULT
-            # TODO: ADD TP SUMMARY RESULT
-
-            # SETTINGS
-            "TP_SETTINGS_BASE": TestCaseBase.settings_read(files=self.SETTINGS_BASE_FILEPATH),
-
-            # STRUCTURE
-            "TCS_RESULTS": TCS_RESULTS,
+            "STAND": self.get__info__stand(),
+            "TESTCASES": TCS_RESULTS,
             }
-        return result
+        return ModelTpResults(**result)
 
     # -----------------------------------------------------------------------------------------------------------------
     def post__tc_results(self, tc_inst: TestCaseBase) -> None:

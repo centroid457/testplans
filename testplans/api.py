@@ -88,7 +88,7 @@ def create_app__FastApi_Tp(self=None, data: Any = None) -> FastAPI:
         return app.data.get__info()
 
     @app.get("/results")
-    async def results() -> dict:
+    async def results() -> ModelTpResults:
         return app.data.get__results()
 
     return app
