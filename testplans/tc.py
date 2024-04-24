@@ -162,29 +162,29 @@ class TestCaseBase(_TestCaseBase, QThread):
         # self.signals.signal__tc_state_changed.emit(self)
 
     # =================================================================================================================
-    # def info_pretty(self) -> str:
-    #     # fixme: ref from info_get
-    #     result = ""
-    #
-    #     result += f"NAME={self.NAME}\n"
-    #     result += f"DESCRIPTION={self.DESCRIPTION}\n"
-    #     result += f"SKIP={self.SKIP}\n"
-    #     result += f"skip_tc_dut={self.skip_tc_dut}\n"
-    #     result += f"ASYNC={self.ASYNC}\n"
-    #     result += f"INDEX={self.INDEX}\n"
-    #     result += f"result={self.result}\n"
-    #     result += f"progress={self.progress}\n"
-    #     result += f"exx={self.exx}\n"
-    #
-    #     result += f"SETTINGS=====================\n"
-    #     if self.SETTINGS:
-    #         for name, value in self.SETTINGS.dict.items():
-    #             result += f"{name}: {value}\n"
-    #
-    #     result += f"details=====================\n"
-    #     for name, value in self.details.items():
-    #         result += f"{name}: {value}\n"
-    #     return result
+    def info_pretty(self) -> str:
+        # fixme: ref from info_get
+        result = ""
+
+        result += f"NAME={self.NAME}\n"
+        result += f"DESCRIPTION={self.DESCRIPTION}\n"
+        result += f"SKIP={self.SKIP}\n"
+        result += f"skip_tc_dut={self.skip_tc_dut}\n"
+        result += f"ASYNC={self.ASYNC}\n"
+        result += f"INDEX={self.INDEX}\n"
+        result += f"result={self.result}\n"
+        result += f"progress={self.progress}\n"
+        result += f"exx={self.exx}\n"
+
+        result += f"SETTINGS=====================\n"
+        if self.SETTINGS:
+            for name, value in self.SETTINGS.dict.items():
+                result += f"{name}: {value}\n"
+
+        result += f"details=====================\n"
+        for name, value in self.details.items():
+            result += f"{name}: {value}\n"
+        return result
 
     @classmethod
     def get__info(cls) -> ModelTcClsInfo:
