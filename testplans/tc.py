@@ -10,9 +10,11 @@ from private_values import PrivateJson
 # from .devices import DevicesIndexed_WithDut
 from .models import *
 
+from logger_aux import Logger
+
 
 # =====================================================================================================================
-class _TestCaseBase:
+class _TestCaseBase(Logger):
     # just to use in Signals before defining exact
     pass
 
@@ -243,17 +245,23 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     # =================================================================================================================
     def run(self) -> None:
+        # self.LOGGER.debug("run clear")
+
         # PREPARE --------
         self.clear()
         if not self.DEVICES__BY_INDEX.DUT or not self.DEVICES__BY_INDEX.DUT.connect() or self.DEVICES__BY_INDEX.DUT.SKIP:
             return
 
         # WORK --------
+        # self.LOGGER.debug("run startup")
         if self.startup():
             try:
+                # self.LOGGER.debug("run run_wrapped")
                 self.result = self.run_wrapped()
+                # self.LOGGER.debug(f"{self.result=}")
             except Exception as exx:
                 self.exx = exx
+        # self.LOGGER.debug("run teardown")
         self.teardown()
 
     @classmethod

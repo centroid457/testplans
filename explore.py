@@ -28,6 +28,8 @@ class Tp_Example(TpMultyDutBase):
     api_client: Client_RequestsStack = Client_RequestsStack_Tp()
     DEVICES__CLS = DevicesIndexed__Tp
 
+    GUI__START = False
+
 
 # =====================================================================================================================
 if __name__ == "__main__":

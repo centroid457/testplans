@@ -18,6 +18,8 @@ from server_templates import ServerAiohttpBase, Client_RequestItem, Client_Reque
 from object_info import ObjectInfo
 from private_values import PrivateJson
 
+from logger_aux import Logger
+
 
 # =====================================================================================================================
 class Exx__TcsPathNotExists(Exception):
@@ -37,7 +39,7 @@ class Exx__TcSettingsIncorrect(Exception):
 
 
 # =====================================================================================================================
-class TpMultyDutBase(QThread):
+class TpMultyDutBase(Logger, QThread):
     signal__tp_start = pyqtSignal()
     signal__tp_stop = pyqtSignal()
     signal__tp_finished = pyqtSignal()
@@ -101,16 +103,21 @@ class TpMultyDutBase(QThread):
 
         self.api_server = self.API_SERVER__CLS(data=self)
         if self.API_SERVER__START:
+            self.LOGGER.debug("starting api server")
             self.api_server.start()
 
-        self.gui = self.GUI__CLS(self)
         if self.GUI__START:
+            self.LOGGER.debug("starting gui")
+            self.gui = self.GUI__CLS(self)
+
             # this will BLOCK process
             # this will BLOCK process
             # this will BLOCK process
             # this will BLOCK process
             # this will BLOCK process
             self.gui.run()
+        else:
+            self.api_server.wait()  # it is ok!!!
 
     def slots_connect(self) -> None:
         self.signal__tp_start.connect(self.start)
@@ -221,6 +228,7 @@ class TpMultyDutBase(QThread):
         self.tp__teardown(0)
 
     def run(self) -> None:
+        self.LOGGER.debug("TP START")
         if self.tp__check_active():
             return
 
@@ -234,6 +242,7 @@ class TpMultyDutBase(QThread):
 
         # FINISH TP ---------------------------------------------------
         self.tp__teardown()
+        self.LOGGER.debug("TP FINISH")
 
     # =================================================================================================================
     def get__info__stand(self) -> ModelStand:

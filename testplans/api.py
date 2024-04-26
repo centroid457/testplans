@@ -75,7 +75,11 @@ def create_app__FastApi_Tp(self=None, data: Any = None) -> FastAPI:
 
     @app.post("/start")
     async def start() -> bool:
-        app.data.signal__tp_start.emit()
+        print(f"access async start")
+        # print(f"1=EMIT")
+        # app.data.signal__tp_start.emit()
+        print(f"2=DIRECT START!")
+        app.data.start()
         return True
 
     @app.post("/stop")
