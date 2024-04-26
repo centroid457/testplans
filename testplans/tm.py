@@ -10,21 +10,24 @@ from funcs_aux import NamesIndexed_Base, NamesIndexed_Templated
 
 
 # =====================================================================================================================
-class Headers(NamesIndexed_Base):
-    TESTCASE = 0
-    ASYNC = 1
-    STARTUP = 2
-    DUTS = NamesIndexed_Templated(3, 10)
-    # FIXME: need resolve COUNT over DevicesIndexed!!!
-
-
-# =====================================================================================================================
 class TpTableModel(TableModelTemplate):
     DATA: "TpMultyDutBase"
-    HEADERS: Headers = Headers()
+    HEADERS: "Headers"
 
     # AUX -------------------------------------------
     open__settings: Optional[bool] = None
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        class Headers(NamesIndexed_Base):
+            TESTCASE = 0
+            ASYNC = 1
+            STARTUP = 2
+            DUTS = NamesIndexed_Templated(3, self.DATA.DEVICES__CLS.COUNT)
+            # FIXME: need resolve COUNT over DevicesIndexed!!!
+
+        self.HEADERS = Headers()
 
     def rowCount(self, parent: QModelIndex = None, *args, **kwargs) -> int:
         return len(self.DATA.TCS__CLS)

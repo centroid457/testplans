@@ -6,8 +6,8 @@ from DEVICES import dut_example1
 
 
 # =====================================================================================================================
-class DevicesIndexed__Example(DevicesIndexed_WithDut):
-    COUNT = 10
+class DevicesIndexed__Tp(DevicesIndexed_WithDut):
+    COUNT = 3
     CLS_LIST__DUT = dut_example1.Device
 
 
@@ -26,7 +26,7 @@ class Client_RequestsStack_Tp(Client_RequestsStack):
 # =====================================================================================================================
 class Tp_Example(TpMultyDutBase):
     api_client: Client_RequestsStack = Client_RequestsStack_Tp()
-    DEVICES__CLS = DevicesIndexed__Example
+    DEVICES__CLS = DevicesIndexed__Tp
 
 
 # =====================================================================================================================
