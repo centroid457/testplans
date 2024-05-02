@@ -15,6 +15,13 @@
 ********************************************************************************
 ## NEWS
 
+0.2.6 (2024/05/02 13:00:30)
+------------------------------
+- [TP]:  
+	- try for Linux change scheme thread+async+threads to async+threads  
+	- create START__GUI_AND_API  
+	- separate TpInsideApi_Runner for linux  
+
 0.2.5 (2024/05/02 12:11:40)
 ------------------------------
 - [TP]:  

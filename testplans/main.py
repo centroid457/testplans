@@ -301,6 +301,9 @@ class TpMultyDutBase(Logger, QThread):
 
     # -----------------------------------------------------------------------------------------------------------------
     def post__tc_results(self, tc_inst: TestCaseBase) -> None:
+        if not self.api_client:
+            return
+
         body = {
             "STAND_NAME": self.STAND_NAME,
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
@@ -317,6 +320,8 @@ class TpInsideApi_Runner(TpApi_FastApi):
     in Linux it is not good maybe cause of nesting theme=Thread+Async+Threads
 
     so this is the attempt to execute correctly TP in Linux by deactivating GUI and using theme=Async+Threads
+
+    UNFORTUNATELY: ITS NOT WORKING WAY for linux!!!
     """
     TP_CLS: Type[TpMultyDutBase] = TpMultyDutBase
 
