@@ -28,7 +28,8 @@ class Tp_Example(TpMultyDutBase):
     api_client: Client_RequestsStack = Client_RequestsStack_Tp()
     DEVICES__CLS = DevicesIndexed__Tp
 
-    GUI__START = False
+    GUI__START = True
+    API_SERVER__START = True
 
 
 # =====================================================================================================================

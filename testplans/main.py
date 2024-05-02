@@ -101,11 +101,12 @@ class TpMultyDutBase(Logger, QThread):
         self.tcs__reinit()
         self.slots_connect()
 
-        self.api_server = self.API_SERVER__CLS(data=self)
         if self.API_SERVER__START:
             self.LOGGER.debug("starting api server")
+            self.api_server = self.API_SERVER__CLS(data=self)
             self.api_server.start()
 
+        # last execution --------------------------------------
         if self.GUI__START:
             self.LOGGER.debug("starting gui")
             self.gui = self.GUI__CLS(self)
@@ -116,7 +117,7 @@ class TpMultyDutBase(Logger, QThread):
             # this will BLOCK process
             # this will BLOCK process
             self.gui.run()
-        else:
+        elif self.API_SERVER__START:
             self.api_server.wait()  # it is ok!!!
 
     def slots_connect(self) -> None:
