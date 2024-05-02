@@ -1,5 +1,5 @@
 from testplans import *
-from testplans.main import TpMultyDutBase, DevicesIndexed_WithDut
+from testplans.main import TpMultyDutBase, DevicesIndexed_WithDut, TpInsideApi_Runner
 from server_templates import ServerAiohttpBase, Client_RequestsStack, Client_RequestItem
 
 from DEVICES import dut_example1
@@ -28,13 +28,30 @@ class Tp_Example(TpMultyDutBase):
     api_client: Client_RequestsStack = Client_RequestsStack_Tp()
     DEVICES__CLS = DevicesIndexed__Tp
 
+    API_SERVER__CLS = TpApi_FastApi
+
     GUI__START = True
     API_SERVER__START = True
 
 
 # =====================================================================================================================
+class TpInsideApi_Runner__example(TpInsideApi_Runner):
+    TP_CLS = Tp_Example
+
+
+# =====================================================================================================================
+def run_direct():
+    Tp_Example()
+
+
+def run_over_api():
+    TpInsideApi_Runner__example()
+
+
+# =====================================================================================================================
 if __name__ == "__main__":
-    Tp_obj = Tp_Example()
+    run_direct()
+    # run_over_api()
 
 
 # =====================================================================================================================

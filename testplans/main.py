@@ -14,7 +14,7 @@ import asyncio
 from pydantic import BaseModel
 
 from pyqt_templates import *
-from server_templates import ServerAiohttpBase, Client_RequestItem, Client_RequestsStack
+from server_templates import ServerAiohttpBase, Client_RequestItem, Client_RequestsStack, ServerFastApi_Thread
 from object_info import ObjectInfo
 from private_values import PrivateJson
 
@@ -47,6 +47,8 @@ class TpMultyDutBase(Logger, QThread):
     _signal__tp_reset_duts_sn = pyqtSignal()
 
     # SETTINGS ------------------------------------------------------
+    START__GUI_AND_API: bool = True
+
     STAND_NAME: Optional[str] = "stand_id__1"
     STAND_DESCRIPTION: Optional[str] = "stand_description"
     STAND_SN: Optional[str] = "StandSn"
@@ -101,6 +103,10 @@ class TpMultyDutBase(Logger, QThread):
         self.tcs__reinit()
         self.slots_connect()
 
+        if self.START__GUI_AND_API:
+            self.start__gui_and_api()
+
+    def start__gui_and_api(self) -> None:
         if self.API_SERVER__START:
             self.LOGGER.debug("starting api server")
             self.api_server = self.API_SERVER__CLS(data=self)
@@ -301,6 +307,26 @@ class TpMultyDutBase(Logger, QThread):
             **tc_inst.get__results().dict(),
         }
         self.api_client.send(body=body)
+
+
+# =====================================================================================================================
+class TpInsideApi_Runner(TpApi_FastApi):
+    """
+    REASON:
+    in windows TestCaseBase works fine by any variance GUI__START/API_SERVER__START
+    in Linux it is not good maybe cause of nesting theme=Thread+Async+Threads
+
+    so this is the attempt to execute correctly TP in Linux by deactivating GUI and using theme=Async+Threads
+    """
+    TP_CLS: Type[TpMultyDutBase] = TpMultyDutBase
+
+    def __init__(self, *args, **kwargs):
+
+        self.TP_CLS.START__GUI_AND_API = False
+        self.data = self.TP_CLS()
+
+        super().__init__(*args, **kwargs)
+        self.run()
 
 
 # =====================================================================================================================
