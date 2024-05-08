@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 2, 6)
+    VERSION: Tuple[int, int, int] = (0, 2, 7)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,11 +105,7 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        ["[TP]",
-            "try for Linux change scheme thread+async+threads to async+threads",
-            "create START__GUI_AND_API",
-            "separate TpInsideApi_Runner for linux",
-         ]
+        "[tc] logs add+enable as attempt to find bags in parallel started tc-threads=RUN+RUN__CLS",
     ]
 
     # FINALIZE -----------------------------------------------

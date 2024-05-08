@@ -31,6 +31,9 @@ class Signals(SignalsTemplate):
 
 # =====================================================================================================================
 class TestCaseBase(_TestCaseBase, QThread):
+    LOG_ENABLE = True
+    LOG_USE_FILE = False
+
     # SETTINGS ------------------------------------
     NAME: str = ""      # set auto!
     DESCRIPTION: str = ""
@@ -61,6 +64,9 @@ class TestCaseBase(_TestCaseBase, QThread):
     # def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
     def __init__(self, index: int = 0):
         super().__init__()
+
+        self.LOGGER.debug("init tc")
+
         self.INDEX = index
 
         if self.DEVICES__CLS:
@@ -119,6 +125,8 @@ class TestCaseBase(_TestCaseBase, QThread):
         return result
 
     def clear(self) -> None:
+        self.LOGGER.debug("clear")
+
         self.result = None
         self.details = {}
         self.exx = None
@@ -160,11 +168,15 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     # DETAILS ---------------------------------------------------------------------------------------------------------
     def details_update(self, details: Dict[str, Any]) -> None:
+        self.LOGGER.debug("")
+
         self.details.update(details)
         # self.signals.signal__tc_state_changed.emit(self)
 
     # =================================================================================================================
     def info_pretty(self) -> str:
+        self.LOGGER.debug("")
+
         # fixme: ref from info_get
         result = ""
 
@@ -205,6 +217,8 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     # =================================================================================================================
     def get__results(self) -> ModelTcInstResult:
+        self.LOGGER.debug("")
+
         result = {
             **self.get__info().dict(),
 
@@ -230,6 +244,8 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     # =================================================================================================================
     def terminate(self) -> None:
+        self.LOGGER.debug("")
+
         super().terminate()
 
         progress = self.progress
@@ -245,7 +261,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     # =================================================================================================================
     def run(self) -> None:
-        # self.LOGGER.debug("run clear")
+        self.LOGGER.debug("run")
 
         # PREPARE --------
         self.clear()
@@ -253,15 +269,15 @@ class TestCaseBase(_TestCaseBase, QThread):
             return
 
         # WORK --------
-        # self.LOGGER.debug("run startup")
+        self.LOGGER.debug("run-startup")
         if self.startup():
             try:
-                # self.LOGGER.debug("run run_wrapped")
+                self.LOGGER.debug("run-run_wrapped START")
                 self.result = self.run_wrapped()
-                # self.LOGGER.debug(f"{self.result=}")
+                self.LOGGER.debug(f"run-run_wrapped FINISHED WITH {self.result=}")
             except Exception as exx:
                 self.exx = exx
-        # self.LOGGER.debug("run teardown")
+        self.LOGGER.debug("run-teardown")
         self.teardown()
 
     @classmethod
@@ -272,13 +288,18 @@ class TestCaseBase(_TestCaseBase, QThread):
         # if not cls.DEVICES__CLS.LIST__DUT:
         #     return
 
+        print(f"run__cls=START={cls.NAME=}={'='*50}")
         if cls.SKIP:
+            print(f"run__cls=SKIP={cls.NAME=}={'='*50}")
             return
 
         # ---------------------------------
+        print(f"run__cls=clear__cls")
         cls.clear__cls()
 
+        print(f"run__cls=startup__cls")
         cls.result__cls_startup = cls.startup__cls()
+        print(f"run__cls={cls.result__cls_startup=}")
         if not cls.result__cls_startup:
             return
 
@@ -287,16 +308,21 @@ class TestCaseBase(_TestCaseBase, QThread):
             if tc_inst.skip_tc_dut:
                 continue
 
+            print(f"run__cls=tc_inst.start({tc_inst.INDEX=})")
             tc_inst.start()
             if not cls.ASYNC:
+                print(f"run__cls=tc_inst.wait({tc_inst.INDEX=})inONEBYONE")
                 tc_inst.wait()
 
         # FINISH --------------------------
         if cls.ASYNC:
             for tc_inst in cls.TCS__INST:
+                print(f"run__cls=tc_inst.wait({tc_inst.INDEX=})inPARALLEL")
                 tc_inst.wait()
 
+        print(f"run__cls=teardown__cls")
         cls.teardown__cls()
+        print(f"run__cls=FINISH={cls.NAME=}={'='*50}")
 
     # REDEFINE ========================================================================================================
     pass
@@ -314,10 +340,12 @@ class TestCaseBase(_TestCaseBase, QThread):
         return True
 
     def startup(self) -> bool:
+        self.LOGGER.debug("")
         self.progress = 1
         return True
 
     def teardown(self):
+        self.LOGGER.debug("")
         self.progress = 100
 
     @classmethod
