@@ -254,7 +254,10 @@ class TestCaseBase(_TestCaseBase, QThread):
     @classmethod
     def terminate__cls(cls) -> None:
         for tc_inst in cls.TCS__INST:
-            tc_inst.terminate()
+            try:
+                tc_inst.terminate()
+            except:
+                pass
 
         cls.teardown__cls()
 
