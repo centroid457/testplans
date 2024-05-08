@@ -239,13 +239,11 @@ class TpMultyDutBase(Logger, QThread):
         if self.tp__check_active():
             return
 
-        if not self.tp__startup():
-            return
-
-        for step, tc in enumerate(self.TCS__CLS, start=1):
-            self.progress = int(step / len(self.TCS__CLS) * 100) - 1
-            self.tc_active = tc
-            tc.run__cls()
+        if self.tp__startup():
+            for step, tc in enumerate(self.TCS__CLS, start=1):
+                self.progress = int(step / len(self.TCS__CLS) * 100) - 1
+                self.tc_active = tc
+                tc.run__cls()
 
         # FINISH TP ---------------------------------------------------
         self.tp__teardown()

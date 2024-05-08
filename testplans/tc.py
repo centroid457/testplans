@@ -302,26 +302,25 @@ class TestCaseBase(_TestCaseBase, QThread):
         print(f"run__cls=startup__cls")
         cls.result__cls_startup = cls.startup__cls()
         print(f"run__cls={cls.result__cls_startup=}")
-        if not cls.result__cls_startup:
-            return
-
-        # BATCH --------------------------
-        for tc_inst in cls.TCS__INST:
-            if tc_inst.skip_tc_dut:
-                continue
-
-            print(f"run__cls=tc_inst.start({tc_inst.INDEX=})")
-            tc_inst.start()
-            if not cls.ASYNC:
-                print(f"run__cls=tc_inst.wait({tc_inst.INDEX=})inONEBYONE")
-                tc_inst.wait()
-
-        # FINISH --------------------------
-        if cls.ASYNC:
+        if cls.result__cls_startup:
+            # BATCH --------------------------
             for tc_inst in cls.TCS__INST:
-                print(f"run__cls=tc_inst.wait({tc_inst.INDEX=})inPARALLEL")
-                tc_inst.wait()
+                if tc_inst.skip_tc_dut:
+                    continue
 
+                print(f"run__cls=tc_inst.start({tc_inst.INDEX=})")
+                tc_inst.start()
+                if not cls.ASYNC:
+                    print(f"run__cls=tc_inst.wait({tc_inst.INDEX=})inONEBYONE")
+                    tc_inst.wait()
+
+            # WAIT --------------------------
+            if cls.ASYNC:
+                for tc_inst in cls.TCS__INST:
+                    print(f"run__cls=tc_inst.wait({tc_inst.INDEX=})inPARALLEL")
+                    tc_inst.wait()
+
+        # FINISH -------------------------------------------------
         print(f"run__cls=teardown__cls")
         cls.teardown__cls()
         print(f"run__cls=FINISH={cls.NAME=}={'='*50}")
