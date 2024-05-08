@@ -64,7 +64,6 @@ class TestCaseBase(_TestCaseBase, QThread):
     # def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
     def __init__(self, index: int = 0):
         super().__init__()
-
         self.LOGGER.debug("init tc")
 
         self.INDEX = index
