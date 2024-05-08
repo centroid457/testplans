@@ -3,7 +3,7 @@ from testplans import TestCaseBase
 
 import DEVICES
 
-class TestCase(TestCaseBase):
+class TestCase123(TestCaseBase):
     ASYNC = False
     DESCRIPTION = "startupCls=False"
 

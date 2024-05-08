@@ -255,7 +255,8 @@ class TestCaseBase(_TestCaseBase, QThread):
     def terminate__cls(cls) -> None:
         for tc_inst in cls.TCS__INST:
             try:
-                tc_inst.terminate()
+                if tc_inst.isRunning() and not tc_inst.isFinished():
+                    tc_inst.terminate()
             except:
                 pass
 

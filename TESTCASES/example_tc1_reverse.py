@@ -3,7 +3,7 @@ from testplans import TestCaseBase
 from . import example_tc1_direct
 
 
-class TestCase(example_tc1_direct.TestCase):
+class TestCase123(example_tc1_direct.TestCase):
     ASYNC = True
     DESCRIPTION = "reverse1"
 
