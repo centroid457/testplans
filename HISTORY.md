@@ -15,6 +15,13 @@
 ********************************************************************************
 ## NEWS
 
+0.2.12 (2024/05/13 18:05:56)
+------------------------------
+- [tc]:  
+	- fix timestamp  
+	- add result__cls_teardown + apply in gui  
+	- add startup__cls__wrapped/teardown*rename all to *__wrapped  
+
 0.2.11 (2024/05/13 17:10:38)
 ------------------------------
 - [models] zero fix  
@@ -22,7 +29,7 @@
 
 0.2.10 (2024/05/08 15:16:53)
 ------------------------------
-- [tc+tcs] zero ref + hide all Р•РЎР« С€С‚ examples except one!  
+- [tc+tcs] zero ref + hide all Р вЂўР РЋР В« РЎв‚¬РЎвЂљ examples except one!  
 
 0.2.9 (2024/05/08 13:43:50)
 ------------------------------
