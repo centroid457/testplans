@@ -31,7 +31,7 @@ class Signals(SignalsTemplate):
 
 # =====================================================================================================================
 class TestCaseBase(_TestCaseBase, QThread):
-    LOG_ENABLE = True
+    LOG_ENABLE = False
     LOG_USE_FILE = False
 
     # SETTINGS ------------------------------------
@@ -56,6 +56,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     result__cls_startup: Optional[bool] = None
     __result: Optional[bool]
+    _timestamp: float = None
     details: Dict[str, Any]
     exx: Optional[Exception]
     progress: int
@@ -105,6 +106,20 @@ class TestCaseBase(_TestCaseBase, QThread):
         but recommended to use from DEVICES__BY_INDEX! - # TODO: solve it!!!
         """
         return self.DEVICES__BY_INDEX.DUT
+
+    @property
+    def timestamp(self) -> float | None:
+        """
+        None - not even started
+        float - was started!
+            stable - finished
+            UnStable - in progress (active thread)
+        """
+        if self._timestamp:
+            return self._timestamp
+
+        if self.isRunning():
+            return time.time()
 
     # =================================================================================================================
     @classmethod
@@ -223,7 +238,7 @@ class TestCaseBase(_TestCaseBase, QThread):
             **self.DUT.get__info().dict(),
 
             # RESULTS
-            "tc_timestamp": time.time(),
+            "tc_timestamp": self.timestamp,
             "tc_active": self.isRunning(),
             "tc_progress": self.progress,
             "tc_result": self.result,
@@ -345,6 +360,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     def teardown(self):
         self.LOGGER.debug("")
+        self._timestamp = time.time()
         self.progress = 100
 
     @classmethod

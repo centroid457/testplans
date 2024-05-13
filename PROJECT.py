@@ -105,7 +105,11 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "[tc+tcs] zero ref + hide all ЕСЫ шт examples except one!",
+
+
+
+        "[models] zero fix",
+        "[tc] add timestamp",
     ]
 
     # FINALIZE -----------------------------------------------
