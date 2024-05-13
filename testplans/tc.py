@@ -56,7 +56,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     result__cls_startup: Optional[bool] = None
     __result: Optional[bool]
-    _timestamp: float = None
+    __timestamp: float | None = None
     details: Dict[str, Any]
     exx: Optional[Exception]
     progress: int
@@ -115,8 +115,8 @@ class TestCaseBase(_TestCaseBase, QThread):
             stable - finished
             UnStable - in progress (active thread)
         """
-        if self._timestamp:
-            return self._timestamp
+        if self.__timestamp:
+            return self.__timestamp
 
         if self.isRunning():
             return time.time()
@@ -141,6 +141,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     def clear(self) -> None:
         self.LOGGER.debug("clear")
 
+        self.__timestamp = None
         self.result = None
         self.details = {}
         self.exx = None
@@ -360,7 +361,7 @@ class TestCaseBase(_TestCaseBase, QThread):
 
     def teardown(self):
         self.LOGGER.debug("")
-        self._timestamp = time.time()
+        self.__timestamp = time.time()
         self.progress = 100
 
     @classmethod
