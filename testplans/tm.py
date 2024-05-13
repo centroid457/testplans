@@ -25,6 +25,7 @@ class TpTableModel(TableModelTemplate):
             ASYNC = 1
             STARTUP = 2
             DUTS = NamesIndexed_Templated(3, self.DATA.DEVICES__CLS.COUNT)
+            TEARDOWN = 3 + self.DATA.DEVICES__CLS.COUNT
             # FIXME: need resolve COUNT over DevicesIndexed!!!
 
         self.HEADERS = Headers()
@@ -95,6 +96,13 @@ class TpTableModel(TableModelTemplate):
                         return ""
                     else:
                         return f'{tc_inst.result}'
+            if col == self.HEADERS.TEARDOWN:
+                if tc.result__cls_teardown is True:
+                    return '+'
+                elif tc.result__cls_teardown is False:
+                    return '-'
+                else:
+                    return
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.TextAlignmentRole:
@@ -150,6 +158,11 @@ class TpTableModel(TableModelTemplate):
                     return QColor("#FF5050")
                 if tc_inst.progress > 0:
                     return QColor("#FFFF50")
+            if col == self.HEADERS.TEARDOWN:
+                if tc.result__cls_teardown is True:
+                    return QColor("#50FF50")
+                if tc.result__cls_teardown is False:
+                    return QColor("#FF5050")
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:

@@ -110,7 +110,7 @@ designed to apply testplan for several DUTs
 
         ["[tc]",
             "fix timestamp",
-            "add result__cls_teardown",
+            "add result__cls_teardown + apply in gui",
             "add startup__cls__wrapped/teardown*"
             "rename all to *__wrapped",
          ]
