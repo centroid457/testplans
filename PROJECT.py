@@ -105,8 +105,15 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "[models] zero fix",
-        "[tc] add timestamp",
+
+
+
+        ["[tc]",
+            "fix timestamp",
+            "add result__cls_teardown",
+            "add startup__cls__wrapped/teardown*"
+            "rename all to *__wrapped",
+         ]
     ]
 
     # FINALIZE -----------------------------------------------

@@ -55,6 +55,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     INDEX: int = 0
 
     result__cls_startup: Optional[bool] = None
+    result__cls_teardown: Optional[bool] = None
     __result: Optional[bool]
     __timestamp: float | None = None
     details: Dict[str, Any]
@@ -150,6 +151,7 @@ class TestCaseBase(_TestCaseBase, QThread):
     @classmethod
     def clear__cls(cls):
         cls.result__cls_startup = None
+        cls.result__cls_teardown = None
         # for tc in cls.TCS__INST:
         #     tc.clear()
 
@@ -289,7 +291,7 @@ class TestCaseBase(_TestCaseBase, QThread):
         if self.startup():
             try:
                 self.LOGGER.debug("run-run_wrapped START")
-                self.result = self.run_wrapped()
+                self.result = self.run__wrapped()
                 self.LOGGER.debug(f"run-run_wrapped FINISHED WITH {self.result=}")
             except Exception as exx:
                 self.exx = exx
@@ -310,13 +312,7 @@ class TestCaseBase(_TestCaseBase, QThread):
             return
 
         # ---------------------------------
-        print(f"run__cls=clear__cls")
-        cls.clear__cls()
-
-        print(f"run__cls=startup__cls")
-        cls.result__cls_startup = cls.startup__cls()
-        print(f"run__cls={cls.result__cls_startup=}")
-        if cls.result__cls_startup:
+        if cls.startup__cls():
             # BATCH --------------------------
             for tc_inst in cls.TCS__INST:
                 if tc_inst.skip_tc_dut:
@@ -335,9 +331,43 @@ class TestCaseBase(_TestCaseBase, QThread):
                     tc_inst.wait()
 
         # FINISH -------------------------------------------------
-        print(f"run__cls=teardown__cls")
         cls.teardown__cls()
         print(f"run__cls=FINISH={cls.NAME=}={'='*50}")
+
+    # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
+    @classmethod
+    def startup__cls(cls) -> bool:
+        """before batch work
+        """
+        print(f"startup__cls")
+        cls.clear__cls()
+
+        result = cls.startup__cls__wrapped()
+        print(f"result__cls_startup={result}")
+        cls.result__cls_startup = result
+        return result
+
+    def startup(self) -> bool:
+        self.LOGGER.debug("")
+        self.progress = 1
+        return self.startup__wrapped()
+
+    def teardown(self) -> None:
+        self.LOGGER.debug("")
+        self.__timestamp = time.time()
+        self.progress = 99
+        self.teardown__wrapped()
+        self.progress = 100
+
+    @classmethod
+    def teardown__cls(cls) -> bool:
+        print(f"run__cls=teardown__cls")
+        result = cls.teardown__cls__wrapped()
+        if not result:
+            print(f"[FAIL] teardown__cls {cls.NAME}")
+
+        cls.result__cls_teardown = result
+        return result
 
     # REDEFINE ========================================================================================================
     pass
@@ -347,30 +377,22 @@ class TestCaseBase(_TestCaseBase, QThread):
     pass
     pass
 
-    # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
     @classmethod
-    def startup__cls(cls) -> bool:
-        """before batch work
-        """
+    def startup__cls__wrapped(cls) -> bool:
         return True
 
-    def startup(self) -> bool:
-        self.LOGGER.debug("")
-        self.progress = 1
+    def startup__wrapped(cls) -> bool:
         return True
 
-    def teardown(self):
-        self.LOGGER.debug("")
-        self.__timestamp = time.time()
-        self.progress = 100
+    def run__wrapped(self) -> bool:
+        return True
+
+    def teardown__wrapped(cls) -> None:
+        return None
 
     @classmethod
-    def teardown__cls(cls):
-        pass
-
-    # RUN -------------------------------------------------------------------------------------------------------------
-    def run_wrapped(self) -> bool:
-        pass
+    def teardown__cls__wrapped(cls) -> bool:
+        return True
 
 
 # =====================================================================================================================

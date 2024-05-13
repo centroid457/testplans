@@ -17,14 +17,14 @@ class Dut1(DutBase):
 # -------------------------------------------
 class Tc1(TestCaseBase):
     TIME_SLEEP: float = 0.2
-    def run_wrapped(self) -> bool:
+    def run__wrapped(self) -> bool:
         time.sleep(self.TIME_SLEEP)
         return self.DUT.VALUE
 
 
 class Tc1_reverse(TestCaseBase):
-    def run_wrapped(self) -> bool:
-        return not super().run_wrapped()
+    def run__wrapped(self) -> bool:
+        return not super().run__wrapped()
 
 
 # -------------------------------------------
