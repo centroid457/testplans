@@ -3,62 +3,61 @@ from pydantic import BaseModel
 
 
 # =====================================================================================================================
-class ModelStand(BaseModel):
-    name: str           # "StandPSU"
-    description: str    # "test PSU for QCD"
-    sn: str
-    settings: dict[str, Any] = {}
+TYPES__DICT = dict[str, Union[None, str, bool, int, float, dict, list]]
 
 
-class ModelDevice(BaseModel):
-    name: str           # "PSU"
-    description: str    # "Power Supply Unit"
-    sn: str
+# =====================================================================================================================
+class ModelStandInfo(BaseModel):
+    STAND_NAME: str           # "StandPSU"
+    STAND_DESCRIPTION: str    # "test PSU for QCD"
+    STAND_SN: str
+    STAND_SETTINGS: TYPES__DICT = {}     # main settings for all TCS
 
-    index: int          # device position in stand???
+
+class ModelDeviceInfo(BaseModel):
+    DUT_INDEX: int          # device position in stand
+
+    DUT_NAME: str           # "PSU"
+    DUT_DESCRIPTION: str    # "Power Supply Unit"
+    DUT_SN: str
 
 
-class ModelTcClsInfo(BaseModel):
-    name: str
-    description: str
+class ModelTcInfo(BaseModel):
+    TC_NAME: str
+    TC_DESCRIPTION: str
 
-    is_async: bool = False
-    is_skipped: bool = False
+    TC_ASYNC: bool
+    TC_SKIP: bool
 
-    settings: dict[str, Union[None, str, bool, int, float, dict, list]] = {
+    TC_SETTINGS: TYPES__DICT = {
         # CONTENT IS NOT SPECIFIED!
         # "ANY_1": Any,
     }
 
-class ModelTcInstResult(ModelTcClsInfo):
-    DEVICE: ModelDevice
 
-    timestamp: float | None = None
-    is_active: bool = False
-    is_async: bool = False
-    is_skipped: bool = False
+class ModelTcResult(BaseModel):
+    tc_timestamp: float | None = None
 
-    progress: int = 0
-    result: bool | None = None
-
-    details: dict[str, Any] = {
+    tc_active: bool = False
+    tc_progress: int = 0
+    tc_result: bool | None = None
+    tc_details: TYPES__DICT = {
         # CONTENT IS NOT SPECIFIED!
         # "ANY_2": Any,
     }
 
 
-class ModelSendResult(ModelTcInstResult):
-    STAND: ModelStand
+# =====================================================================================================================
+class ModelTcResultFull(ModelTcResult, ModelTcInfo, ModelDeviceInfo):
+    pass
 
 
-class ModelTpInfo(BaseModel):
-    STAND: ModelStand
-    TESTCASES: List[ModelTcClsInfo]
+class ModelTpInfo(ModelStandInfo):
+    TESTCASES: list[ModelTcInfo]
 
 
-class ModelTpResults(BaseModel):
-    STAND: ModelStand
-    TESTCASES: list[list[ModelTcInstResult]]
+class ModelTpResults(ModelStandInfo):
+    TESTCASES: list[list[ModelTcResultFull]]
 
 
 # =====================================================================================================================

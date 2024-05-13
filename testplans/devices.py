@@ -57,14 +57,15 @@ class DeviceBase:
         """
         pass
 
-    def get__info(self) -> ModelDevice:
+    def get__info(self) -> ModelDeviceInfo:
         result = {
-            "name": self.NAME or self.__class__.__name__,
-            "description": self.DESCRIPTION or self.__class__.__name__,
-            "index": self.INDEX,
-            "sn": self.SN or "",
+            "DUT_INDEX": self.INDEX,
+
+            "DUT_NAME": self.NAME or self.__class__.__name__,
+            "DUT_DESCRIPTION": self.DESCRIPTION or self.__class__.__name__,
+            "DUT_SN": self.SN or "",
         }
-        return ModelDevice(**result)
+        return ModelDeviceInfo(**result)
 
     # UNIQUE ==========================================================================================================
     pass

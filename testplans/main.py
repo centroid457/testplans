@@ -250,14 +250,14 @@ class TpMultyDutBase(Logger, QThread):
         self.LOGGER.debug("TP FINISH")
 
     # =================================================================================================================
-    def get__info__stand(self) -> ModelStand:
+    def get__info__stand(self) -> ModelStandInfo:
         result = {
-            "name": self.STAND_NAME,
-            "description": self.STAND_DESCRIPTION,
-            "sn": self.STAND_SN,
-            "settings": TestCaseBase.settings_read(files=self.SETTINGS_BASE_FILEPATH),
+            "STAND_NAME": self.STAND_NAME,
+            "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
+            "STAND_SN": self.STAND_SN,
+            "STAND_SETTINGS": TestCaseBase.settings_read(files=self.SETTINGS_BASE_FILEPATH),
         }
-        return ModelStand(**result)
+        return ModelStandInfo(**result)
 
     def get__info(self) -> ModelTpInfo:
         """
@@ -268,7 +268,8 @@ class TpMultyDutBase(Logger, QThread):
             TP_TCS.append(tc.get__info())
 
         result = {
-            "STAND": self.get__info__stand(),
+            **self.get__info__stand().dict(),
+
             "TESTCASES": TP_TCS,
             # "TP_DUTS": [],      # TODO: decide how to use
             # [
@@ -292,7 +293,7 @@ class TpMultyDutBase(Logger, QThread):
             TCS_RESULTS.append(tc.results_get_all())
 
         result = {
-            "STAND": self.get__info__stand(),
+            **self.get__info__stand().dict(),
             "TESTCASES": TCS_RESULTS,
             }
         return ModelTpResults(**result)

@@ -200,39 +200,36 @@ class TestCaseBase(_TestCaseBase, QThread):
         return result
 
     @classmethod
-    def get__info(cls) -> ModelTcClsInfo:
+    def get__info(cls) -> ModelTcInfo:
         """
         get info/structure about TcCls
         """
         result = {
-            "name": cls.NAME,
-            "description": cls.DESCRIPTION,
-            "is_async": cls.ASYNC,
-            "is_skipped": cls.SKIP,
-            "settings": cls.settings_read(),
+            "TC_NAME": cls.NAME,
+            "TC_DESCRIPTION": cls.DESCRIPTION,
+            "TC_ASYNC": cls.ASYNC,
+            "TC_SKIP": cls.SKIP,
+            "TC_SETTINGS": cls.settings_read(),
         }
 
-        return ModelTcClsInfo(**result)
+        return ModelTcInfo(**result)
 
     # =================================================================================================================
-    def get__results(self) -> ModelTcInstResult:
+    def get__results(self) -> ModelTcResultFull:
         self.LOGGER.debug("")
 
         result = {
             **self.get__info().dict(),
-
-            "DEVICE": self.DUT.get__info(),
+            **self.DUT.get__info().dict(),
 
             # RESULTS
-            "is_active": self.isRunning(),
-            "is_async": self.ASYNC,
-            "is_skipped": self.SKIP,
-
-            "progress": self.progress,
-            "result": self.result,
-            "details": self.details,
+            "tc_timestamp": time.time(),
+            "tc_active": self.isRunning(),
+            "tc_progress": self.progress,
+            "tc_result": self.result,
+            "tc_details": self.details,
         }
-        return ModelTcInstResult(**result)
+        return ModelTcResultFull(**result)
 
     @classmethod
     def results_get_all(cls) -> List[Dict[str, Any]]:
