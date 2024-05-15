@@ -149,7 +149,7 @@ class TpGuiBase(Gui):
         row = index.row()
         col = index.column()
 
-        if col < self.TM.HEADERS.DUTS.START_OUTER:
+        if col < self.TM.HEADERS.DUTS.START_OUTER or col >= (self.TM.HEADERS.DUTS.START_OUTER + self.TM.HEADERS.DUTS.COUNT):
             return
 
         tc = list(self.DATA.TCS__CLS)[row]
