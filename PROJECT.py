@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 2, 12)
+    VERSION: Tuple[int, int, int] = (0, 2, 13)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,12 +105,8 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        ["[tc]",
-            "fix timestamp",
-            "add result__cls_teardown + apply in gui",
-            "add startup__cls__wrapped/teardown*"
-            "rename all to *__wrapped",
-         ]
+        "[TC] separate Info",
+        "[GUI] fix click on TEARDOWN",
     ]
 
     # FINALIZE -----------------------------------------------
