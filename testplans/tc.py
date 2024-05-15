@@ -14,7 +14,7 @@ from logger_aux import Logger
 
 
 # =====================================================================================================================
-class _TestCaseBase(Logger):
+class _TestCaseBase0(Logger):
     # just to use in Signals before defining exact
     pass
 
@@ -26,11 +26,11 @@ class _TestCaseBase(Logger):
 
 # =====================================================================================================================
 class Signals(SignalsTemplate):
-    signal__tc_state_changed = pyqtSignal(_TestCaseBase)
+    signal__tc_state_changed = pyqtSignal(_TestCaseBase0)
 
 
 # =====================================================================================================================
-class TestCaseBase(_TestCaseBase, QThread):
+class _TestCaseBase(_TestCaseBase0, QThread):
     LOG_ENABLE = False
     LOG_USE_FILE = False
 
@@ -191,72 +191,6 @@ class TestCaseBase(_TestCaseBase, QThread):
         # self.signals.signal__tc_state_changed.emit(self)
 
     # =================================================================================================================
-    def info_pretty(self) -> str:
-        self.LOGGER.debug("")
-
-        # fixme: ref from info_get
-        result = ""
-
-        result += f"NAME={self.NAME}\n"
-        result += f"DESCRIPTION={self.DESCRIPTION}\n"
-        result += f"SKIP={self.SKIP}\n"
-        result += f"skip_tc_dut={self.skip_tc_dut}\n"
-        result += f"ASYNC={self.ASYNC}\n"
-        result += f"INDEX={self.INDEX}\n"
-        result += f"result={self.result}\n"
-        result += f"progress={self.progress}\n"
-        result += f"exx={self.exx}\n"
-
-        result += f"SETTINGS=====================\n"
-        if self.SETTINGS:
-            for name, value in self.SETTINGS.dict.items():
-                result += f"{name}: {value}\n"
-
-        result += f"details=====================\n"
-        for name, value in self.details.items():
-            result += f"{name}: {value}\n"
-        return result
-
-    @classmethod
-    def get__info(cls) -> ModelTcInfo:
-        """
-        get info/structure about TcCls
-        """
-        result = {
-            "TC_NAME": cls.NAME,
-            "TC_DESCRIPTION": cls.DESCRIPTION,
-            "TC_ASYNC": cls.ASYNC,
-            "TC_SKIP": cls.SKIP,
-            "TC_SETTINGS": cls.settings_read(),
-        }
-
-        return ModelTcInfo(**result)
-
-    # =================================================================================================================
-    def get__results(self) -> ModelTcResultFull:
-        self.LOGGER.debug("")
-
-        result = {
-            **self.get__info().dict(),
-            **self.DUT.get__info().dict(),
-
-            # RESULTS
-            "tc_timestamp": self.timestamp,
-            "tc_active": self.isRunning(),
-            "tc_progress": self.progress,
-            "tc_result": self.result,
-            "tc_details": self.details,
-        }
-        return ModelTcResultFull(**result)
-
-    @classmethod
-    def results_get_all(cls) -> List[Dict[str, Any]]:
-        results = []
-        for tc_inst in cls.TCS__INST:
-            results.append(tc_inst.get__results().dict())
-        return results
-
-    # =================================================================================================================
     def terminate(self) -> None:
         self.LOGGER.debug("")
 
@@ -393,6 +327,82 @@ class TestCaseBase(_TestCaseBase, QThread):
     @classmethod
     def teardown__cls__wrapped(cls) -> bool:
         return True
+
+
+# =====================================================================================================================
+class Info(_TestCaseBase):
+    """
+    separated class for gen results/info by models!
+    """
+    # =================================================================================================================
+    def info_pretty(self) -> str:
+        self.LOGGER.debug("")
+
+        # fixme: ref from info_get
+        result = ""
+
+        result += f"NAME={self.NAME}\n"
+        result += f"DESCRIPTION={self.DESCRIPTION}\n"
+        result += f"SKIP={self.SKIP}\n"
+        result += f"skip_tc_dut={self.skip_tc_dut}\n"
+        result += f"ASYNC={self.ASYNC}\n"
+        result += f"INDEX={self.INDEX}\n"
+        result += f"result={self.result}\n"
+        result += f"progress={self.progress}\n"
+        result += f"exx={self.exx}\n"
+
+        result += f"SETTINGS=====================\n"
+        if self.SETTINGS:
+            for name, value in self.SETTINGS.dict.items():
+                result += f"{name}: {value}\n"
+
+        result += f"details=====================\n"
+        for name, value in self.details.items():
+            result += f"{name}: {value}\n"
+        return result
+
+    @classmethod
+    def get__info(cls) -> ModelTcInfo:
+        """
+        get info/structure about TcCls
+        """
+        result = {
+            "TC_NAME": cls.NAME,
+            "TC_DESCRIPTION": cls.DESCRIPTION,
+            "TC_ASYNC": cls.ASYNC,
+            "TC_SKIP": cls.SKIP,
+            "TC_SETTINGS": cls.settings_read(),
+        }
+
+        return ModelTcInfo(**result)
+
+    # =================================================================================================================
+    def get__results(self) -> ModelTcResultFull:
+        self.LOGGER.debug("")
+
+        result = {
+            **self.get__info().dict(),
+            **self.DUT.get__info().dict(),
+
+            # RESULTS
+            "tc_timestamp": self.timestamp,
+            "tc_active": self.isRunning(),
+            "tc_progress": self.progress,
+            "tc_result": self.result,
+            "tc_details": self.details,
+        }
+        return ModelTcResultFull(**result)
+
+    @classmethod
+    def results__get_all(cls) -> List[Dict[str, Any]]:
+        results = []
+        for tc_inst in cls.TCS__INST:
+            results.append(tc_inst.get__results().dict())
+        return results
+
+class TestCaseBase(Info):
+    """
+    """
 
 
 # =====================================================================================================================
