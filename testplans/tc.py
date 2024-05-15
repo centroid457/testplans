@@ -341,15 +341,15 @@ class Info(_TestCaseBase):
         # fixme: ref from info_get
         result = ""
 
-        result += f"NAME={self.NAME}\n"
-        result += f"DESCRIPTION={self.DESCRIPTION}\n"
-        result += f"SKIP={self.SKIP}\n"
-        result += f"skip_tc_dut={self.skip_tc_dut}\n"
-        result += f"ASYNC={self.ASYNC}\n"
-        result += f"INDEX={self.INDEX}\n"
-        result += f"result={self.result}\n"
-        result += f"progress={self.progress}\n"
-        result += f"exx={self.exx}\n"
+        result += f"DUT_INDEX={self.INDEX}\n"
+        result += f"TC_NAME={self.NAME}\n"
+        result += f"TC_DESCRIPTION={self.DESCRIPTION}\n"
+        result += f"TC_SKIP={self.SKIP}\n"
+        result += f"tc_skip_dut={self.skip_tc_dut}\n"
+        result += f"TC_ASYNC={self.ASYNC}\n"
+        result += f"tc_result={self.result}\n"
+        result += f"tc_progress={self.progress}\n"
+        result += f"tc_exx={self.exx}\n"
 
         result += f"SETTINGS=====================\n"
         if self.SETTINGS:
