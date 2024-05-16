@@ -149,14 +149,17 @@ class TpGuiBase(Gui):
         row = index.row()
         col = index.column()
 
-        if col < self.TM.HEADERS.DUTS.START_OUTER or col >= (self.TM.HEADERS.DUTS.START_OUTER + self.TM.HEADERS.DUTS.COUNT):
-            return
-
         tc = list(self.DATA.TCS__CLS)[row]
-        dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.TM.HEADERS.DUTS.START_OUTER]
-        self.PTE.setPlainText(tc.TCS__INST[dut.INDEX].info_pretty())
 
-        # print(f"{row=}/{section=}/{dut=}/{tc=}")
+        if col == self.TM.HEADERS.STARTUP:
+            self.PTE.setPlainText(str(tc.result__cls_startup))
+
+        if col in self.TM.HEADERS.DUTS:
+            dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.TM.HEADERS.DUTS.START_OUTER]
+            self.PTE.setPlainText(tc.TCS__INST[dut.INDEX].info_pretty())
+
+        if col == self.TM.HEADERS.TEARDOWN:
+            self.PTE.setPlainText(str(tc.result__cls_teardown))
 
 
 # =====================================================================================================================

@@ -11,11 +11,11 @@ from private_values import PrivateJson
 from .models import *
 
 from logger_aux import Logger
-from funcs_aux import NamesIndexed_Base
+from funcs_aux import ResultExpect_Base
 
 
 # =====================================================================================================================
-TYPE__RESULT = Union[None, bool, NamesIndexed_Base]
+TYPE__RESULT = Union[None, bool, ResultExpect_Base]
 
 
 # =====================================================================================================================

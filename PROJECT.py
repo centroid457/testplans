@@ -105,7 +105,10 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "[TC] fix/add cls_clear on run_cls",
+
+
+
+        "[GUI] show result in PTE for TC_STARTUP/TEARDOWN",
     ]
 
     # FINALIZE -----------------------------------------------
