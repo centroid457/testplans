@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from pyqt_templates import TableModelTemplate
-from funcs_aux import NamesIndexed_Base, NamesIndexed_Templated
+from funcs_aux import NamesIndexed_Base, NamesIndexed_Templated, ResultExpect_Base
 
 # from .tp import TpMultyDutBase
 
@@ -84,12 +84,12 @@ class TpTableModel(TableModelTemplate):
             if col == self.HEADERS.ASYNC:
                 return '+' if tc.ASYNC else '-'
             if col == self.HEADERS.STARTUP:
-                if tc.result__cls_startup is True:
-                    return '+'
-                elif tc.result__cls_startup is False:
-                    return '-'
-                else:
+                if tc.result__cls_startup is None:
                     return
+                elif bool(tc.result__cls_startup) is True:
+                    return '+'
+                elif bool(tc.result__cls_startup) is False:
+                    return '-'
             if col in self.HEADERS.DUTS:
                 if tc_inst:
                     if tc_inst.result is None:
@@ -97,12 +97,12 @@ class TpTableModel(TableModelTemplate):
                     else:
                         return f'{tc_inst.result}'
             if col == self.HEADERS.TEARDOWN:
-                if tc.result__cls_teardown is True:
-                    return '+'
-                elif tc.result__cls_teardown is False:
-                    return '-'
-                else:
+                if tc.result__cls_teardown is None:
                     return
+                elif bool(tc.result__cls_teardown) is True:
+                    return '+'
+                elif bool(tc.result__cls_teardown) is False:
+                    return '-'
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.TextAlignmentRole:
@@ -145,23 +145,31 @@ class TpTableModel(TableModelTemplate):
             if tc.SKIP:
                 return QColor('#e2e2e2')
             if col == self.HEADERS.STARTUP:
-                if tc.result__cls_startup is True:
+                if tc.result__cls_startup is None:
+                    return
+                elif bool(tc.result__cls_startup) is True:
                     return QColor("#50FF50")
-                if tc.result__cls_startup is False:
+                elif bool(tc.result__cls_startup) is False:
                     return QColor("#FF5050")
             if col in self.HEADERS.DUTS:
                 if tc_inst.skip_tc_dut or not dut.connect() or dut.SKIP:
                     return QColor('#e2e2e2')
-                if tc_inst.result is True:
-                    return QColor("#00FF00")
-                if tc_inst.result is False:
-                    return QColor("#FF5050")
-                if tc_inst.progress > 0:
+                elif tc_inst.isRunning():
                     return QColor("#FFFF50")
+                elif bool(tc_inst.result) is True:
+                    return QColor("#00FF00")
+                elif bool(tc_inst.result) is False:
+                    if tc_inst.result is None:
+                        return
+                    else:
+                        return QColor("#FF5050")
+                # elif
             if col == self.HEADERS.TEARDOWN:
-                if tc.result__cls_teardown is True:
+                if tc.result__cls_teardown is None:
+                    return
+                elif bool(tc.result__cls_teardown) is True:
                     return QColor("#50FF50")
-                if tc.result__cls_teardown is False:
+                elif bool(tc.result__cls_teardown) is False:
                     return QColor("#FF5050")
 
         # -------------------------------------------------------------------------------------------------------------
@@ -172,12 +180,12 @@ class TpTableModel(TableModelTemplate):
                         return Qt.Unchecked
                     else:
                         return Qt.Checked
-                if col == self.HEADERS.ASYNC:
+                elif col == self.HEADERS.ASYNC:
                     if tc.ASYNC:
                         return Qt.Checked
                     else:
                         return Qt.Unchecked
-                if col in self.HEADERS.DUTS:
+                elif col in self.HEADERS.DUTS:
                     if not tc_inst.SKIP and not dut.SKIP:
                         if tc_inst.skip_tc_dut:
                             return Qt.Unchecked
