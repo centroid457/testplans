@@ -11,6 +11,11 @@ from private_values import PrivateJson
 from .models import *
 
 from logger_aux import Logger
+from funcs_aux import NamesIndexed_Base
+
+
+# =====================================================================================================================
+TYPE__RESULT = Union[None, bool, NamesIndexed_Base]
 
 
 # =====================================================================================================================
@@ -163,11 +168,11 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     # RESULT ----------------------------------------------------------------------------------------------------------
     @property
-    def result(self) -> Optional[bool]:
+    def result(self) -> TYPE__RESULT:
         return self.__result
 
     @result.setter
-    def result(self, value: Optional[bool]) -> None:
+    def result(self, value: TYPE__RESULT) -> None:
         self.__result = value
         self.signals.signal__tc_state_changed.emit(self)
 
@@ -270,7 +275,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
     @classmethod
-    def startup__cls(cls) -> bool:
+    def startup__cls(cls) -> TYPE__RESULT:
         """before batch work
         """
         print(f"startup__cls")
@@ -281,12 +286,12 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         cls.result__cls_startup = result
         return result
 
-    def startup(self) -> bool:
+    def startup(self) -> TYPE__RESULT:
         self.LOGGER.debug("")
         self.progress = 1
         return self.startup__wrapped()
 
-    def teardown(self) -> bool:
+    def teardown(self) -> TYPE__RESULT:
         self.LOGGER.debug("")
         self.__timestamp = time.time()
         self.progress = 99
@@ -295,7 +300,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         return result
 
     @classmethod
-    def teardown__cls(cls) -> bool:
+    def teardown__cls(cls) -> TYPE__RESULT:
         print(f"run__cls=teardown__cls")
         result = cls.teardown__cls__wrapped()
         if not result:
@@ -313,20 +318,20 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     pass
 
     @classmethod
-    def startup__cls__wrapped(cls) -> bool:
+    def startup__cls__wrapped(cls) -> TYPE__RESULT:
         return True
 
-    def startup__wrapped(cls) -> bool:
+    def startup__wrapped(cls) -> TYPE__RESULT:
         return True
 
-    def run__wrapped(self) -> bool:
+    def run__wrapped(self) -> TYPE__RESULT:
         return True
 
-    def teardown__wrapped(cls) -> bool:
+    def teardown__wrapped(cls) -> TYPE__RESULT:
         return True
 
     @classmethod
-    def teardown__cls__wrapped(cls) -> bool:
+    def teardown__cls__wrapped(cls) -> TYPE__RESULT:
         return True
 
 
