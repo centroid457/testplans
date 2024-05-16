@@ -152,8 +152,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     def clear__cls(cls):
         cls.result__cls_startup = None
         cls.result__cls_teardown = None
-        # for tc in cls.TCS__INST:
-        #     tc.clear()
+        for tc in cls.TCS__INST:
+            tc.clear()
 
     # @classmethod
     # @property
@@ -286,12 +286,13 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         self.progress = 1
         return self.startup__wrapped()
 
-    def teardown(self) -> None:
+    def teardown(self) -> bool:
         self.LOGGER.debug("")
         self.__timestamp = time.time()
         self.progress = 99
-        self.teardown__wrapped()
+        result = self.teardown__wrapped()
         self.progress = 100
+        return result
 
     @classmethod
     def teardown__cls(cls) -> bool:
@@ -321,8 +322,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     def run__wrapped(self) -> bool:
         return True
 
-    def teardown__wrapped(cls) -> None:
-        return None
+    def teardown__wrapped(cls) -> bool:
+        return True
 
     @classmethod
     def teardown__cls__wrapped(cls) -> bool:
@@ -399,6 +400,7 @@ class Info(_TestCaseBase):
         for tc_inst in cls.TCS__INST:
             results.append(tc_inst.get__results().dict())
         return results
+
 
 class TestCaseBase(Info):
     """
