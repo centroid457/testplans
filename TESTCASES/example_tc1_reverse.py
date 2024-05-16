@@ -13,7 +13,7 @@ class TestCase(example_tc1_direct.TestCase):
     def startup__cls__wrapped(cls) -> TYPE__RESULT:
         result_chain = ResultExpect_Chain(
             [
-                ResultExpect_Step(value=True, title="TRUE"),
+                ResultExpect_Step(value=True, value_as_func=False,  title="TRUE"),
                 ResultExpect_Step(value=False, title="FALSE"),
                 ResultExpect_Step(value=None, title="NONE"),
             ],
