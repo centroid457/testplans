@@ -130,7 +130,13 @@ class TpGuiBase(Gui):
         self.TM._data_reread()
 
     def TV_hh_sectionClicked(self, index: int) -> None:
-        if index > 1:
+        if index == self.TM.HEADERS.STARTUP:
+            pass
+
+        if index == self.TM.HEADERS.TEARDOWN:
+            pass
+
+        if index in self.TM.HEADERS.DUTS:
             dut = self.DATA.DEVICES__CLS.LIST__DUT[index - self.TM.HEADERS.DUTS.START_OUTER]
             dut._bebug__SKIP_reverse()
             self.TM._data_reread()
