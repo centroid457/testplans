@@ -394,7 +394,7 @@ class Info(_TestCaseBase):
             "tc_timestamp": self.timestamp,
             "tc_active": self.isRunning(),
             "tc_progress": self.progress,
-            "tc_result": self.result,
+            "tc_result": bool(self.result),
             "tc_details": self.details,
         }
         return ModelTcResultFull(**result)
