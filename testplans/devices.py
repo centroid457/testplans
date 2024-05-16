@@ -219,6 +219,7 @@ class DevicesIndexed_Base:
 # =====================================================================================================================
 class DevicesIndexed_WithDut(DevicesIndexed_Base):
     CLS_LIST__DUT: Type[DutBase] = DutBase
+
     LIST__DUT: List[DutBase]
     DUT: DutBase
 

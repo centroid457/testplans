@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 2, 17)
+    VERSION: Tuple[int, int, int] = (0, 2, 18)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -106,8 +106,7 @@ designed to apply testplan for several DUTs
     ]
     NEWS: List[str] = [
         ["[GUI]",
-            "show result as ResultChain/Step in PTE for TC_STARTUP/TEARDOWN/DUT",
-            "fix tapping mouse on HEADER in Settings mode!",
+            "apply TM.HEADERS.DUTS.get_listed_index__by_outer",
          ]
     ]
 
