@@ -6,6 +6,15 @@ from .models import *
 
 
 # =====================================================================================================================
+TYPE__BREED_RESULT__ITEM = Union[Any, Exception]
+TYPE__BREED_RESULT__GROUP = Union[
+    TYPE__BREED_RESULT__ITEM,        # SINGLE variant
+    list[TYPE__BREED_RESULT__ITEM]   # LIST variant
+]
+TYPE__BREED_RESULT__GROUPS = dict[str, TYPE__BREED_RESULT__GROUP]
+
+
+# =====================================================================================================================
 class Exx__DevCantAccessIndex(Exception):
     pass
 
@@ -190,8 +199,13 @@ class ObjectListBreeder_Base:
                 cls._GROUPS.update({group_name: dev_instance})
 
     # -----------------------------------------------------------------------------------------------------------------
-    def call_meth_on_group(self, meth: str, group: str | None = None) -> None:
-        pass
+    def call_on_group(self, meth: str, group: str | None = None) -> Union[Any, list[Any], Dict[str, Union[Any, list[Any]]]]:
+        if group is None:
+            pass
+        else:
+            if self.check_exists__group__(group):
+                pass
+
 
 
 # =====================================================================================================================
