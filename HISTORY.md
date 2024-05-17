@@ -18,7 +18,7 @@
 0.2.19 (2024/05/17 13:34:10)
 ------------------------------
 - [ObjectListBreeder_Base] big ref:  
-	- add GroupType  
+	- add BreederGroupType  
 	- add group_get__type/group_check__exists/group_get__objects  
 
 0.2.18 (2024/05/16 18:51:05)

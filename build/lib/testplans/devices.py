@@ -16,11 +16,11 @@ TYPE__BREED_RESULT__GROUPS = dict[str, TYPE__BREED_RESULT__GROUP]
 
 
 # =====================================================================================================================
-class Exx__BreederObjCantAccessIndex(Exception):
+class Exx__DevCantAccessIndex(Exception):
     pass
 
 
-class Exx__BreederGroupNotExists(Exception):
+class Exx__GroupNotExists(Exception):
     pass
 
 
@@ -102,7 +102,7 @@ class DutBase(DeviceBase):
 
 
 # =====================================================================================================================
-class BreederGroupType(Enum):
+class GroupType(Enum):
     SINGLE = auto()
     LIST = auto()
     NOT_EXISTS = auto()
@@ -210,22 +210,22 @@ class ObjectListBreeder_Base:
         # FINAL not found -----------------------------
         msg = f"{item=}/{self.INDEX=}"
         print(msg)
-        raise Exx__BreederGroupNotExists(msg)
+        raise Exx__GroupNotExists(msg)
 
     # -----------------------------------------------------------------------------------------------------------------
     @classmethod
-    def group_get__type(cls, name: str) -> BreederGroupType:
+    def group_get__type(cls, name: str) -> GroupType:
         if f"{cls._STARTSWITH__DEFINE__CLS_SINGLE}{name}" in dir(cls):
-            return BreederGroupType.SINGLE
+            return GroupType.SINGLE
 
         if f"{cls._STARTSWITH__DEFINE__CLS_LIST}{name}" in dir(cls):
-            return BreederGroupType.LIST
+            return GroupType.LIST
 
-        return BreederGroupType.NOT_EXISTS
+        return GroupType.NOT_EXISTS
 
     @classmethod
     def group_check__exists(cls, name: str) -> bool:
-        return cls.group_get__type(name) != BreederGroupType.NOT_EXISTS
+        return cls.group_get__type(name) != GroupType.NOT_EXISTS
 
     @classmethod
     def group_get__objects(cls, name: str) -> Union[None, Any, list[Any]]:

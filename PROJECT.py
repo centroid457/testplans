@@ -107,7 +107,7 @@ designed to apply testplan for several DUTs
     NEWS: List[str] = [
         [
             "[ObjectListBreeder_Base] big ref",
-                "add GroupType",
+                "add BreederGroupType",
                 "add group_get__type/group_check__exists/group_get__objects"
         ]
     ]
