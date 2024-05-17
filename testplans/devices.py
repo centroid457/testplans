@@ -173,9 +173,11 @@ class ObjectListBreeder_Base:
                 obj_list__name = f"{cls._STARTSWITH__ACCESS__OBJECT_LIST}{group_name}"
                 obj_list__value = []
                 for index in range(cls.COUNT):
-                    # FIXME: add Try sentence
                     obj_cls = getattr(cls, attr_name)
-                    obj_instance = obj_cls(index)
+                    try:
+                        obj_instance = obj_cls(index)
+                    except Exception as exx:
+                        obj_instance = exx
                     obj_list__value.append(obj_instance)
 
                 # apply GROUP to class -------
@@ -185,10 +187,11 @@ class ObjectListBreeder_Base:
             # SINGLE --------------------------------------
             if attr_name.startswith(cls._STARTSWITH__DEFINE__CLS_SINGLE):
                 group_name = attr_name.removeprefix(cls._STARTSWITH__DEFINE__CLS_SINGLE)
-                # FIXME: add Try sentence
                 obj_cls = getattr(cls, attr_name)
-                obj_instance = obj_cls()
-
+                try:
+                    obj_instance = obj_cls()
+                except Exception as exx:
+                    obj_instance = exx
                 # apply -------
                 setattr(cls, group_name, obj_instance)
                 cls._GROUPS.update({group_name: obj_instance})
@@ -232,24 +235,41 @@ class ObjectListBreeder_Base:
         if cls.group_check__exists(name):
             return cls._GROUPS[name]
 
-    # @classmethod
-    # def group_call_meth(cls, meth: str, group: str | None = None) -> Union[NoReturn, TYPE__BREED_RESULT__GROUP, TYPE__BREED_RESULT__GROUPS]:
-    #     if group is None:
-    #         pass
-    #         # call on all groups
-    #
-    #     if not cls.group_check__exists(group):
-    #         raise Exx__BreederGroupNotExists()
-    #
-    #     else:
-    #         :
-    #         if
-    #         cls._GROUPS[group]:
-    #         results = []
-    #         for index in range(cls.COUNT):
-    #             # FIXME: add Try sentence
-    #             obj_instance = getattr(cls, attr_name)(index)
-    #             obj_list__value.append(obj_instance)
+    @classmethod
+    def group_call__(cls, meth: str, group: str | None = None, *args, **kwargs) -> Union[NoReturn, TYPE__BREED_RESULT__GROUP, TYPE__BREED_RESULT__GROUPS]:
+        # CALL ON ALL GROUPS -------------------------------------------------
+        if group is None:
+            results = {}
+            for group_name in cls._GROUPS:
+                results.update({group_name: cls.group_call__(meth, group_name)})
+            return results
+
+        # if group is not exists ---------------------------------------------
+        if not cls.group_check__exists(group):
+            raise Exx__BreederGroupNotExists()
+
+        # EXACT ONE GROUP ---------------------------------------------
+        group_objs = cls._GROUPS[group]
+
+        if isinstance(group_objs, list):
+            results = []
+            for obj in group_objs:
+                try:
+                    obj_meth = getattr(obj, "meth")
+                    obj_result = obj_meth(*args, **kwargs)
+                except Exception as exx:
+                    obj_result = exx
+                results.append(obj_result)
+        else:
+            obj = group_objs
+            try:
+                obj_meth = getattr(obj, "meth")
+                obj_result = obj_meth(*args, **kwargs)
+            except Exception as exx:
+                obj_result = exx
+            results = obj_result
+
+        return results
 
 
 # =====================================================================================================================
@@ -259,33 +279,16 @@ class DevicesIndexed_Base(ObjectListBreeder_Base):
 
     @classmethod
     def connect__cls(cls) -> None:
-        for group_name, group_value in cls._GROUPS.items():
-            devices = []
-            if isinstance(group_value, list):
-                devices = group_value
-            else:
-                devices = [group_value, ]
-
-            for device in devices:
-                device.connect()
+        cls.group_call__("connect")
 
     @classmethod
     def disconnect__cls(cls) -> None:
-        for group_name, group_value in cls._GROUPS.items():
-            devices = []
-            if isinstance(group_value, list):
-                devices = group_value
-            else:
-                devices = [group_value, ]
-
-            for device in devices:
-                device.disconnect()
+        cls.group_call__("disconnect")
 
     # DEBUG PURPOSE ---------------------------------------------------------------------------------------------------
     @classmethod
     def _debug__duts__reset_sn(cls) -> None:
-        for dut in cls.LIST__DUT:
-            dut._debug__reset_sn()
+        cls.group_call__("_debug__reset_sn", "DUT")
 
 
 # =====================================================================================================================
