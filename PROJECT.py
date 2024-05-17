@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 2, 19)
+    VERSION: Tuple[int, int, int] = (0, 2, 20)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -106,9 +106,8 @@ designed to apply testplan for several DUTs
     ]
     NEWS: List[str] = [
         [
-            "[ObjectListBreeder_Base] big ref",
-                "add BreederGroupType",
-                "add group_get__type/group_check__exists/group_get__objects"
+            "[ObjectListBreeder_Base]",
+                "add group_call__",
         ]
     ]
 
