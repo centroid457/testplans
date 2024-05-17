@@ -123,9 +123,6 @@ class ObjectListBreeder_Base:
     # access ----------
     _STARTSWITH__ACCESS__OBJECT_LIST: str = "LIST__"
 
-    # calls -----------
-    _STARTSWITH__CALL_ON: str = "call_on__"
-
     # -----------------
     _GROUPS: Dict[str, Union[Any, list[Any]]] = {}
 
@@ -145,16 +142,17 @@ class ObjectListBreeder_Base:
         if self.INDEX is None:
             return
 
+        # ACCESS TO OBJECT ----------------------------
         if item in self._GROUPS:
             device = self._GROUPS[item]
             if isinstance(device, list):
                 device = device[self.INDEX]
             return device
 
-        else:
-            msg = f"{item=}/{self.INDEX=}"
-            print(msg)
-            raise Exx__DevNotExists(msg)
+        # FINAL not found -----------------------------
+        msg = f"{item=}/{self.INDEX=}"
+        print(msg)
+        raise Exx__DevNotExists(msg)
 
     @classmethod
     def check_exists__group__(cls, name: str) -> bool:
@@ -191,6 +189,9 @@ class ObjectListBreeder_Base:
                 setattr(cls, group_name, dev_instance)
                 cls._GROUPS.update({group_name: dev_instance})
 
+    # -----------------------------------------------------------------------------------------------------------------
+    def call_meth_on_group(self, meth: str, group: str | None = None) -> None:
+        pass
 
 
 # =====================================================================================================================
