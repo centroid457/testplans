@@ -16,8 +16,8 @@ class TestCase(TestCaseBase):
 
         result_chain = ResultExpect_Chain(
             [
-                ResultExpect_Step(value=True, value_as_func=False,  title="TRUE"),
-                ResultExpect_Step(value=self.DEVICES__BY_INDEX.DUT.VALUE, value_as_func=False, title="DUT.VALUE"),
+                ResultExpect_Step(value=True, title="TRUE"),
+                ResultExpect_Step(value=self.DEVICES__BY_INDEX.DUT.VALUE, title="DUT.VALUE"),
             ],
         )
 

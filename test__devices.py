@@ -135,9 +135,9 @@ class Test__TpDevicesIndexed:
         assert self.Victim.LIST__DUT == self.Victim._GROUPS["DUT"]
         assert self.Victim.ATC == self.Victim._GROUPS["ATC"]
 
-        assert self.Victim.check_exists__group__("DUT") is True
-        assert self.Victim.check_exists__group__("ATC") is True
-        assert self.Victim.check_exists__group__("PTS") is False
+        assert self.Victim.group_check__exists("DUT") is True
+        assert self.Victim.group_check__exists("ATC") is True
+        assert self.Victim.group_check__exists("PTS") is False
 
         # DISCONNECT
         self.Victim.disconnect__cls()
@@ -176,9 +176,9 @@ class Test__TpDevicesIndexed:
 
         assert victim.LIST__DUT == victim._GROUPS["DUT"]
 
-        assert victim.check_exists__group__("DUT") is True
-        assert victim.check_exists__group__("ATC") is True
-        assert victim.check_exists__group__("PTS") is False
+        assert victim.group_check__exists("DUT") is True
+        assert victim.group_check__exists("ATC") is True
+        assert victim.group_check__exists("PTS") is False
 
     # -----------------------------------------------------------------------------------------------------------------
     def test__CLS_LIST__CLS(self):
@@ -200,9 +200,9 @@ class Test__TpDevicesIndexed:
         assert len(self.Victim.LIST__DUT) == 2
         assert len(self.Victim.LIST__PTS) == 2
 
-        assert self.Victim.check_exists__group__("DUT") is True
-        assert self.Victim.check_exists__group__("ATC") is False
-        assert self.Victim.check_exists__group__("PTS") is True
+        assert self.Victim.group_check__exists("DUT") is True
+        assert self.Victim.group_check__exists("ATC") is False
+        assert self.Victim.group_check__exists("PTS") is True
 
     def test__CLS_LIST__INSTANCE(self):
         self.Victim.COUNT = 2
@@ -232,9 +232,9 @@ class Test__TpDevicesIndexed:
         assert len(victim.LIST__DUT) == 2
         assert len(victim.LIST__PTS) == 2
 
-        assert victim.check_exists__group__("DUT") is True
-        assert victim.check_exists__group__("ATC") is False
-        assert victim.check_exists__group__("PTS") is True
+        assert victim.group_check__exists("DUT") is True
+        assert victim.group_check__exists("ATC") is False
+        assert victim.group_check__exists("PTS") is True
 
     # -----------------------------------------------------------------------------------------------------------------
     def test__double_init(self):

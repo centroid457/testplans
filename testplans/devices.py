@@ -1,5 +1,6 @@
 from typing import *
 import uuid
+from enum import Enum, auto
 
 from .tc import TestCaseBase
 from .models import *
@@ -19,7 +20,7 @@ class Exx__DevCantAccessIndex(Exception):
     pass
 
 
-class Exx__DevNotExists(Exception):
+class Exx__GroupNotExists(Exception):
     pass
 
 
@@ -101,6 +102,12 @@ class DutBase(DeviceBase):
 
 
 # =====================================================================================================================
+class GroupType(Enum):
+    SINGLE = auto()
+    LIST = auto()
+    NOT_EXISTS = auto()
+
+
 class ObjectListBreeder_Base:
     """
     class which keep all objects in one place!
@@ -113,6 +120,11 @@ class ObjectListBreeder_Base:
     - pass just one instance into all other classes!
     - check all devices for PRESENT (or else) in one place!
     - init all and check correctness for all
+
+    AFTER GENERATING OBJECTS - ACCESS TO OBJECTS LIST USED OVER THE CLASS!!!
+        OBJS_CLS = ObjectListBreeder_Base
+        OBJS = OBJS_CLS()
+        devs = OBJS_CLS.LIST__DEV
     """
     # SETTINGS ----------------------
     COUNT: int = 1
@@ -133,10 +145,10 @@ class ObjectListBreeder_Base:
     _STARTSWITH__ACCESS__OBJECT_LIST: str = "LIST__"
 
     # -----------------
-    _GROUPS: Dict[str, Union[Any, list[Any]]] = {}
+    _GROUPS: dict[str, Union[Any, list[Any]]] = {}
 
     # instance ---
-    INDEX: int = None
+    INDEX: int | None = None    # index used only in OBJECT INSTANCE
 
     def __init__(self, index: int):
         """
@@ -147,27 +159,6 @@ class ObjectListBreeder_Base:
         self.generate__objects()
 
     # -----------------------------------------------------------------------------------------------------------------
-    def __getattr__(self, item: str) -> Union[None, DeviceBase, NoReturn]:
-        if self.INDEX is None:
-            return
-
-        # ACCESS TO OBJECT ----------------------------
-        if item in self._GROUPS:
-            device = self._GROUPS[item]
-            if isinstance(device, list):
-                device = device[self.INDEX]
-            return device
-
-        # FINAL not found -----------------------------
-        msg = f"{item=}/{self.INDEX=}"
-        print(msg)
-        raise Exx__DevNotExists(msg)
-
-    @classmethod
-    def check_exists__group__(cls, name: str) -> bool:
-        return name in cls._GROUPS
-
-    # -----------------------------------------------------------------------------------------------------------------
     @classmethod
     def generate__objects(cls) -> None:
         if cls._GROUPS:
@@ -176,36 +167,89 @@ class ObjectListBreeder_Base:
         # WORK --------------------------------------
         cls._GROUPS = {}
         for attr_name in dir(cls):
+            # LIST --------------------------------------
             if attr_name.startswith(cls._STARTSWITH__DEFINE__CLS_LIST):
                 group_name = attr_name.removeprefix(cls._STARTSWITH__DEFINE__CLS_LIST)
-                dev_list__name = f"{cls._STARTSWITH__ACCESS__OBJECT_LIST}{group_name}"
-                dev_list__value = []
+                obj_list__name = f"{cls._STARTSWITH__ACCESS__OBJECT_LIST}{group_name}"
+                obj_list__value = []
                 for index in range(cls.COUNT):
                     # FIXME: add Try sentence
-                    dev_instance = getattr(cls, attr_name)(index)
-                    dev_list__value.append(dev_instance)
+                    obj_cls = getattr(cls, attr_name)
+                    obj_instance = obj_cls(index)
+                    obj_list__value.append(obj_instance)
 
-                # apply -------
-                setattr(cls, dev_list__name, dev_list__value)
-                cls._GROUPS.update({group_name: dev_list__value})
+                # apply GROUP to class -------
+                setattr(cls, obj_list__name, obj_list__value)
+                cls._GROUPS.update({group_name: obj_list__value})
 
-            elif attr_name.startswith(cls._STARTSWITH__DEFINE__CLS_SINGLE):
+            # SINGLE --------------------------------------
+            if attr_name.startswith(cls._STARTSWITH__DEFINE__CLS_SINGLE):
                 group_name = attr_name.removeprefix(cls._STARTSWITH__DEFINE__CLS_SINGLE)
                 # FIXME: add Try sentence
-                dev_instance = getattr(cls, attr_name)()
+                obj_cls = getattr(cls, attr_name)
+                obj_instance = obj_cls()
 
                 # apply -------
-                setattr(cls, group_name, dev_instance)
-                cls._GROUPS.update({group_name: dev_instance})
+                setattr(cls, group_name, obj_instance)
+                cls._GROUPS.update({group_name: obj_instance})
 
     # -----------------------------------------------------------------------------------------------------------------
-    def call_on_group(self, meth: str, group: str | None = None) -> Union[Any, list[Any], Dict[str, Union[Any, list[Any]]]]:
-        if group is None:
-            pass
-        else:
-            if self.check_exists__group__(group):
-                pass
+    def __getattr__(self, item: str) -> Union[None, Any, NoReturn]:
+        if self.INDEX is None:
+            return
 
+        # ACCESS TO OBJECT ----------------------------
+        if self.group_check__exists(item):
+            group_objs = self._GROUPS[item]
+            if isinstance(group_objs, list):
+                obj = group_objs[self.INDEX]
+            else:
+                obj = group_objs
+            return obj
+
+        # FINAL not found -----------------------------
+        msg = f"{item=}/{self.INDEX=}"
+        print(msg)
+        raise Exx__GroupNotExists(msg)
+
+    # -----------------------------------------------------------------------------------------------------------------
+    @classmethod
+    def group_get__type(cls, name: str) -> GroupType:
+        if f"{cls._STARTSWITH__DEFINE__CLS_SINGLE}{name}" in dir(cls):
+            return GroupType.SINGLE
+
+        if f"{cls._STARTSWITH__DEFINE__CLS_LIST}{name}" in dir(cls):
+            return GroupType.LIST
+
+        return GroupType.NOT_EXISTS
+
+    @classmethod
+    def group_check__exists(cls, name: str) -> bool:
+        return cls.group_get__type(name) != GroupType.NOT_EXISTS
+
+    @classmethod
+    def group_get__objects(cls, name: str) -> Union[None, Any, list[Any]]:
+        if cls.group_check__exists(name):
+            return cls._GROUPS[name]
+
+    # @classmethod
+    # def group_call_meth(cls, meth: str, group: str | None = None) -> Union[NoReturn, TYPE__BREED_RESULT__GROUP, TYPE__BREED_RESULT__GROUPS]:
+    #     if group is None:
+    #         pass
+    #         # call on all groups
+    #
+    #     if not cls.group_check__exists(group):
+    #         raise Exx__GroupNotExists()
+    #
+    #     else:
+    #         :
+    #         if
+    #         cls._GROUPS[group]:
+    #         results = []
+    #         for index in range(cls.COUNT):
+    #             # FIXME: add Try sentence
+    #             obj_instance = getattr(cls, attr_name)(index)
+    #             obj_list__value.append(obj_instance)
 
 
 # =====================================================================================================================
