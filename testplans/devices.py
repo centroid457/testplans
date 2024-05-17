@@ -92,10 +92,10 @@ class DutBase(DeviceBase):
 
 
 # =====================================================================================================================
-class DevicesIndexed_Base:
+class ObjectListBreeder_Base:
     """
-    object which keep all devices in one place!
-    useful for multyDut-like systems.
+    class which keep all objects in one place!
+    useful for multyObject systems.
 
     If you need just one device for all duts - use direct attribute,
     else use LIST__*NAME* and dont forget to create annotation for direct Indexed item access!
@@ -115,27 +115,33 @@ class DevicesIndexed_Base:
     # CLS_SINGLE__ATC: Callable[..., DeviceBase]
     # ATC: DeviceBase
 
-    # AUX ----------------------
-    _STARTSWITH__CLS_LIST: str = "CLS_LIST__"
-    _STARTSWITH__CLS_SINGLE: str = "CLS_SINGLE__"
+    # AUX ----------------------------------------------------------
+    # definitions -----
+    _STARTSWITH__DEFINE__CLS_LIST: str = "CLS_LIST__"
+    _STARTSWITH__DEFINE__CLS_SINGLE: str = "CLS_SINGLE__"
 
-    _STARTSWITH__DEVICES_LIST: str = "LIST__"
+    # access ----------
+    _STARTSWITH__ACCESS__OBJECT_LIST: str = "LIST__"
 
-    _GROUPS: Dict[str, Union[DeviceBase, List[DeviceBase]]] = {}
+    # calls -----------
+    _STARTSWITH__CALL_ON: str = "call_on__"
+
+    # -----------------
+    _GROUPS: Dict[str, Union[Any, list[Any]]] = {}
 
     # instance ---
     INDEX: int = None
 
     def __init__(self, index: int):
+        """
+        you can use just a simple init (by calling class without index) for generate all instances!
+        """
         super().__init__()
         self.INDEX = index
-        self.generate__devices()
-
-    def __del__(self):
-        self.disconnect__cls()
+        self.generate__objects()
 
     # -----------------------------------------------------------------------------------------------------------------
-    def __getattr__(self, item: str) -> Union[DeviceBase, NoReturn]:
+    def __getattr__(self, item: str) -> Union[None, DeviceBase, NoReturn]:
         if self.INDEX is None:
             return
 
@@ -156,16 +162,16 @@ class DevicesIndexed_Base:
 
     # -----------------------------------------------------------------------------------------------------------------
     @classmethod
-    def generate__devices(cls) -> None:
+    def generate__objects(cls) -> None:
         if cls._GROUPS:
             return
 
         # WORK --------------------------------------
         cls._GROUPS = {}
         for attr_name in dir(cls):
-            if attr_name.startswith(cls._STARTSWITH__CLS_LIST):
-                group_name = attr_name.removeprefix(cls._STARTSWITH__CLS_LIST)
-                dev_list__name = f"{cls._STARTSWITH__DEVICES_LIST}{group_name}"
+            if attr_name.startswith(cls._STARTSWITH__DEFINE__CLS_LIST):
+                group_name = attr_name.removeprefix(cls._STARTSWITH__DEFINE__CLS_LIST)
+                dev_list__name = f"{cls._STARTSWITH__ACCESS__OBJECT_LIST}{group_name}"
                 dev_list__value = []
                 for index in range(cls.COUNT):
                     # FIXME: add Try sentence
@@ -176,14 +182,21 @@ class DevicesIndexed_Base:
                 setattr(cls, dev_list__name, dev_list__value)
                 cls._GROUPS.update({group_name: dev_list__value})
 
-            elif attr_name.startswith(cls._STARTSWITH__CLS_SINGLE):
-                group_name = attr_name.removeprefix(cls._STARTSWITH__CLS_SINGLE)
+            elif attr_name.startswith(cls._STARTSWITH__DEFINE__CLS_SINGLE):
+                group_name = attr_name.removeprefix(cls._STARTSWITH__DEFINE__CLS_SINGLE)
                 # FIXME: add Try sentence
                 dev_instance = getattr(cls, attr_name)()
 
                 # apply -------
                 setattr(cls, group_name, dev_instance)
                 cls._GROUPS.update({group_name: dev_instance})
+
+
+
+# =====================================================================================================================
+class DevicesIndexed_Base(ObjectListBreeder_Base):
+    def __del__(self):
+        self.disconnect__cls()
 
     @classmethod
     def connect__cls(cls) -> None:
@@ -218,17 +231,27 @@ class DevicesIndexed_Base:
 
 # =====================================================================================================================
 class DevicesIndexed_WithDut(DevicesIndexed_Base):
+    """
+    READY TO USE WITH DUT
+    """
+    # DEFINITIONS ---------------
     CLS_LIST__DUT: Type[DutBase] = DutBase
 
+    # JUST SHOW NAMES -----------
     LIST__DUT: List[DutBase]
     DUT: DutBase
 
 
 # =====================================================================================================================
 class DevicesIndexed_Example(DevicesIndexed_WithDut):
+    """
+    JUST an example DUT+some other single dev
+    """
+    # DEFINITIONS ---------------
     COUNT: int = 2
-
     CLS_SINGLE__ATC: Type[DeviceBase] = DeviceBase
+
+    # JUST SHOW NAMES -----------
     ATC: DeviceBase
 
 

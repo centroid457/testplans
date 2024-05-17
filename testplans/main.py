@@ -105,7 +105,7 @@ class TpMultyDutBase(Logger, QThread):
             print(msg)
             raise Exx__TcsPathNotExists(msg)
 
-        self.DEVICES__CLS.generate__devices()
+        self.DEVICES__CLS.generate__objects()
 
         self.tcs__reinit()
         self.slots_connect()
