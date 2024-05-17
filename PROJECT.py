@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 2, 18)
+    VERSION: Tuple[int, int, int] = (0, 2, 19)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,9 +105,11 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        ["[GUI]",
-            "apply TM.HEADERS.DUTS.get_listed_index__by_outer",
-         ]
+        [
+            "[ObjectListBreeder_Base] big ref",
+                "add GroupType",
+                "add group_get__type/group_check__exists/group_get__objects"
+        ]
     ]
 
     # FINALIZE -----------------------------------------------
