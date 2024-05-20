@@ -13,7 +13,11 @@ class DevicesIndexed__Tp(DevicesIndexed_WithDut):
 
 # =====================================================================================================================
 class Client_RequestItem_Tp(Client_RequestItem):
-    pass
+    LOG_ENABLE = True
+
+    RETRY_LIMIT = 0
+    RETRY_TIMEOUT = 1
+
     HOST: str = "192.168.74.20"
     PORT: int = 8080
     ROUTE: str = "results"
