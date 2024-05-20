@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 2, 22)
+    VERSION: Tuple[int, int, int] = (0, 2, 23)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -106,8 +106,9 @@ designed to apply testplan for several DUTs
     ]
     NEWS: List[str] = [
         [
-            "[ObjectListBreeder_Base]",
-                "zero fix tests",
+            "[TC+ClientRequests]",
+                "apply new ver logger",
+                "fix send only not None",
         ]
     ]
 
