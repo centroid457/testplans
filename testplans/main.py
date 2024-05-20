@@ -309,7 +309,7 @@ class TpMultyDutBase(Logger, QThread):
 
     # -----------------------------------------------------------------------------------------------------------------
     def post__tc_results(self, tc_inst: TestCaseBase) -> None:
-        if not self.api_client:
+        if not self.api_client or tc_inst.result is None:
             return
 
         body = {

@@ -20,11 +20,13 @@ class Client_RequestItem_Tp(Client_RequestItem):
 
 
 class Client_RequestsStack_Tp(Client_RequestsStack):
+    LOG_ENABLE = True
     REQUEST_CLS = Client_RequestItem_Tp
 
 
 # =====================================================================================================================
 class Tp_Example(TpMultyDutBase):
+    LOG_ENABLE = True
     api_client: Client_RequestsStack = Client_RequestsStack_Tp()
     # api_client: Client_RequestsStack = None
 
