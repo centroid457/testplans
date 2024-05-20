@@ -309,9 +309,11 @@ class TpMultyDutBase(Logger, QThread):
 
     # -----------------------------------------------------------------------------------------------------------------
     def post__tc_results(self, tc_inst: TestCaseBase) -> None:
+        # CHECK ------------------------------------------
         if not self.api_client or tc_inst.result is None:
             return
 
+        # WORK ------------------------------------------
         body = {
             "STAND_NAME": self.STAND_NAME,
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
