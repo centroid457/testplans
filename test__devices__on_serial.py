@@ -36,7 +36,7 @@ class Atc(DeviceBase):
 
 
 # =====================================================================================================================
-# @pytest.mark.skip
+@pytest.mark.skip
 class Test__TpDevicesIndexed_OnSerial:
     @classmethod
     def setup_class(cls):

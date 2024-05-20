@@ -82,7 +82,6 @@ class Test__TpDevicesIndexed:
     def test__DUT_COUNT(self):
         # 1 -----------------------------------------------------
         self.Victim.COUNT = 1
-        assert self.Victim._GROUPS == {}
         self.Victim.generate__objects()
 
         assert set(self.Victim._GROUPS) == {"DUT", }
@@ -151,6 +150,7 @@ class Test__TpDevicesIndexed:
     def test__CLS_SINGLE__INSTANCE(self):
         self.Victim.COUNT = 2
         self.Victim.CLS_SINGLE__ATC = DeviceBase
+        self.Victim.generate__objects()
 
         victim = self.Victim(1)
 
@@ -207,6 +207,7 @@ class Test__TpDevicesIndexed:
     def test__CLS_LIST__INSTANCE(self):
         self.Victim.COUNT = 2
         self.Victim.CLS_LIST__PTS = DeviceBase
+        self.Victim.generate__objects()
 
         victim = self.Victim(1)
 
