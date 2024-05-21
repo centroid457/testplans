@@ -73,7 +73,7 @@ class Test__TpDevicesIndexed:
 
     def setup_method(self, method):
         pass
-        self.Victim: Type[DevicesIndexed_WithDut] = type("Victim", (DevicesIndexed_WithDut,), {})
+        self.Victim: Type[DevicesBreeder_WithDut] = type("Victim", (DevicesBreeder_WithDut,), {})
 
     def teardown_method(self, method):
         pass

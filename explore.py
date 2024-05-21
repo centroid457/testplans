@@ -1,12 +1,12 @@
 from testplans import *
-from testplans.main import TpMultyDutBase, DevicesIndexed_WithDut, TpInsideApi_Runner
+from testplans.main import TpMultyDutBase, DevicesBreeder_WithDut, TpInsideApi_Runner
 from server_templates import ServerAiohttpBase, Client_RequestsStack, Client_RequestItem
 
 from DEVICES import dut_example1
 
 
 # =====================================================================================================================
-class DevicesIndexed__Tp(DevicesIndexed_WithDut):
+class DevicesBreeder__Tp(DevicesBreeder_WithDut):
     COUNT = 2
     CLS_LIST__DUT = dut_example1.Device
 
@@ -34,7 +34,7 @@ class Tp_Example(TpMultyDutBase):
     api_client: Client_RequestsStack = Client_RequestsStack_Tp()
     # api_client: Client_RequestsStack = None
 
-    DEVICES__CLS = DevicesIndexed__Tp
+    DEVICES__CLS = DevicesBreeder__Tp
 
     API_SERVER__CLS = TpApi_FastApi
 

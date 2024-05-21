@@ -7,7 +7,7 @@ THIS IS THE REAL TESTPLAN!!!
 # =====================================================================================================================
 # from . import *
 from .tc import TestCaseBase
-from .devices import DutBase, DeviceBase, DevicesIndexed_WithDut, DevicesIndexed_Example
+from .devices import DutBase, DeviceBase, DevicesBreeder_WithDut, DevicesBreeder_Example
 from .gui import TpGuiBase
 from .api import TpApi_Aiohttp, TpApi_FastApi
 from .models import *
@@ -75,7 +75,7 @@ class TpMultyDutBase(Logger, QThread):
     SETTINGS_BASE_NAME: Union[str, Path] = "SETTINGS_BASE.json"
     SETTINGS_BASE_FILEPATH: Path
 
-    DEVICES__CLS: Type[DevicesIndexed_WithDut] = DevicesIndexed_Example
+    DEVICES__CLS: Type[DevicesBreeder_WithDut] = DevicesBreeder_Example
 
     # AUX -----------------------------------------------------------
     TCS__CLS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}     # todo: RENAME TO clss!!!

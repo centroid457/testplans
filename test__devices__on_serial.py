@@ -42,7 +42,7 @@ class Test__TpDevicesIndexed_OnSerial:
     def setup_class(cls):
         pass
 
-        class Victim(DevicesIndexed_Example):
+        class Victim(DevicesBreeder_Example):
             COUNT = 2
             CLS_SINGLE__ATC = Atc
 

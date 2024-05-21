@@ -85,7 +85,7 @@ class DutBase(DeviceBase):
 
 
 # =====================================================================================================================
-class DevicesIndexed_Base(BreederObjectList):
+class DevicesBreeder(BreederObjectList):
     def __del__(self):
         self.disconnect__cls()
 
@@ -104,7 +104,7 @@ class DevicesIndexed_Base(BreederObjectList):
 
 
 # =====================================================================================================================
-class DevicesIndexed_WithDut(DevicesIndexed_Base):
+class DevicesBreeder_WithDut(DevicesBreeder):
     """
     READY TO USE WITH DUT
     """
@@ -117,7 +117,7 @@ class DevicesIndexed_WithDut(DevicesIndexed_Base):
 
 
 # =====================================================================================================================
-class DevicesIndexed_Example(DevicesIndexed_WithDut):
+class DevicesBreeder_Example(DevicesBreeder_WithDut):
     """
     JUST an example DUT+some other single dev
     """
