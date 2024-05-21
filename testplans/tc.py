@@ -263,7 +263,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
         # FINISH -------------------------------------------------
         cls.teardown__cls()
-        print(f"run__cls=FINISH={cls.NAME=}={'='*50}")
+        print(f"[TC]FINISH={cls.NAME=}={'='*50}")
 
     # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
     @classmethod
