@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 3, 1)
+    VERSION: Tuple[int, int, int] = (0, 3, 2)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,8 +105,8 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "[DEV] rename to DevicesBreeder",
-        "[installer]apply upgrade_prj",
+        "zero renames",
+        "add timeoutStart",
     ]
 
     # FINALIZE -----------------------------------------------
