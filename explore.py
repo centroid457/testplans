@@ -22,6 +22,8 @@ class Client_RequestItem_Tp(Client_RequestItem):
     PORT: int = 8080
     ROUTE: str = "results"
 
+    SUCCESS_IF_FAIL_CODE = True
+
 
 class Client_RequestsStack_Tp(Client_RequestsStack):
     LOG_ENABLE = True
