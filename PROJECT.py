@@ -105,7 +105,9 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "apply new ver BreederStr from pyqt_templates",
+
+
+        "[installer]apply upgrade_prj",
     ]
 
     # FINALIZE -----------------------------------------------
