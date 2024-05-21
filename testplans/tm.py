@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from pyqt_templates import TableModelTemplate
-from funcs_aux import NamesIndexed_Base, NamesIndexed_Templated, ResultExpect_Base
+from funcs_aux import BreederStrSeries, BreederStrStack, ResultExpect_Base
 
 # from .tp import TpMultyDutBase
 
@@ -20,12 +20,12 @@ class TpTableModel(TableModelTemplate):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        class Headers(NamesIndexed_Base):
-            TESTCASE = 0
-            ASYNC = 1
-            STARTUP = 2
-            DUTS = NamesIndexed_Templated(3, self.DATA.DEVICES__CLS.COUNT)
-            TEARDOWN = 3 + self.DATA.DEVICES__CLS.COUNT
+        class Headers(BreederStrStack):
+            TESTCASE: int = 0
+            ASYNC: None = None
+            STARTUP: None = None
+            DUTS: BreederStrSeries = BreederStrSeries(None, self.DATA.DEVICES__CLS.COUNT)
+            TEARDOWN: None = None
             # FIXME: need resolve COUNT over DevicesIndexed!!!
 
         self.HEADERS = Headers()
