@@ -62,7 +62,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     result__cls_startup: Optional[bool] = None
     result__cls_teardown: Optional[bool] = None
     __result: Optional[bool]
-    __timestamp: float | None = None
+    __timestamp_last: float | None = None
+    timestamp_start: float | None = None
     details: Dict[str, Any]
     exx: Optional[Exception]
     progress: int
@@ -104,15 +105,15 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     # =================================================================================================================
     @property
-    def timestamp(self) -> float | None:
+    def timestamp_last(self) -> float | None:
         """
         None - not even started
         float - was started!
             stable - finished
             UnStable - in progress (active thread)
         """
-        if self.__timestamp:
-            return self.__timestamp
+        if self.__timestamp_last:
+            return self.__timestamp_last
 
         if self.isRunning():
             return time.time()
@@ -137,7 +138,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     def clear(self) -> None:
         self.LOGGER.debug("clear")
 
-        self.__timestamp = None
+        self.__timestamp_last = None
+        self.timestamp_start = None
         self.result = None
         self.details = {}
         self.exx = None
@@ -211,6 +213,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
         # PREPARE --------
         self.clear()
+        self.timestamp_start = time.time()
         if not self.DEVICES.DUT or not self.DEVICES.DUT.connect() or self.DEVICES.DUT.SKIP:
             return
 
@@ -282,7 +285,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     def teardown(self) -> TYPE__RESULT:
         self.LOGGER.debug("")
-        self.__timestamp = time.time()
+        self.__timestamp_last = time.time()
         self.progress = 99
         result = self.teardown__wrapped()
         self.progress = 100
@@ -343,6 +346,8 @@ class Info(_TestCaseBase):
         result += f"tc_result={self.result}\n"
         result += f"tc_progress={self.progress}\n"
         result += f"tc_exx={self.exx}\n"
+        result += f"tc_timestamp_start={self.timestamp_start}\n"
+        result += f"tc_timestamp_last={self.timestamp_last}\n"
 
         result += f"SETTINGS=====================\n"
         if self.SETTINGS:
@@ -378,7 +383,7 @@ class Info(_TestCaseBase):
             **self.DEVICES.DUT.get__info().dict(),
 
             # RESULTS
-            "tc_timestamp": self.timestamp,
+            "tc_timestamp": self.timestamp_last,
             "tc_active": self.isRunning(),
             "tc_progress": self.progress,
             "tc_result": bool(self.result),
