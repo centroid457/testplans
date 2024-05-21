@@ -7,7 +7,7 @@ from PyQt5.QtCore import QThread
 from pyqt_templates import *
 from private_values import PrivateJson
 
-# from .devices import DevicesBreeder_WithDut
+# from .devices import DevicesBreeder
 from .models import *
 
 from logger_aux import Logger
@@ -50,11 +50,11 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     # AUXILIARY -----------------------------------
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
-    TCS__INST: List['TestCaseBase'] = None
+    TCS__LIST: List['_TestCaseBase'] = None
 
     # INSTANCE ------------------------------------
-    DEVICES__CLS: Type['DevicesBreeder_WithDut'] = None
-    DEVICES__BY_INDEX: 'DevicesBreeder_WithDut' = None
+    DEVICES__CLS: Type['DevicesBreeder'] = None
+    DEVICES: 'DevicesBreeder' = None
 
     SETTINGS: PrivateJson = None
     INDEX: int = 0
@@ -71,12 +71,10 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     # def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
     def __init__(self, index: int = 0):
         super().__init__()
-        self.LOGGER.debug("init tc")
-
         self.INDEX = index
 
         if self.DEVICES__CLS:
-            self.DEVICES__BY_INDEX = self.DEVICES__CLS(self.INDEX)
+            self.DEVICES = self.DEVICES__CLS(self.INDEX)
 
         self.clear()
 
@@ -86,33 +84,25 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         self.SETTINGS = PrivateJson(_dict=self.settings_read())
 
     @classmethod
-    def devices__apply(cls, devices_cls: Type['DevicesBreeder_WithDut'] = None) -> None:
+    def devices__apply(cls, devices_cls: Type['DevicesBreeder'] = None) -> None:
         if devices_cls is not None:
             cls.DEVICES__CLS = devices_cls
         if cls.DEVICES__CLS:
-            cls._TCS__INST__generate()
+            cls._objects__generate()
 
     @classmethod
-    def _TCS__INST__generate(cls) -> None:
+    def _objects__generate(cls) -> None:
         """
         create tc objects for all DUTs, if not existed - create it in all DUTs
         """
-        cls.TCS__INST = []
+        cls.TCS__LIST = []
         for index in range(cls.DEVICES__CLS.COUNT):
             tc_on_dut = cls(index=index)
-            cls.TCS__INST.append(tc_on_dut)
+            cls.TCS__LIST.append(tc_on_dut)
 
         # FIXME: check if some TC on one base - it would be incorrect!!!???
 
     # =================================================================================================================
-    @property
-    def DUT(self) -> Optional['DutBase']:
-        """
-        this is only for convenience!
-        but recommended to use from DEVICES__BY_INDEX! - # TODO: solve it!!!
-        """
-        return self.DEVICES__BY_INDEX.DUT
-
     @property
     def timestamp(self) -> float | None:
         """
@@ -157,7 +147,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     def clear__cls(cls):
         cls.result__cls_startup = None
         cls.result__cls_teardown = None
-        for tc in cls.TCS__INST:
+        for tc in cls.TCS__LIST:
             tc.clear()
 
     # @classmethod
@@ -191,7 +181,6 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     # DETAILS ---------------------------------------------------------------------------------------------------------
     def details_update(self, details: Dict[str, Any]) -> None:
         self.LOGGER.debug("")
-
         self.details.update(details)
         # self.signals.signal__tc_state_changed.emit(self)
 
@@ -207,7 +196,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     @classmethod
     def terminate__cls(cls) -> None:
-        for tc_inst in cls.TCS__INST:
+        for tc_inst in cls.TCS__LIST:
             try:
                 if tc_inst.isRunning() and not tc_inst.isFinished():
                     tc_inst.terminate()
@@ -222,7 +211,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
         # PREPARE --------
         self.clear()
-        if not self.DEVICES__BY_INDEX.DUT or not self.DEVICES__BY_INDEX.DUT.connect() or self.DEVICES__BY_INDEX.DUT.SKIP:
+        if not self.DEVICES.DUT or not self.DEVICES.DUT.connect() or self.DEVICES.DUT.SKIP:
             return
 
         # WORK --------
@@ -253,7 +242,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         # ---------------------------------
         if cls.startup__cls():
             # BATCH --------------------------
-            for tc_inst in cls.TCS__INST:
+            for tc_inst in cls.TCS__LIST:
                 if tc_inst.skip_tc_dut:
                     continue
 
@@ -265,7 +254,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
             # WAIT --------------------------
             if cls.ASYNC:
-                for tc_inst in cls.TCS__INST:
+                for tc_inst in cls.TCS__LIST:
                     print(f"run__cls=tc_inst.wait({tc_inst.INDEX=})inPARALLEL")
                     tc_inst.wait()
 
@@ -342,8 +331,6 @@ class Info(_TestCaseBase):
     """
     # =================================================================================================================
     def info_pretty(self) -> str:
-        self.LOGGER.debug("")
-
         # fixme: ref from info_get
         result = ""
 
@@ -388,7 +375,7 @@ class Info(_TestCaseBase):
 
         result = {
             **self.get__info().dict(),
-            **self.DUT.get__info().dict(),
+            **self.DEVICES.DUT.get__info().dict(),
 
             # RESULTS
             "tc_timestamp": self.timestamp,
@@ -402,7 +389,7 @@ class Info(_TestCaseBase):
     @classmethod
     def results__get_all(cls) -> List[Dict[str, Any]]:
         results = []
-        for tc_inst in cls.TCS__INST:
+        for tc_inst in cls.TCS__LIST:
             results.append(tc_inst.get__results().dict())
         return results
 

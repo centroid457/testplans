@@ -23,5 +23,5 @@ class TestCase(example_tc1_direct.TestCase):
 
     def run__wrapped(self) -> bool:
         time.sleep(0.5)
-        self.details_update({"detail_value": not self.DEVICES__BY_INDEX.DUT.VALUE})
-        return not self.DEVICES__BY_INDEX.DUT.VALUE
+        self.details_update({"detail_value": not self.DEVICES.DUT.VALUE})
+        return not self.DEVICES.DUT.VALUE

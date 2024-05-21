@@ -19,7 +19,7 @@ class Tc1(TestCaseBase):
     TIME_SLEEP: float = 0.2
     def run__wrapped(self) -> bool:
         time.sleep(self.TIME_SLEEP)
-        return self.DUT.VALUE
+        return self.DEVICES.DUT.VALUE
 
 
 class Tc1_reverse(TestCaseBase):

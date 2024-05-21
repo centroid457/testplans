@@ -75,7 +75,7 @@ class TpTableModel(TableModelTemplate):
         tc_inst = None
         if col in self.HEADERS.DUTS:
             dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
-            tc_inst = tc.TCS__INST[dut.INDEX]
+            tc_inst = tc.TCS__LIST[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:
@@ -221,7 +221,7 @@ class TpTableModel(TableModelTemplate):
         tc_inst = None
         if col in self.HEADERS.DUTS:
             dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
-            tc_inst = tc.TCS__INST[dut.INDEX]
+            tc_inst = tc.TCS__LIST[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
