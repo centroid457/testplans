@@ -72,7 +72,7 @@
 
 0.2.13 (2024/05/15 12:15:26)
 ------------------------------
-- [TC] separate Info  
+- [TC] separate _Info  
 - [GUI] fix click on TEARDOWN  
 
 0.2.12 (2024/05/13 18:05:56)

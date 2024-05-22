@@ -1,10 +1,8 @@
+from typing import *
 import time
-
 import pytest
 
 from testplans import *
-from testplans.main import TpMultyDutBase
-from testplans.devices import DutBase
 
 
 # =====================================================================================================================

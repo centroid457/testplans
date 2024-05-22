@@ -17,7 +17,6 @@ import json
 from pathlib import Path
 from PyQt5.QtCore import QThread, pyqtSignal
 from importlib import import_module
-import asyncio
 from pydantic import BaseModel
 
 from pyqt_templates import *

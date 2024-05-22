@@ -1,16 +1,13 @@
 from typing import *
 
-# from . import *
-from .tc import TestCaseBase
-# from .tp import TpMultyDutBase
-from .tm import TpTableModel
-
-import time
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from pyqt_templates import *
+
+from .tc import TestCaseBase
+from .tm import TpTableModel
 
 
 # =====================================================================================================================

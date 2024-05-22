@@ -2,17 +2,15 @@ import pathlib
 from typing import *
 import json
 import time
-from enum import Enum, auto
 from PyQt5.QtCore import QThread, pyqtSignal
 
 from pyqt_templates import *
 from private_values import PrivateJson
 
-# from .devices import DevicesBreeder
-from .models import *
-
 from logger_aux import Logger
 from funcs_aux import ResultExpect_Base
+
+from .models import *
 
 
 # =====================================================================================================================
@@ -329,7 +327,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
 
 # =====================================================================================================================
-class Info(_TestCaseBase):
+class _Info(_TestCaseBase):
     """
     separated class for gen results/info by models!
     """
@@ -400,7 +398,7 @@ class Info(_TestCaseBase):
         return results
 
 
-class TestCaseBase(Info):
+class TestCaseBase(_Info):
     """
     """
 

@@ -1,6 +1,8 @@
-from testplans import *
-from testplans.main import TpMultyDutBase, DevicesBreeder_WithDut, TpInsideApi_Runner
+# DON'T DELETE!
+# useful to start smth without pytest and not to run in main script!
+
 from server_templates import ServerAiohttpBase, Client_RequestsStack, Client_RequestItem
+from testplans import *
 
 from DEVICES import dut_example1
 

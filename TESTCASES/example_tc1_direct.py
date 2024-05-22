@@ -3,8 +3,6 @@ from testplans import TestCaseBase
 
 from funcs_aux import ResultExpect_Step, ResultExpect_Chain
 
-import DEVICES
-
 
 class TestCase(TestCaseBase):
     ASYNC = True

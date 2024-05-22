@@ -2,9 +2,10 @@ from typing import *
 import uuid
 from enum import Enum, auto
 
+from funcs_aux import BreederObjectList
+
 from .tc import TestCaseBase
 from .models import *
-from funcs_aux import BreederObjectList
 
 
 # =====================================================================================================================

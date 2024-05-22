@@ -6,8 +6,6 @@ from PyQt5.QtGui import *
 from pyqt_templates import TableModelTemplate
 from funcs_aux import BreederStrSeries, BreederStrStack, ResultExpect_Base
 
-# from .tp import TpMultyDutBase
-
 
 # =====================================================================================================================
 class TpTableModel(TableModelTemplate):
