@@ -9,23 +9,22 @@ THIS IS THE REAL TESTPLAN!!!
 from .tc import TestCaseBase
 from .devices import DutBase, DeviceBase, DevicesBreeder_WithDut, DevicesBreeder_Example
 from .gui import TpGuiBase
-from .api import TpApi_Aiohttp, TpApi_FastApi
+from .api import TpApi_FastApi
 from .models import *
 
 from typing import *
 import json
 from pathlib import Path
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, pyqtSignal
 from importlib import import_module
 import asyncio
 from pydantic import BaseModel
 
 from pyqt_templates import *
-from server_templates import ServerAiohttpBase, Client_RequestItem, Client_RequestsStack, ServerFastApi_Thread
+from logger_aux import *
+from server_templates import *
 from object_info import ObjectInfo
 from private_values import PrivateJson
-
-from logger_aux import Logger
 
 
 # =====================================================================================================================

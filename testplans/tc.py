@@ -1,8 +1,9 @@
 import pathlib
 from typing import *
 import json
+import time
 from enum import Enum, auto
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, pyqtSignal
 
 from pyqt_templates import *
 from private_values import PrivateJson

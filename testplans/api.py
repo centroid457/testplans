@@ -2,8 +2,10 @@ import pathlib
 from typing import *
 from object_info import ObjectInfo
 
-from server_templates import ServerAiohttpBase, decorator__log_request_response, web
 from server_templates import *
+from aiohttp import web
+from fastapi import FastAPI, Response
+from fastapi.responses import RedirectResponse
 
 from .models import *
 
