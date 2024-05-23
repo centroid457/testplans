@@ -14,8 +14,8 @@ class DeviceBase:
     conn: Any = None
     INDEX: int = None
 
-    def __init__(self, index: int = None):
-        super().__init__()
+    def __init__(self, index: int = None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.INDEX = index
 
     # OVERWRITE =======================================================================================================
