@@ -332,11 +332,12 @@ class _Info(_TestCaseBase):
     separated class for gen results/info by models!
     """
     # =================================================================================================================
-    def info_pretty(self) -> str:
+    def get__info_pretty(self) -> str:
         # fixme: ref from info_get
         result = ""
 
         result += f"DUT_INDEX={self.INDEX}\n"
+        result += f"DUT_SN={self.DEVICES.DUT.SN}\n"
         result += f"TC_NAME={self.NAME}\n"
         result += f"TC_DESCRIPTION={self.DESCRIPTION}\n"
         result += f"TC_SKIP={self.SKIP}\n"
