@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 3, 3)
+    VERSION: Tuple[int, int, int] = (0, 3, 4)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,9 +105,7 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "[__INIT__.py] fix import",
-        "apply last pypi template",
-        "apply all last versions for all moduls",
+        "[TC] zero extend get__info_pretty",
     ]
 
     # FINALIZE -----------------------------------------------

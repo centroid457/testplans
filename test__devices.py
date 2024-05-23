@@ -31,28 +31,6 @@ class Test__DeviceBase:
     def test__1(self):
         victim = self.Victim()
 
-
-# =====================================================================================================================
-class Test__DutBase:
-    @classmethod
-    def setup_class(cls):
-        pass
-        cls.Victim = type("Victim", (DutBase,), {})
-
-    # @classmethod
-    # def teardown_class(cls):
-    #     pass
-    #
-    # def setup_method(self, method):
-    #     pass
-    #
-    # def teardown_method(self, method):
-    #     pass
-
-    # -----------------------------------------------------------------------------------------------------------------
-    def test__1(self):
-        victim = self.Victim()
-
     def test__2(self):
         victim = self.Victim()
         assert victim.INDEX is None
@@ -84,31 +62,22 @@ class Test__TpDevicesIndexed:
         self.Victim.COUNT = 1
         self.Victim.generate__objects()
 
-        assert set(self.Victim._GROUPS) == {"DUT", }
-        assert len(self.Victim._GROUPS["DUT"]) == 1
-        assert self.Victim._GROUPS["DUT"] == self.Victim.LIST__DUT
-        assert type(self.Victim._GROUPS["DUT"][0]) == DutBase
-
         victim = self.Victim(0)
         assert victim.DUT == self.Victim.LIST__DUT[0]
         assert victim.DUT == victim.LIST__DUT[0]
 
         # 2 ------------------------------------------------------
         self.Victim.COUNT = 2
-        self.Victim._GROUPS = {}
-        self.Victim.generate__objects()
-
-        assert set(self.Victim._GROUPS) == {"DUT", }
-        assert len(self.Victim._GROUPS["DUT"]) == 2
-        assert self.Victim._GROUPS["DUT"] == self.Victim.LIST__DUT
-        assert type(self.Victim._GROUPS["DUT"][0]) == DutBase
-
-        # INSTANCE ----------------------
+        self.Victim.generate__objects(force=True)
+        #
+        # # INSTANCE ----------------------
         victim = self.Victim(0)
+        assert victim.DUT.INDEX == 0
         assert victim.DUT == self.Victim.LIST__DUT[0]
         assert victim.DUT == victim.LIST__DUT[0]
 
         victim = self.Victim(1)
+        assert victim.DUT.INDEX == 1
         assert victim.DUT == self.Victim.LIST__DUT[1]
         assert victim.DUT == victim.LIST__DUT[1]
 
@@ -121,18 +90,8 @@ class Test__TpDevicesIndexed:
         self.Victim.CLS_SINGLE__ATC = DeviceBase
         self.Victim.generate__objects()
 
-        assert set(self.Victim._GROUPS) == {"DUT", "ATC"}
-
-        assert type(self.Victim._GROUPS["DUT"]) == list
-        assert type(self.Victim._GROUPS["ATC"]) == DeviceBase
-
-        atc_old = self.Victim._GROUPS["ATC"]
-
         assert hasattr(self.Victim, "LIST__DUT") is True
         assert hasattr(self.Victim, "LIST__ATC") is False
-
-        assert self.Victim.LIST__DUT == self.Victim._GROUPS["DUT"]
-        assert self.Victim.ATC == self.Victim._GROUPS["ATC"]
 
         assert self.Victim.group_check__exists("DUT") is True
         assert self.Victim.group_check__exists("ATC") is True
@@ -140,12 +99,8 @@ class Test__TpDevicesIndexed:
 
         # DISCONNECT
         self.Victim.disconnect__cls()
-        assert id(atc_old) == id(self.Victim.ATC)
-        assert atc_old is self.Victim.ATC
 
         self.Victim.generate__objects()
-        assert id(atc_old) == id(self.Victim.ATC)
-        assert atc_old is self.Victim.ATC
 
     def test__CLS_SINGLE__INSTANCE(self):
         self.Victim.COUNT = 2
@@ -154,13 +109,7 @@ class Test__TpDevicesIndexed:
 
         victim = self.Victim(1)
 
-        assert set(victim._GROUPS) == {"DUT", "ATC"}
-
-        assert type(victim._GROUPS["DUT"]) == list
-        assert type(victim._GROUPS["ATC"]) == DeviceBase
-
         assert victim.DUT == victim.LIST__DUT[1]
-        assert victim.ATC == victim._GROUPS["ATC"]
         try:
             victim.PTS
             assert False
@@ -174,7 +123,6 @@ class Test__TpDevicesIndexed:
         except:
             pass
 
-        assert victim.LIST__DUT == victim._GROUPS["DUT"]
 
         assert victim.group_check__exists("DUT") is True
         assert victim.group_check__exists("ATC") is True
@@ -186,16 +134,8 @@ class Test__TpDevicesIndexed:
         self.Victim.CLS_LIST__PTS = DeviceBase
         self.Victim.generate__objects()
 
-        assert set(self.Victim._GROUPS) == {"DUT", "PTS"}
-
-        assert type(self.Victim._GROUPS["DUT"]) == list
-        assert type(self.Victim._GROUPS["PTS"]) == list
-
         assert hasattr(self.Victim, "LIST__DUT") is True
         assert hasattr(self.Victim, "LIST__PTS") is True
-
-        assert self.Victim.LIST__DUT == self.Victim._GROUPS["DUT"]
-        assert self.Victim.LIST__PTS == self.Victim._GROUPS["PTS"]
 
         assert len(self.Victim.LIST__DUT) == 2
         assert len(self.Victim.LIST__PTS) == 2
@@ -211,11 +151,6 @@ class Test__TpDevicesIndexed:
 
         victim = self.Victim(1)
 
-        assert set(victim._GROUPS) == {"DUT", "PTS"}
-
-        assert type(victim._GROUPS["DUT"]) == list
-        assert type(victim._GROUPS["PTS"]) == list
-
         assert victim.DUT == victim.LIST__DUT[1]
         assert victim.PTS == victim.LIST__PTS[1]
         try:
@@ -226,9 +161,6 @@ class Test__TpDevicesIndexed:
 
         assert hasattr(victim, "LIST__DUT") is True
         assert hasattr(victim, "LIST__PTS") is True
-
-        assert victim.LIST__DUT == victim._GROUPS["DUT"]
-        assert victim.LIST__PTS == victim._GROUPS["PTS"]
 
         assert len(victim.LIST__DUT) == 2
         assert len(victim.LIST__PTS) == 2

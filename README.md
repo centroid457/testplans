@@ -1,4 +1,4 @@
-# testplans (v0.3.3)
+# testplans (v0.3.4)
 
 ## DESCRIPTION_SHORT
 simple testplan framework for several DUTs
