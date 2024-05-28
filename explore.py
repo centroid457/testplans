@@ -4,13 +4,15 @@
 from server_templates import ServerAiohttpBase, Client_RequestsStack, Client_RequestItem
 from testplans import *
 
-from DEVICES import dut_example1
+from DEVICES import dut, atc, ptb
 
 
 # =====================================================================================================================
 class DevicesBreeder__Tp(DevicesBreeder_WithDut):
     COUNT = 2
-    CLS_LIST__DUT = dut_example1.Device
+    CLS_SINGLE__ATC = atc.Device
+    CLS_LIST__PTB = ptb.Device
+    CLS_LIST__DUT = dut.Device
 
 
 # =====================================================================================================================

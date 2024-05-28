@@ -1,11 +1,12 @@
 import time
 from testplans import TestCaseBase, TYPE__RESULT
-from . import example_tc1_direct
+from . import tc1_direct
 
 from funcs_aux import ResultExpect_Step, ResultExpect_Chain
 
 
-class TestCase(example_tc1_direct.TestCase):
+# =====================================================================================================================
+class TestCase(tc1_direct.TestCase):
     ASYNC = True
     DESCRIPTION = "reverse1"
 
@@ -25,3 +26,6 @@ class TestCase(example_tc1_direct.TestCase):
         time.sleep(0.5)
         self.details_update({"detail_value": not self.DEVICES__BREEDER_INST.DUT.VALUE})
         return not self.DEVICES__BREEDER_INST.DUT.VALUE
+
+
+# =====================================================================================================================
