@@ -22,7 +22,7 @@ class TpTableModel(TableModelTemplate):
             TESTCASE: int = 0
             ASYNC: None = None
             STARTUP: None = None
-            DUTS: BreederStrSeries = BreederStrSeries(None, self.DATA.DEVICES__CLS.COUNT)
+            DUTS: BreederStrSeries = BreederStrSeries(None, self.DATA.DEVICES__BREEDER_CLS.COUNT)
             TEARDOWN: None = None
             # FIXME: need resolve COUNT over DevicesIndexed!!!
 
@@ -72,7 +72,7 @@ class TpTableModel(TableModelTemplate):
         dut = None
         tc_inst = None
         if col in self.HEADERS.DUTS:
-            dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
+            dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
             tc_inst = tc.TCS__LIST[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------
@@ -218,7 +218,7 @@ class TpTableModel(TableModelTemplate):
         dut = None
         tc_inst = None
         if col in self.HEADERS.DUTS:
-            dut = self.DATA.DEVICES__CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
+            dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
             tc_inst = tc.TCS__LIST[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------

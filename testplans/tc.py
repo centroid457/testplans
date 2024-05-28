@@ -47,59 +47,62 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     # STOP_IF_FALSE_RESULT: Optional[bool] = None     # NOT USED NOW! MAYBE NOT IMPORTANT!!!
     SETTINGS_FILES: Union[None, pathlib.Path, List[pathlib.Path]] = None
 
+    DEVICES__BREEDER_CLS: Type['DevicesBreeder'] = None
+
     # AUXILIARY -----------------------------------
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
-    TCS__LIST: List['_TestCaseBase'] = None
-
-    # INSTANCE ------------------------------------
-    DEVICES__CLS: Type['DevicesBreeder'] = None
-    DEVICES__INST: 'DevicesBreeder' = None
-
-    SETTINGS: PrivateJson = None
-    INDEX: int
+    TCS__LIST: List['_TestCaseBase'] = []
 
     result__cls_startup: Optional[bool] = None
     result__cls_teardown: Optional[bool] = None
-    __result: Optional[bool]
-    __timestamp_last: float | None = None
-    timestamp_start: float | None = None
-    details: Dict[str, Any]
+
+    # INSTANCE ------------------------------------
+    INDEX: int
+    SETTINGS: PrivateJson
+    DEVICES__BREEDER_INST: 'DevicesBreeder'
+
+    _result: Optional[bool] = None
+    _timestamp_last: Optional[float]
+    timestamp_start: Optional[float]
+    details: dict[str, Any]
     exx: Optional[Exception]
     progress: int
 
     # =================================================================================================================
-    def __init__(self, index: int):
-        super().__init__()
-        self.INDEX = index
-
-        if self.DEVICES__CLS and not self.DEVICES__INST:
-            self.DEVICES__INST = self.DEVICES__CLS(self.INDEX)
-
-        self.clear()
-
-        # if _settings_files is not None:
-        #     self.SETTINGS_FILES = _settings_files
-
-        self.SETTINGS = PrivateJson(_dict=self.settings_read())
-
     @classmethod
     def devices__apply(cls, devices_cls: Type['DevicesBreeder'] = None) -> None:
         if devices_cls is not None:
-            cls.DEVICES__CLS = devices_cls
-        if cls.DEVICES__CLS:
-            cls._objects__generate()
+            cls.DEVICES__BREEDER_CLS = devices_cls
+            cls.TCS__LIST = []
+
+        if cls.DEVICES__BREEDER_CLS:
+            cls.DEVICES__BREEDER_CLS.generate__objects()
+            cls._TCS__LIST__generate()
 
     @classmethod
-    def _objects__generate(cls) -> None:
+    def _TCS__LIST__generate(cls) -> None:
         """
         create tc objects for all DUTs, if not existed - create it in all DUTs
         """
-        cls.TCS__LIST = []
-        for index in range(cls.DEVICES__CLS.COUNT):
+        if cls.TCS__LIST:
+            return
+
+        for index in range(cls.DEVICES__BREEDER_CLS.COUNT):
             tc_inst = cls(index=index)
             cls.TCS__LIST.append(tc_inst)
 
         # FIXME: check if some TC on one base - it would be incorrect!!!???
+
+    # =================================================================================================================
+    def __init__(self, index: int):
+        self.INDEX = index
+        super().__init__()
+
+        if self.DEVICES__BREEDER_CLS:
+            self.DEVICES__BREEDER_INST = self.DEVICES__BREEDER_CLS(index)
+
+        self.SETTINGS = PrivateJson(_dict=self.settings_read())
+        self.clear()
 
     # =================================================================================================================
     @property
@@ -110,8 +113,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             stable - finished
             UnStable - in progress (active thread)
         """
-        if self.__timestamp_last:
-            return self.__timestamp_last
+        if self._timestamp_last:
+            return self._timestamp_last
 
         if self.isRunning():
             return time.time()
@@ -136,9 +139,9 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     def clear(self) -> None:
         self.LOGGER.debug("clear")
 
-        self.__timestamp_last = None
-        self.timestamp_start = None
         self.result = None
+        self._timestamp_last = None
+        self.timestamp_start = None
         self.details = {}
         self.exx = None
         self.progress = 0
@@ -159,11 +162,11 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     # RESULT ----------------------------------------------------------------------------------------------------------
     @property
     def result(self) -> TYPE__RESULT:
-        return self.__result
+        return self._result
 
     @result.setter
     def result(self, value: TYPE__RESULT) -> None:
-        self.__result = value
+        self._result = value
         self.signals.signal__tc_state_changed.emit(self)
 
     # # ---------------------------------------------------------
@@ -212,7 +215,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         # PREPARE --------
         self.clear()
         self.timestamp_start = time.time()
-        if not self.DEVICES__INST.DUT or not self.DEVICES__INST.DUT.connect() or self.DEVICES__INST.DUT.SKIP:
+        if not self.DEVICES__BREEDER_INST.DUT or not self.DEVICES__BREEDER_INST.DUT.connect() or self.DEVICES__BREEDER_INST.DUT.SKIP:
             return
 
         # WORK --------
@@ -232,7 +235,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         """run TC on batch duts(??? may be INDEXES???)
         prefered using in thread on upper level!
         """
-        # if not cls.DEVICES__CLS.LIST__DUT:
+        # if not cls.DEVICES__BREEDER_CLS.LIST__DUT:
         #     return
 
         print(f"run__cls=START={cls.NAME=}={'='*50}")
@@ -283,7 +286,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     def teardown(self) -> TYPE__RESULT:
         self.LOGGER.debug("")
-        self.__timestamp_last = time.time()
+        self._timestamp_last = time.time()
         self.progress = 99
         result = self.teardown__wrapped()
         self.progress = 100
@@ -336,7 +339,7 @@ class _Info(_TestCaseBase):
         result = ""
 
         result += f"DUT_INDEX={self.INDEX}\n"
-        result += f"DUT_SN={self.DEVICES__INST.DUT.SN}\n"
+        result += f"DUT_SN={self.DEVICES__BREEDER_INST.DUT.SN}\n"
         result += f"TC_NAME={self.NAME}\n"
         result += f"TC_DESCRIPTION={self.DESCRIPTION}\n"
         result += f"TC_SKIP={self.SKIP}\n"
@@ -379,7 +382,7 @@ class _Info(_TestCaseBase):
 
         result = {
             **self.get__info().dict(),
-            **self.DEVICES__INST.DUT.get__info().dict(),
+            **self.DEVICES__BREEDER_INST.DUT.get__info().dict(),
 
             # RESULTS
             "tc_timestamp": self.timestamp_last,

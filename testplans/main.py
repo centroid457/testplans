@@ -69,11 +69,11 @@ class TpMultyDutBase(Logger, QThread):
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"
-    # DIRPATH_DEVS: Union[str, Path] = "DEVICES__INST"
+    # DIRPATH_DEVS: Union[str, Path] = "DEVICES__BREEDER_INST"
     SETTINGS_BASE_NAME: Union[str, Path] = "SETTINGS_BASE.json"
     SETTINGS_BASE_FILEPATH: Path
 
-    DEVICES__CLS: Type[DevicesBreeder_WithDut] = DevicesBreeder_Example
+    DEVICES__BREEDER_CLS: Type[DevicesBreeder_WithDut] = DevicesBreeder_Example
 
     # AUX -----------------------------------------------------------
     TCS__CLS: Dict[Union[str, Type[TestCaseBase]], Optional[bool]] = {}     # todo: RENAME TO clss!!!
@@ -82,7 +82,7 @@ class TpMultyDutBase(Logger, QThread):
     #     Tc2: True
     # }
 
-    # DEVICES__INST: List[Union[str, Type[DeviceBase]]]    # settings
+    # DEVICES__BREEDER_INST: List[Union[str, Type[DeviceBase]]]    # settings
     # [
     #     Dev1,
     #     Dev2
@@ -103,7 +103,7 @@ class TpMultyDutBase(Logger, QThread):
             print(msg)
             raise Exx__TcsPathNotExists(msg)
 
-        self.DEVICES__CLS.generate__objects()
+        self.DEVICES__BREEDER_CLS.generate__objects()
 
         self.tcs__reinit()
         self.slots_connect()
@@ -134,7 +134,7 @@ class TpMultyDutBase(Logger, QThread):
     def slots_connect(self) -> None:
         self.signal__tp_start.connect(self.start)
         self.signal__tp_stop.connect(self.terminate)
-        self._signal__tp_reset_duts_sn.connect(self.DEVICES__CLS._debug__duts__reset_sn)
+        self._signal__tp_reset_duts_sn.connect(self.DEVICES__BREEDER_CLS._debug__duts__reset_sn)
 
         TestCaseBase.signals.signal__tc_state_changed.connect(self.post__tc_results)
 
@@ -198,7 +198,7 @@ class TpMultyDutBase(Logger, QThread):
 
     def _tcs__apply_devices(self) -> None:
         for tc in self.TCS__CLS:
-            tc.devices__apply(self.DEVICES__CLS)
+            tc.devices__apply(self.DEVICES__BREEDER_CLS)
 
     # =================================================================================================================
     def tp__check_active(self) -> bool:
@@ -225,7 +225,7 @@ class TpMultyDutBase(Logger, QThread):
             progress = 100
         self.progress = progress
 
-        self.DEVICES__CLS.disconnect__cls()
+        self.DEVICES__BREEDER_CLS.disconnect__cls()
 
         self.signal__tp_finished.emit()
 

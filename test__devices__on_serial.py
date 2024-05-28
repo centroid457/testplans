@@ -11,18 +11,12 @@ from bus_user import *
 
 # =====================================================================================================================
 class _Atc_SerialClient(SerialClient):
-    ADDRESS = AddressAutoAcceptVariant.FIRST_FREE__PAIRED_FOR_EMU
+    ADDRESS = Type__AddressAutoAcceptVariant.FIRST_FREE__PAIRED
     RAISE_CONNECT = False
 
     # EMULATOR ------------------------
-    _EMULATOR__CLS = SerialServer_Example
-    _EMULATOR__START = True
-
-    def connect__validation(self) -> bool:
-        return self.address__answer_validation()
-
-    def address__answer_validation(self) -> bool:
-        return self.write_read_line_last("upper hello") == "UPPER HELLO"
+    # _EMULATOR__CLS = SerialServer_Example
+    # _EMULATOR__START = True
 
 
 class Atc(DeviceBase):
@@ -61,15 +55,7 @@ class Test__TpDevicesIndexed_OnSerial:
     # -----------------------------------------------------------------------------------------------------------------
     def test__1(self):
         # 1 -----------------------------------------------------
-        assert self.Victim._GROUPS == {}
-        self.Victim.generate__objects()
-        assert self.Victim._GROUPS != {}
-
-
-        self.Victim.connect__cls()
-        assert self.Victim.ATC.conn.CONNECTED is True
-        self.Victim.disconnect__cls()
-        assert self.Victim.ATC.conn.CONNECTED is False
+        assert False
 
 
 # =====================================================================================================================
