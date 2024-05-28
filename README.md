@@ -1,4 +1,4 @@
-# testplans (v0.3.5)
+# testplans (v0.3.6)
 
 ## DESCRIPTION_SHORT
 simple testplan framework for several DUTs
@@ -56,7 +56,7 @@ designed to apply testplan for several DUTs
 	- tc  
 	- tc on dut  
 	- dut  
-3. [DEVICES__INST]:  
+3. [DEVICES__BREEDER_INST]:  
 	- keep all in one instance  
 	- use variants: single device for all duts or list for pairing each dut  
 
