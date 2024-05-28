@@ -40,9 +40,9 @@ if __name__ == "__main__":
     # emu.start()
     # emu.wait()
 
-    # dev = Ptb_SerialClient()
-    # print(f"{dev.connect()=}")
-    # print(f"{dev.ADDRESS=}")
+    dev = Ptb_SerialClient()
+    print(f"{dev.connect()=}")
+    print(f"{dev.ADDRESS=}")
 
 
 # =====================================================================================================================

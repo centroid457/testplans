@@ -9,7 +9,7 @@ from DEVICES import dut, atc, ptb
 
 # =====================================================================================================================
 class DevicesBreeder__Tp(DevicesBreeder_WithDut):
-    COUNT = 2
+    COUNT = 10
     CLS_SINGLE__ATC = atc.Device
     CLS_LIST__PTB = ptb.Device
     CLS_LIST__DUT = dut.Device

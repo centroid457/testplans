@@ -10,7 +10,7 @@ class TestCase(TestCaseBase):
     DESCRIPTION = "direct1"
 
     def run__wrapped(self):
-        time.sleep(0.5)
+        time.sleep(0.2)
         self.details_update({"detail_value": self.DEVICES__BREEDER_INST.DUT.VALUE})
 
         result_chain = ResultExpect_Chain(

@@ -35,10 +35,10 @@ if __name__ == "__main__":
     # emu.start()
     # emu.wait()
 
-    # dev = Atc_SerialClient()
-    # print(f"{dev.connect()=}")
+    dev = Atc_SerialClient()
+    print(f"{dev.connect()=}")
     # print(f"{dev.addresses_system__detect()=}")
-    # print(f"{dev.ADDRESS=}")
+    print(f"{dev.ADDRESS=}")
     #
     # print(f"{dev.address__answer_validation()=}")
     # print(f"{dev.address__answer_validation()=}")

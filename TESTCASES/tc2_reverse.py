@@ -23,7 +23,7 @@ class TestCase(tc1_direct.TestCase):
         return result_chain
 
     def run__wrapped(self) -> bool:
-        time.sleep(0.5)
+        time.sleep(0.2)
         self.details_update({"detail_value": not self.DEVICES__BREEDER_INST.DUT.VALUE})
         return not self.DEVICES__BREEDER_INST.DUT.VALUE
 

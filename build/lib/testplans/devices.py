@@ -2,9 +2,10 @@ from typing import *
 import uuid
 from enum import Enum, auto
 
+from funcs_aux import BreederObjectList
+
 from .tc import TestCaseBase
 from .models import *
-from funcs_aux import BreederObjectList
 
 
 # =====================================================================================================================
@@ -13,8 +14,8 @@ class DeviceBase:
     conn: Any = None
     INDEX: int = None
 
-    def __init__(self, index: int = None):
-        super().__init__()
+    def __init__(self, index: int = None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.INDEX = index
 
     # OVERWRITE =======================================================================================================
