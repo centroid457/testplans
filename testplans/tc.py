@@ -52,11 +52,14 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     # AUXILIARY -----------------------------------
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
     TCS__LIST: List['_TestCaseBase'] = []
+    _INSTS_DICT_CLS: dict[Any, dict[Any, Any]]
 
     result__cls_startup: Optional[bool] = None
     result__cls_teardown: Optional[bool] = None
 
     # INSTANCE ------------------------------------
+    _inst_inited: Optional[bool] = None
+
     INDEX: int
     SETTINGS: PrivateJson
     DEVICES__BREEDER_INST: 'DevicesBreeder'
@@ -94,15 +97,38 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         # FIXME: check if some TC on one base - it would be incorrect!!!???
 
     # =================================================================================================================
+    def __new__(cls, index: int, *args, **kwargs):
+        print(f"{cls.__name__}.__NEW__={index=}/{args=}/{kwargs=}")
+
+        if not hasattr(cls, "_INSTS_DICT_CLS"):
+            setattr(cls, "_INSTS_DICT_CLS", {})
+
+        if cls not in cls._INSTS_DICT_CLS:
+            cls._INSTS_DICT_CLS.update({cls: {}})
+
+        INSTS_DICT = cls._INSTS_DICT_CLS[cls]
+
+        try:
+            INST = INSTS_DICT[index]
+        except:
+            INST = super().__new__(cls)
+            INSTS_DICT[index] = INST
+
+        return INST
+
     def __init__(self, index: int):
+        if self._inst_inited:
+            return
+
+        # NEW INSTANCE -----------------------------
         self.INDEX = index
+        self.clear()
         super().__init__()
 
         if self.DEVICES__BREEDER_CLS:
             self.DEVICES__BREEDER_INST = self.DEVICES__BREEDER_CLS(index)
 
         self.SETTINGS = PrivateJson(_dict=self.settings_read())
-        self.clear()
 
     # =================================================================================================================
     @property
@@ -137,8 +163,6 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         return result
 
     def clear(self) -> None:
-        self.LOGGER.debug("clear")
-
         self.result = None
         self._timestamp_last = None
         self.timestamp_start = None
