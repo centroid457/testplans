@@ -129,6 +129,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             self.DEVICES__BREEDER_INST = self.DEVICES__BREEDER_CLS(index)
 
         self.SETTINGS = PrivateJson(_dict=self.settings_read())
+        self._inst_inited = True
 
     # =================================================================================================================
     @property
