@@ -69,7 +69,7 @@ class TpMultyDutBase(Logger, QThread):
 
     # DIRPATH_TPS: Union[str, Path] = "TESTPLANS"
     DIRPATH_TCS: Union[str, Path] = "TESTCASES"
-    # DIRPATH_DEVS: Union[str, Path] = "DEVICES"
+    # DIRPATH_DEVS: Union[str, Path] = "DEVICES__INST"
     SETTINGS_BASE_NAME: Union[str, Path] = "SETTINGS_BASE.json"
     SETTINGS_BASE_FILEPATH: Path
 
@@ -82,7 +82,7 @@ class TpMultyDutBase(Logger, QThread):
     #     Tc2: True
     # }
 
-    # DEVICES: List[Union[str, Type[DeviceBase]]]    # settings
+    # DEVICES__INST: List[Union[str, Type[DeviceBase]]]    # settings
     # [
     #     Dev1,
     #     Dev2

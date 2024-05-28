@@ -86,7 +86,7 @@ designed to apply testplan for several DUTs
         ["[SKIP]",
             "tc", "tc on dut", "dut"
          ],
-        ["[DEVICES]",
+        ["[DEVICES__INST]",
             "keep all in one instance",
             "use variants: single device for all duts or list for pairing each dut",
          ],

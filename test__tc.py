@@ -30,7 +30,7 @@ class Test__TestCaseBase:
     def test__1(self):
         victim = self.Victim()
         assert not victim.DEVICES__CLS
-        assert not victim.DEVICES
+        assert not victim.DEVICES__INST
         assert not victim.INDEX
         assert not victim.TCS__LIST
 

@@ -53,10 +53,10 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     # INSTANCE ------------------------------------
     DEVICES__CLS: Type['DevicesBreeder'] = None
-    DEVICES: 'DevicesBreeder' = None
+    DEVICES__INST: 'DevicesBreeder' = None
 
     SETTINGS: PrivateJson = None
-    INDEX: int = 0
+    INDEX: int
 
     result__cls_startup: Optional[bool] = None
     result__cls_teardown: Optional[bool] = None
@@ -68,13 +68,12 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     progress: int
 
     # =================================================================================================================
-    # def __init__(self, dut: Any, _settings_files: Union[None, pathlib.Path, List[pathlib.Path]] = None):
-    def __init__(self, index: int = 0):
+    def __init__(self, index: int):
         super().__init__()
         self.INDEX = index
 
-        if self.DEVICES__CLS:
-            self.DEVICES = self.DEVICES__CLS(self.INDEX)
+        if self.DEVICES__CLS and not self.DEVICES__INST:
+            self.DEVICES__INST = self.DEVICES__CLS(self.INDEX)
 
         self.clear()
 
@@ -97,8 +96,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         """
         cls.TCS__LIST = []
         for index in range(cls.DEVICES__CLS.COUNT):
-            tc_on_dut = cls(index=index)
-            cls.TCS__LIST.append(tc_on_dut)
+            tc_inst = cls(index=index)
+            cls.TCS__LIST.append(tc_inst)
 
         # FIXME: check if some TC on one base - it would be incorrect!!!???
 
@@ -213,7 +212,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         # PREPARE --------
         self.clear()
         self.timestamp_start = time.time()
-        if not self.DEVICES.DUT or not self.DEVICES.DUT.connect() or self.DEVICES.DUT.SKIP:
+        if not self.DEVICES__INST.DUT or not self.DEVICES__INST.DUT.connect() or self.DEVICES__INST.DUT.SKIP:
             return
 
         # WORK --------
@@ -337,7 +336,7 @@ class _Info(_TestCaseBase):
         result = ""
 
         result += f"DUT_INDEX={self.INDEX}\n"
-        result += f"DUT_SN={self.DEVICES.DUT.SN}\n"
+        result += f"DUT_SN={self.DEVICES__INST.DUT.SN}\n"
         result += f"TC_NAME={self.NAME}\n"
         result += f"TC_DESCRIPTION={self.DESCRIPTION}\n"
         result += f"TC_SKIP={self.SKIP}\n"
@@ -380,7 +379,7 @@ class _Info(_TestCaseBase):
 
         result = {
             **self.get__info().dict(),
-            **self.DEVICES.DUT.get__info().dict(),
+            **self.DEVICES__INST.DUT.get__info().dict(),
 
             # RESULTS
             "tc_timestamp": self.timestamp_last,

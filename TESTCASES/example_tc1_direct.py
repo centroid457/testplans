@@ -10,12 +10,12 @@ class TestCase(TestCaseBase):
 
     def run__wrapped(self) -> bool:
         time.sleep(0.5)
-        self.details_update({"detail_value": self.DEVICES.DUT.VALUE})
+        self.details_update({"detail_value": self.DEVICES__INST.DUT.VALUE})
 
         result_chain = ResultExpect_Chain(
             [
                 ResultExpect_Step(value=True, title="TRUE"),
-                ResultExpect_Step(value=self.DEVICES.DUT.VALUE, title="DUT.VALUE"),
+                ResultExpect_Step(value=self.DEVICES__INST.DUT.VALUE, title="DUT.VALUE"),
             ],
         )
 
