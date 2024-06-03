@@ -4,23 +4,18 @@ from bus_user import *
 
 
 # =====================================================================================================================
-class Ptb_SerialClient(SerialClient):
-    # ADDRESS = AddressAutoAcceptVariant.FIRST_FREE__PAIRED_FOR_EMU
-    ADDRESS = Type__AddressAutoAcceptVariant.FIRST_FREE__ANSWER_VALID
+class Ptb_SerialClient(SerialClient_FirstFree_AnswerValid):
+    LOG_ENABLE = True
     RAISE_CONNECT = False
-
     INDEX: int | None
-
-    # EMULATOR ------------------------
-    # _EMULATOR__CLS = Ptb_Emulator
-    # _EMULATOR__START = True
 
     @property
     def PREFIX(self) -> str:
         return f"PTB:{self.INDEX}:"
 
     def address__answer_validation(self) -> bool:
-        return self.write_read_line_last("get name") == f"PTB {self.INDEX}"
+        result = self.write_read__last_validate("get name", f"PTB") and self.write_read__last_validate("get addr", [f"{self.INDEX}", f"0{self.INDEX}"])
+        return result
 
 
 # =====================================================================================================================

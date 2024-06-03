@@ -40,7 +40,7 @@ class Test__DeviceBase:
 
 
 # =====================================================================================================================
-class Test__TpDevicesIndexed:
+class Test__DevicesBreeder_WithDut:
     @classmethod
     def setup_class(cls):
         pass
@@ -122,7 +122,6 @@ class Test__TpDevicesIndexed:
             assert False
         except:
             pass
-
 
         assert victim.group_check__exists("DUT") is True
         assert victim.group_check__exists("ATC") is True

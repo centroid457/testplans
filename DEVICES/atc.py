@@ -4,23 +4,15 @@ from bus_user import *
 
 
 # =====================================================================================================================
-class Atc_SerialClient(SerialClient):
+class Atc_SerialClient(SerialClient_FirstFree_AnswerValid):
+    LOG_ENABLE = True
     RAISE_CONNECT = False
-
-    # ADDRESS = AddressAutoAcceptVariant.FIRST_FREE__PAIRED_FOR_EMU
-    ADDRESS = Type__AddressAutoAcceptVariant.FIRST_FREE__ANSWER_VALID
-    # ADDRESS = "COM24"
-    # ADDRESS = "/dev/ttyUSB0"
     BAUDRATE = 115200
     PREFIX = "ATC:03:"
     EOL__SEND = b"\r"
 
-    # EMULATOR ------------------------
-    # _EMULATOR__CLS = Atc_Emulator
-    # _EMULATOR__START = True
-
     def address__answer_validation(self) -> bool:
-        return self.write_read_line_last("get name") == "ATC 03"
+        return self.write_read__last_validate("get name", "ATC 03")
 
 
 # =====================================================================================================================

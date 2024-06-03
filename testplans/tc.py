@@ -51,8 +51,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     # AUXILIARY -----------------------------------
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
-    TCS__LIST: List['_TestCaseBase'] = []
-    _INSTS_DICT_CLS: dict[Any, dict[Any, Any]]
+    _INSTS_DICT_CLS: dict[Type[Any], dict[Any, Any]]
 
     result__cls_startup: Optional[bool] = None
     result__cls_teardown: Optional[bool] = None
@@ -76,37 +75,34 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     def devices__apply(cls, devices_cls: Type['DevicesBreeder'] = None) -> None:
         if devices_cls is not None:
             cls.DEVICES__BREEDER_CLS = devices_cls
-            cls.TCS__LIST = []
+            cls.TCS__LIST.clear()
 
         if cls.DEVICES__BREEDER_CLS:
             cls.DEVICES__BREEDER_CLS.generate__objects()
-            cls._TCS__LIST__generate()
+            for index in range(cls.DEVICES__BREEDER_CLS.COUNT):
+                tc_inst = cls(index=index)
 
     @classmethod
-    def _TCS__LIST__generate(cls) -> None:
-        """
-        create tc objects for all DUTs, if not existed - create it in all DUTs
-        """
-        if cls.TCS__LIST:
-            return
-
-        for index in range(cls.DEVICES__BREEDER_CLS.COUNT):
-            tc_inst = cls(index=index)
-            cls.TCS__LIST.append(tc_inst)
-
-        # FIXME: check if some TC on one base - it would be incorrect!!!???
+    @property
+    def TCS__LIST(cls) -> list[Self]:
+        try:
+            result = list(_TestCaseBase._INSTS_DICT_CLS[cls].values())
+        except:
+            result = []
+        return result
 
     # =================================================================================================================
     def __new__(cls, index: int, *args, **kwargs):
-        print(f"{cls.__name__}.__NEW__={index=}/{args=}/{kwargs=}")
+        """
+        use singletons for every class!
+        """
+        if not hasattr(_TestCaseBase, "_INSTS_DICT_CLS"):
+            setattr(_TestCaseBase, "_INSTS_DICT_CLS", {})
 
-        if not hasattr(cls, "_INSTS_DICT_CLS"):
-            setattr(cls, "_INSTS_DICT_CLS", {})
+        if cls not in _TestCaseBase._INSTS_DICT_CLS:
+            _TestCaseBase._INSTS_DICT_CLS.update({cls: {}})
 
-        if cls not in cls._INSTS_DICT_CLS:
-            cls._INSTS_DICT_CLS.update({cls: {}})
-
-        INSTS_DICT = cls._INSTS_DICT_CLS[cls]
+        INSTS_DICT = _TestCaseBase._INSTS_DICT_CLS[cls]
 
         try:
             INST = INSTS_DICT[index]
@@ -114,6 +110,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             INST = super().__new__(cls)
             INSTS_DICT[index] = INST
 
+        print(f"{cls.__name__}.__NEW__={index=}/{args=}/{kwargs=}//groups={len(_TestCaseBase._INSTS_DICT_CLS)}/group={len(INSTS_DICT)}")
         return INST
 
     def __init__(self, index: int):

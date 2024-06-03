@@ -19,7 +19,7 @@ class DevicesBreeder__Tp(DevicesBreeder_WithDut):
 class Client_RequestItem_Tp(Client_RequestItem):
     LOG_ENABLE = True
 
-    RETRY_LIMIT = 0
+    RETRY_LIMIT = 1
     RETRY_TIMEOUT = 1
 
     HOST: str = "192.168.74.20"

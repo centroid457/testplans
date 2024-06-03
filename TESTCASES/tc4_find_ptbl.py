@@ -23,11 +23,11 @@ class TestCase(TestCaseBase):
         # return result_chain
 
     def run__wrapped(self) -> TYPE__RESULT:
-        time.sleep(0.2)
+        # time.sleep(0.2)
         result_chain = ResultExpect_Chain(
             [
                 ResultExpect_Step(value=hasattr(self.DEVICES__BREEDER_INST, "PTB"), title="PTB exists"),
-                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.PTB.connect, title="PTB.conn.address__answer_validation"),
+                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.PTB.connect, title="PTB.connect"),
             ],
         )
         result_chain.run()

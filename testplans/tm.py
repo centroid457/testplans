@@ -67,26 +67,26 @@ class TpTableModel(TableModelTemplate):
         # PREPARE -----------------------------------------------------------------------------------------------------
         col = index.column()
         row = index.row()
-        tc = list(self.DATA.TCS__CLS)[row]
+        tc_cls = list(self.DATA.TCS__CLS)[row]
 
         dut = None
         tc_inst = None
         if col in self.HEADERS.DUTS:
             dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
-            tc_inst = tc.TCS__LIST[dut.INDEX]
+            tc_inst = tc_cls.TCS__LIST[dut.INDEX]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:
             if col == self.HEADERS.TESTCASE:
-                return f'{tc.NAME}\n{tc.DESCRIPTION}'
+                return f'{tc_cls.NAME}\n{tc_cls.DESCRIPTION}'
             if col == self.HEADERS.ASYNC:
-                return '+' if tc.ASYNC else '-'
+                return '+' if tc_cls.ASYNC else '-'
             if col == self.HEADERS.STARTUP:
-                if tc.result__cls_startup is None:
+                if tc_cls.result__cls_startup is None:
                     return
-                elif bool(tc.result__cls_startup) is True:
+                elif bool(tc_cls.result__cls_startup) is True:
                     return '+'
-                elif bool(tc.result__cls_startup) is False:
+                elif bool(tc_cls.result__cls_startup) is False:
                     return '-'
             if col in self.HEADERS.DUTS:
                 if tc_inst:
@@ -95,11 +95,11 @@ class TpTableModel(TableModelTemplate):
                     else:
                         return f'{tc_inst.result}'
             if col == self.HEADERS.TEARDOWN:
-                if tc.result__cls_teardown is None:
+                if tc_cls.result__cls_teardown is None:
                     return
-                elif bool(tc.result__cls_teardown) is True:
+                elif bool(tc_cls.result__cls_teardown) is True:
                     return '+'
-                elif bool(tc.result__cls_teardown) is False:
+                elif bool(tc_cls.result__cls_teardown) is False:
                     return '-'
 
         # -------------------------------------------------------------------------------------------------------------
@@ -135,19 +135,19 @@ class TpTableModel(TableModelTemplate):
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.TextColorRole:
-            if tc.SKIP:
+            if tc_cls.SKIP:
                 return QColor('#a2a2a2')
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.BackgroundColorRole:
-            if tc.SKIP:
+            if tc_cls.SKIP:
                 return QColor('#e2e2e2')
             if col == self.HEADERS.STARTUP:
-                if tc.result__cls_startup is None:
+                if tc_cls.result__cls_startup is None:
                     return
-                elif bool(tc.result__cls_startup) is True:
+                elif bool(tc_cls.result__cls_startup) is True:
                     return QColor("#50FF50")
-                elif bool(tc.result__cls_startup) is False:
+                elif bool(tc_cls.result__cls_startup) is False:
                     return QColor("#FF5050")
             if col in self.HEADERS.DUTS:
                 if tc_inst.skip_tc_dut or not dut.connect() or dut.SKIP:
@@ -163,23 +163,23 @@ class TpTableModel(TableModelTemplate):
                         return QColor("#FF5050")
                 # elif
             if col == self.HEADERS.TEARDOWN:
-                if tc.result__cls_teardown is None:
+                if tc_cls.result__cls_teardown is None:
                     return
-                elif bool(tc.result__cls_teardown) is True:
+                elif bool(tc_cls.result__cls_teardown) is True:
                     return QColor("#50FF50")
-                elif bool(tc.result__cls_teardown) is False:
+                elif bool(tc_cls.result__cls_teardown) is False:
                     return QColor("#FF5050")
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
             if self.open__settings:
                 if col == self.HEADERS.TESTCASE:
-                    if tc.SKIP:
+                    if tc_cls.SKIP:
                         return Qt.Unchecked
                     else:
                         return Qt.Checked
                 elif col == self.HEADERS.ASYNC:
-                    if tc.ASYNC:
+                    if tc_cls.ASYNC:
                         return Qt.Checked
                     else:
                         return Qt.Unchecked
@@ -192,7 +192,7 @@ class TpTableModel(TableModelTemplate):
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.FontRole:
-            if tc == self.DATA.tc_active:
+            if tc_cls == self.DATA.tc_active:
                 # QFont("Arial", 9, QFont.Bold)
                 font = QFont()
 

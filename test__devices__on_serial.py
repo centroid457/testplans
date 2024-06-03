@@ -8,37 +8,20 @@ from typing import *
 from testplans import *
 from bus_user import *
 
-
-# =====================================================================================================================
-class _Atc_SerialClient(SerialClient):
-    ADDRESS = Type__AddressAutoAcceptVariant.FIRST_FREE__PAIRED
-    RAISE_CONNECT = False
-
-    # EMULATOR ------------------------
-    # _EMULATOR__CLS = SerialServer_Example
-    # _EMULATOR__START = True
-
-
-class Atc(DeviceBase):
-    conn = _Atc_SerialClient()
-
-    # OVERWRITE =======================================================================================================
-    pass
-    pass
-    pass
-    pass
+from DEVICES import atc, ptb
 
 
 # =====================================================================================================================
-@pytest.mark.skip
-class Test__TpDevicesIndexed_OnSerial:
+# @pytest.mark.skip
+class Test__DevicesBreeder_OnSerial:
     @classmethod
     def setup_class(cls):
         pass
 
-        class Victim(DevicesBreeder_Example):
-            COUNT = 2
-            CLS_SINGLE__ATC = Atc
+        class Victim(DevicesBreeder):
+            COUNT = 10
+            CLS_SINGLE__ATC = atc.Device
+            CLS_LIST__PTB = ptb.Device
 
         cls.Victim = Victim
 
