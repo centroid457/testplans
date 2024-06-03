@@ -4,27 +4,23 @@ from bus_user import *
 
 
 # =====================================================================================================================
-class Ptb_SerialClient(SerialClient_FirstFree_AnswerValid):
+class Device(SerialClient_FirstFree_AnswerValid):
     LOG_ENABLE = True
     RAISE_CONNECT = False
-    INDEX: int | None
+    BAUDRATE = 115200
+    EOL__SEND = b"\n"
 
     @property
     def PREFIX(self) -> str:
         return f"PTB:{self.INDEX}:"
 
     def address__answer_validation(self) -> bool:
-        result = self.write_read__last_validate("get name", f"PTB") and self.write_read__last_validate("get addr", [f"{self.INDEX}", f"0{self.INDEX}"])
+        result = self.write_read__last_validate("get name", f"PTB", prefix="*:") and self.write_read__last_validate("get addr", [f"{self.INDEX}", f"0{self.INDEX}"], prefix="*:")
         return result
 
-
-# =====================================================================================================================
-class Device(DeviceBase):
-    conn = Ptb_SerialClient()
-
-    def __init__(self, *args, **kwargs):
+    def __init__(self, index: int, *args, **kwargs):
+        self.INDEX = index
         super().__init__(*args, **kwargs)
-        self.conn.INDEX = self.INDEX
 
 
 # =====================================================================================================================
@@ -35,7 +31,7 @@ if __name__ == "__main__":
     # emu.start()
     # emu.wait()
 
-    dev = Ptb_SerialClient()
+    dev = Device()
     print(f"{dev.connect()=}")
     print(f"{dev.ADDRESS=}")
 

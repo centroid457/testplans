@@ -4,7 +4,7 @@ from bus_user import *
 
 
 # =====================================================================================================================
-class Atc_SerialClient(SerialClient_FirstFree_AnswerValid):
+class Device(SerialClient_FirstFree_AnswerValid):
     LOG_ENABLE = True
     RAISE_CONNECT = False
     BAUDRATE = 115200
@@ -16,18 +16,13 @@ class Atc_SerialClient(SerialClient_FirstFree_AnswerValid):
 
 
 # =====================================================================================================================
-class Device(DeviceBase):
-    conn = Atc_SerialClient()
-
-
-# =====================================================================================================================
 if __name__ == "__main__":
     pass
     # emu = Atc_Emulator()
     # emu.start()
     # emu.wait()
 
-    dev = Atc_SerialClient()
+    dev = Device()
     print(f"{dev.connect()=}")
     # print(f"{dev.addresses_system__detect()=}")
     print(f"{dev.ADDRESS=}")

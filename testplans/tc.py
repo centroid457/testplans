@@ -79,8 +79,9 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
         if cls.DEVICES__BREEDER_CLS:
             cls.DEVICES__BREEDER_CLS.generate__objects()
-            for index in range(cls.DEVICES__BREEDER_CLS.COUNT):
-                tc_inst = cls(index=index)
+            if not cls.TCS__LIST:
+                for index in range(cls.DEVICES__BREEDER_CLS.COUNT):
+                    tc_inst = cls(index=index)
 
     @classmethod
     @property

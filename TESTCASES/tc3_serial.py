@@ -26,7 +26,7 @@ class TestCase(TestCaseBase):
         result_chain = ResultExpect_Chain(
             [
                 ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.VALUE, title="DUT.VALUE"),
-                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.ATC.conn.address__answer_validation, title="atc.conn.address__answer_validation"),
+                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.ATC.address__answer_validation, title="atc.address__answer_validation"),
             ],
         )
         result_chain.run()
