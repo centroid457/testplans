@@ -18,10 +18,10 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
         result = self.write_read__last_validate("get name", f"PTB", prefix="*:") and self.write_read__last_validate("get addr", [f"{self.INDEX}", f"0{self.INDEX}"], prefix="*:")
         return result
 
-    def __init__(self, index: int = None, *args, **kwargs):
+    def __init__(self, index: int, **kwargs):
         if index is not None:
             self.INDEX = index
-        super().__init__(*args, **kwargs)
+        super().__init__(**kwargs)
 
     @property
     def VALUE(self) -> bool:
