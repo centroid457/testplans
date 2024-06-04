@@ -15,7 +15,7 @@ class PROJECT:
 
     # PROJECT ----------------------------------------------
     NAME_IMPORT: str = "testplans"
-    KEYWORDS: List[str] = [
+    KEYWORDS: list[str] = [
         "testplan",
         "testplan structure framework",
         "testplan gui",
@@ -75,7 +75,7 @@ designed to apply testplan for several DUTs
     - минимальное API и запуск
 """
 
-    FEATURES: List[str] = [
+    FEATURES: list[str] = [
         # "feat1",
         # ["feat2", "block1", "block2"],
 
@@ -93,18 +93,18 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 3, 9)
-    TODO: List[str] = [
+    VERSION: tuple[int, int, int] = (0, 3, 9)
+    TODO: list[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
         "add version for all jsons for future api_server",
         "[RESULTS] try separate",
     ]
-    FIXME: List[str] = [
+    FIXME: list[str] = [
         "TP progress",
         "NEED TESTS!!! TC+TP"
     ]
-    NEWS: List[str] = [
+    NEWS: list[str] = [
         ["[TC]",
             "add TYPE__RESULT_W_EXX/TYPE__RESULT_BASE",
             "fix all wrapped methods in case of EXX (wrap by try!)",
