@@ -1,5 +1,4 @@
 from typing import *
-from testplans import DeviceBase
 from bus_user import *
 
 
@@ -18,6 +17,7 @@ class Device(SerialClient_FirstFree_AnswerValid):
 # =====================================================================================================================
 if __name__ == "__main__":
     pass
+
     # emu = Atc_Emulator()
     # emu.start()
     # emu.wait()
