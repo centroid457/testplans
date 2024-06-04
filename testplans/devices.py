@@ -14,20 +14,17 @@ class DeviceBase:
     conn: Any = None
     INDEX: int = None
 
-    def __init__(self, index: int = None, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.INDEX = index
-
-    # OVERWRITE =======================================================================================================
-    pass
-    pass
-    pass
-    pass
-
     # AUX -----------------------------------
     NAME: str = None
     DESCRIPTION: str = None
     SN: str = None
+
+    def __init__(self, index: int = None, *args, **kwargs):
+        """
+        :param index: None is only for SINGLE!
+        """
+        self.INDEX = index
+        super().__init__(*args, **kwargs)
 
     # CONNECT ---------------------------------
     def connect(self) -> bool:
@@ -44,13 +41,6 @@ class DeviceBase:
         except:
             pass
 
-    # TESTS -----------------------------------
-    def selftest(self) -> Optional[bool]:
-        """
-        :return: None - not implemented (lets decide it!)
-        """
-        pass
-
     def get__info(self) -> ModelDeviceInfo:
         result = {
             "DUT_INDEX": self.INDEX,
@@ -61,28 +51,20 @@ class DeviceBase:
         }
         return ModelDeviceInfo(**result)
 
-    # UNIQUE ==========================================================================================================
-    pass
-    pass
-    pass
-    pass
-
 
 # =====================================================================================================================
 class DutBase(DeviceBase):
-    # SETTINGS ------------------------------------
     SKIP: Optional[bool] = None
 
-    # DEBUG PURPOSE ---------------------------------------------------------------------------------------------------
-    def _debug__reset_sn(self) -> None:
-        """this is only for testing middleware"""
-        self.SN = uuid.uuid4().hex
-
-    def _bebug__SKIP_reverse(self) -> None:
+    def SKIP_reverse(self) -> None:
         """
         this is only for testing purpose
         """
         self.SKIP = not bool(self.SKIP)
+
+    def _debug__reset_sn(self) -> None:
+        """this is only for testing middleware"""
+        self.SN = uuid.uuid4().hex
 
 
 # =====================================================================================================================

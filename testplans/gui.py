@@ -140,7 +140,7 @@ class TpGuiBase(Gui):
 
         if index in self.TM.HEADERS.DUTS:
             dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[self.TM.HEADERS.DUTS.get_listed_index__by_outer(index)]
-            dut._bebug__SKIP_reverse()
+            dut.SKIP_reverse()
             self.TM._data_reread()
 
     def TV_selectionChanged(self, first: QItemSelection, last: QItemSelection) -> None:
