@@ -74,7 +74,7 @@ class TpTableModel(TableModelTemplate):
         if col in self.HEADERS.DUTS:
             index = col - self.HEADERS.DUTS.START_OUTER
             dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[index]
-            tc_inst = tc_cls(index=index)
+            tc_inst = tc_cls.TCS__LIST[index]
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:

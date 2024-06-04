@@ -25,7 +25,7 @@ class TestCase(TestCaseBase):
     def startup__wrapped(self) -> TYPE__RESULT:
         result_chain = ResultExpect_Chain(
             [
-                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.PTB.connect, title="PTB.connect"),
+                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.connect, title="DUT.connect"),
             ],
         )
         result_chain.run()
@@ -34,7 +34,7 @@ class TestCase(TestCaseBase):
     def run__wrapped(self) -> TYPE__RESULT:
         result_chain = ResultExpect_Chain(
             [
-                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.PTB.connect, title="PTB.connect"),
+                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.connect, title="DUT.connect"),
             ],
         )
         result_chain.run()
