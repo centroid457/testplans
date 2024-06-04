@@ -11,6 +11,10 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
     EOL__SEND = b"\n"
 
     @property
+    def DEV_FOUND(self) -> bool:
+        return self.address_check__resolved()
+
+    @property
     def PREFIX(self) -> str:
         return f"PTB:{self.INDEX}:"
 

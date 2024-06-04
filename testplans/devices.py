@@ -18,6 +18,7 @@ class DeviceBase:
     NAME: str = None
     DESCRIPTION: str = None
     SN: str = None
+    DEV_FOUND: bool | None = None
 
     def __init__(self, index: int = None, **kwargs):
         """

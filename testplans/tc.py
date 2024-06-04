@@ -240,7 +240,15 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         # PREPARE --------
         self.clear()
         self.timestamp_start = time.time()
-        if not hasattr(self.DEVICES__BREEDER_INST, "DUT") or self.DEVICES__BREEDER_INST.DUT.SKIP or not self.DEVICES__BREEDER_INST.DUT.connect():
+        if (
+                not hasattr(self.DEVICES__BREEDER_INST, "DUT")
+                or
+                self.DEVICES__BREEDER_INST.DUT.SKIP
+                or
+                not self.DEVICES__BREEDER_INST.DUT.DEV_FOUND
+                or
+                not self.DEVICES__BREEDER_INST.DUT.connect()
+        ):
             return
 
         # WORK --------

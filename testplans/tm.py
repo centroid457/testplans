@@ -151,7 +151,7 @@ class TpTableModel(TableModelTemplate):
                 elif bool(tc_cls.result__cls_startup) is False:
                     return QColor("#FF5050")
             if col in self.HEADERS.DUTS:
-                if tc_inst.skip_tc_dut or dut.SKIP:
+                if tc_inst.skip_tc_dut or dut.SKIP or not dut.DEV_FOUND:
                     return QColor('#e2e2e2')
                 elif tc_inst.isRunning():
                     return QColor("#FFFF50")

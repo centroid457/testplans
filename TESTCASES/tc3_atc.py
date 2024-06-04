@@ -22,6 +22,7 @@ class TestCase(TestCaseBase):
         return result_chain
 
     def run__wrapped(self) -> TYPE__RESULT_W_NORETURN:
+        time.sleep(0.1)
         result_chain = ResultExpect_Chain(
             [
                 # ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.VALUE, title="DUT.VALUE"),

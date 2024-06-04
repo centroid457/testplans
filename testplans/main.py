@@ -211,7 +211,7 @@ class TpMultyDutBase(Logger, QThread):
         Overwrite with super! super first!
         """
         self.progress = 1
-        # self.DEVICES__BREEDER_CLS.connect__cls()      # dont use here! connect only in exact TC!!!!
+        self.DEVICES__BREEDER_CLS.group_call__("connect", "DUT")      # dont connect all here! only in exact TC!!!!
         return True
 
     def tp__teardown(self, progress: int = 100) -> None:
