@@ -14,7 +14,9 @@ from .models import *
 
 
 # =====================================================================================================================
-TYPE__RESULT = Union[None, bool, ResultExpect_Base]
+TYPE__RESULT_BASE = Union[None, bool, ResultExpect_Base]
+TYPE__RESULT_W_NORETURN = Union[TYPE__RESULT_BASE, NoReturn]
+TYPE__RESULT_W_EXX = Union[TYPE__RESULT_BASE, Type[Exception]]
 
 
 # =====================================================================================================================
@@ -184,11 +186,11 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     # RESULT ----------------------------------------------------------------------------------------------------------
     @property
-    def result(self) -> TYPE__RESULT:
+    def result(self) -> TYPE__RESULT_W_EXX:
         return self._result
 
     @result.setter
-    def result(self, value: TYPE__RESULT) -> None:
+    def result(self, value: TYPE__RESULT_W_EXX) -> None:
         self._result = value
         self.signals.signal__tc_state_changed.emit(self)
 
@@ -238,7 +240,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         # PREPARE --------
         self.clear()
         self.timestamp_start = time.time()
-        if not self.DEVICES__BREEDER_INST.DUT or self.DEVICES__BREEDER_INST.DUT.SKIP or not self.DEVICES__BREEDER_INST.DUT.connect():
+        if not hasattr(self.DEVICES__BREEDER_INST, "DUT") or self.DEVICES__BREEDER_INST.DUT.SKIP or not self.DEVICES__BREEDER_INST.DUT.connect():
             return
 
         # WORK --------
@@ -249,6 +251,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
                 self.result = self.run__wrapped()
                 self.LOGGER.debug(f"run-run_wrapped FINISHED WITH {self.result=}")
             except Exception as exx:
+                self.result = False
                 self.exx = exx
         self.LOGGER.debug("run-teardown")
         self.teardown()
@@ -291,34 +294,52 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
     # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
     @classmethod
-    def startup__cls(cls) -> TYPE__RESULT:
+    def startup__cls(cls) -> TYPE__RESULT_W_EXX:
         """before batch work
         """
         print(f"startup__cls")
         cls.clear__cls()
 
-        result = cls.startup__cls__wrapped()
+        try:
+            result = cls.startup__cls__wrapped()
+        except Exception as exx:
+            result = exx
         print(f"result__cls_startup={result}")
         cls.result__cls_startup = result
         return result
 
-    def startup(self) -> TYPE__RESULT:
+    def startup(self) -> TYPE__RESULT_W_EXX:
         self.LOGGER.debug("")
         self.progress = 1
-        return self.startup__wrapped()
 
-    def teardown(self) -> TYPE__RESULT:
+        try:
+            result = self.startup__wrapped()
+        except Exception as exx:
+            result = exx
+        return result
+
+    def teardown(self) -> TYPE__RESULT_W_EXX:
         self.LOGGER.debug("")
         self._timestamp_last = time.time()
         self.progress = 99
-        result = self.teardown__wrapped()
+
+        try:
+            result = self.teardown__wrapped()
+        except Exception as exx:
+            result = exx
+
         self.progress = 100
         return result
 
     @classmethod
-    def teardown__cls(cls) -> TYPE__RESULT:
+    def teardown__cls(cls) -> TYPE__RESULT_W_EXX:
         print(f"run__cls=teardown__cls")
-        result = cls.teardown__cls__wrapped()
+
+        try:
+            result = cls.teardown__cls__wrapped()
+        except Exception as exx:
+            result = exx
+
         if not result:
             print(f"[FAIL] teardown__cls {cls.NAME}")
 
@@ -334,20 +355,20 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     pass
 
     @classmethod
-    def startup__cls__wrapped(cls) -> TYPE__RESULT:
+    def startup__cls__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
         return True
 
-    def startup__wrapped(self) -> TYPE__RESULT:
+    def startup__wrapped(self) -> TYPE__RESULT_W_NORETURN:
         return True
 
-    def run__wrapped(self) -> TYPE__RESULT:
+    def run__wrapped(self) -> TYPE__RESULT_W_NORETURN:
         return True
 
-    def teardown__wrapped(self) -> TYPE__RESULT:
+    def teardown__wrapped(self) -> TYPE__RESULT_W_NORETURN:
         return True
 
     @classmethod
-    def teardown__cls__wrapped(cls) -> TYPE__RESULT:
+    def teardown__cls__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
         return True
 
 

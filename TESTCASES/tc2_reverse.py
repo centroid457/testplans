@@ -1,5 +1,5 @@
 import time
-from testplans import TestCaseBase, TYPE__RESULT
+from testplans import TestCaseBase, TYPE__RESULT_W_NORETURN
 from . import tc1_direct
 
 from funcs_aux import ResultExpect_Step, ResultExpect_Chain
@@ -11,7 +11,7 @@ class TestCase(tc1_direct.TestCase):
     DESCRIPTION = "reverse1"
 
     @classmethod
-    def startup__cls__wrapped(cls) -> TYPE__RESULT:
+    def startup__cls__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
         result_chain = ResultExpect_Chain(
             [
                 ResultExpect_Step(value=True, title="TRUE"),

@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: Tuple[int, int, int] = (0, 3, 8)
+    VERSION: Tuple[int, int, int] = (0, 3, 9)
     TODO: List[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,7 +105,10 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: List[str] = [
-        "[TC] zero ref",
+        ["[TC]",
+            "add TYPE__RESULT_W_EXX/TYPE__RESULT_BASE",
+            "fix all wrapped methods in case of EXX (wrap by try!)",
+         ]
     ]
 
     # FINALIZE -----------------------------------------------

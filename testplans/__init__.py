@@ -54,7 +54,9 @@ from .tc import (
     Signals,
 
     # TYPES
-    TYPE__RESULT,
+    TYPE__RESULT_BASE,
+    TYPE__RESULT_W_NORETURN,
+    TYPE__RESULT_W_EXX,
 
     # EXX
 )

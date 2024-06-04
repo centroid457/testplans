@@ -1,5 +1,5 @@
 import time
-from testplans import TestCaseBase, TYPE__RESULT
+from testplans import TestCaseBase, TYPE__RESULT_W_NORETURN
 
 from funcs_aux import ResultExpect_Step, ResultExpect_Chain
 
@@ -10,7 +10,7 @@ class TestCase(TestCaseBase):
     DESCRIPTION = "atc"
 
     @classmethod
-    def startup__cls__wrapped(cls) -> TYPE__RESULT:
+    def startup__cls__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
         result_chain = ResultExpect_Chain(
             [
                 ResultExpect_Step(value=hasattr(cls, "DEVICES__BREEDER_CLS"), value_under_func=bool, title="hasattr DEVICES__CLS"),
@@ -21,7 +21,7 @@ class TestCase(TestCaseBase):
         result_chain.run()
         return result_chain
 
-    def run__wrapped(self) -> TYPE__RESULT:
+    def run__wrapped(self) -> TYPE__RESULT_W_NORETURN:
         result_chain = ResultExpect_Chain(
             [
                 # ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.VALUE, title="DUT.VALUE"),
