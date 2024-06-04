@@ -238,7 +238,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         # PREPARE --------
         self.clear()
         self.timestamp_start = time.time()
-        if not self.DEVICES__BREEDER_INST.DUT or not self.DEVICES__BREEDER_INST.DUT.connect() or self.DEVICES__BREEDER_INST.DUT.SKIP:
+        if not self.DEVICES__BREEDER_INST.DUT or self.DEVICES__BREEDER_INST.DUT.SKIP or not self.DEVICES__BREEDER_INST.DUT.connect():
             return
 
         # WORK --------

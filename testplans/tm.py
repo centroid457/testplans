@@ -72,8 +72,9 @@ class TpTableModel(TableModelTemplate):
         dut = None
         tc_inst = None
         if col in self.HEADERS.DUTS:
-            dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
-            tc_inst = tc_cls.TCS__LIST[dut.INDEX]
+            index = col - self.HEADERS.DUTS.START_OUTER
+            dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[index]
+            tc_inst = tc_cls(index=index)
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:
@@ -150,7 +151,7 @@ class TpTableModel(TableModelTemplate):
                 elif bool(tc_cls.result__cls_startup) is False:
                     return QColor("#FF5050")
             if col in self.HEADERS.DUTS:
-                if tc_inst.skip_tc_dut or not dut.connect() or dut.SKIP:
+                if tc_inst.skip_tc_dut or dut.SKIP:
                     return QColor('#e2e2e2')
                 elif tc_inst.isRunning():
                     return QColor("#FFFF50")
@@ -213,21 +214,22 @@ class TpTableModel(TableModelTemplate):
         # PREPARE -----------------------------------------------------------------------------------------------------
         row = index.row()
         col = index.column()
-        tc = list(self.DATA.TCS__CLS)[row]
+        tc_cls = list(self.DATA.TCS__CLS)[row]
 
         dut = None
         tc_inst = None
         if col in self.HEADERS.DUTS:
-            dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[col - self.HEADERS.DUTS.START_OUTER]
-            tc_inst = tc.TCS__LIST[dut.INDEX]
+            index = col - self.HEADERS.DUTS.START_OUTER
+            dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[index]
+            tc_inst = tc_cls(index=index)
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
             if col == self.HEADERS.TESTCASE:
-                tc.SKIP = value == Qt.Unchecked
+                tc_cls.SKIP = value == Qt.Unchecked
 
             if col == self.HEADERS.ASYNC:
-                tc.ASYNC = value == Qt.Checked
+                tc_cls.ASYNC = value == Qt.Checked
 
             if col in self.HEADERS.DUTS:
                 if tc_inst:
