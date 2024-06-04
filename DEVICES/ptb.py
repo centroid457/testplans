@@ -1,10 +1,10 @@
 from typing import *
-from testplans import DeviceBase
+from testplans import DutBase
 from bus_user import *
 
 
 # =====================================================================================================================
-class Device(SerialClient_FirstFree_AnswerValid):
+class Device(SerialClient_FirstFree_AnswerValid, DutBase):
     LOG_ENABLE = True
     RAISE_CONNECT = False
     BAUDRATE = 115200
@@ -18,9 +18,14 @@ class Device(SerialClient_FirstFree_AnswerValid):
         result = self.write_read__last_validate("get name", f"PTB", prefix="*:") and self.write_read__last_validate("get addr", [f"{self.INDEX}", f"0{self.INDEX}"], prefix="*:")
         return result
 
-    def __init__(self, index: int, *args, **kwargs):
-        self.INDEX = index
+    def __init__(self, index: int = None, *args, **kwargs):
+        if index is not None:
+            self.INDEX = index
         super().__init__(*args, **kwargs)
+
+    @property
+    def VALUE(self) -> bool:
+        return self.INDEX % 2 == 0
 
 
 # =====================================================================================================================
@@ -31,9 +36,9 @@ if __name__ == "__main__":
     # emu.start()
     # emu.wait()
 
-    dev = Device()
-    print(f"{dev.connect()=}")
-    print(f"{dev.ADDRESS=}")
+    # dev = Device()
+    # print(f"{dev.connect()=}")
+    # print(f"{dev.ADDRESS=}")
 
 
 # =====================================================================================================================

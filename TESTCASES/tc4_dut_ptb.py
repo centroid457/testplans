@@ -22,10 +22,18 @@ class TestCase(TestCaseBase):
         # result_chain.run()
         # return result_chain
 
+    def startup__wrapped(self) -> TYPE__RESULT:
+        result_chain = ResultExpect_Chain(
+            [
+                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.PTB.connect, title="PTB.connect"),
+            ],
+        )
+        result_chain.run()
+        return result_chain
+
     def run__wrapped(self) -> TYPE__RESULT:
         result_chain = ResultExpect_Chain(
             [
-                ResultExpect_Step(value=hasattr(self.DEVICES__BREEDER_INST, "PTB"), title="PTB exists"),
                 ResultExpect_Step(value=self.DEVICES__BREEDER_INST.PTB.connect, title="PTB.connect"),
             ],
         )

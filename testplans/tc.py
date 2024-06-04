@@ -337,13 +337,13 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     def startup__cls__wrapped(cls) -> TYPE__RESULT:
         return True
 
-    def startup__wrapped(cls) -> TYPE__RESULT:
+    def startup__wrapped(self) -> TYPE__RESULT:
         return True
 
     def run__wrapped(self) -> TYPE__RESULT:
         return True
 
-    def teardown__wrapped(cls) -> TYPE__RESULT:
+    def teardown__wrapped(self) -> TYPE__RESULT:
         return True
 
     @classmethod

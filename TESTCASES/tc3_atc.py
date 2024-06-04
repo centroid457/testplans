@@ -6,8 +6,8 @@ from funcs_aux import ResultExpect_Step, ResultExpect_Chain
 
 # =====================================================================================================================
 class TestCase(TestCaseBase):
-    ASYNC = False
-    DESCRIPTION = "serial"
+    ASYNC = True
+    DESCRIPTION = "atc"
 
     @classmethod
     def startup__cls__wrapped(cls) -> TYPE__RESULT:

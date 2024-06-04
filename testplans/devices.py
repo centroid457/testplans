@@ -19,12 +19,13 @@ class DeviceBase:
     DESCRIPTION: str = None
     SN: str = None
 
-    def __init__(self, index: int = None, *args, **kwargs):
+    def __init__(self, index: int = None, **kwargs):
         """
         :param index: None is only for SINGLE!
         """
-        self.INDEX = index
-        super().__init__(*args, **kwargs)
+        if index is not None:
+            self.INDEX = index
+        super().__init__(**kwargs)
 
     # CONNECT ---------------------------------
     def connect(self) -> bool:
