@@ -44,8 +44,14 @@ if __name__ == "__main__":
     print(f"{dev.connect()=}")
     print(f"{dev.ADDRESS=}")
 
-    dev.write_read__last("ptb:1:get name", prefix="")
-    dev.write_read__last("ptb:01:get name", prefix="")
+    # dev.write_read__last("get sn")
+    # dev.write_read__last("get fru")
+    # dev.write_read__last("test sc12s")
+    # dev.write_read__last("test ld12s")
+    # dev.write_read__last("test gnd")
+    # dev.write_read__last("test")
+    # dev.write_read__last("get status")
+    dev.write_read__last("get vin")
 
 
 # =====================================================================================================================
