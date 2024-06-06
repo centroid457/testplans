@@ -16,7 +16,7 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
 
     @property
     def PREFIX(self) -> str:
-        return f"PTB:{self.INDEX}:"
+        return f"PTB:{self.INDEX:02d}:"
 
     def address__answer_validation(self) -> bool:
         result = self.write_read__last_validate("get name", f"PTB", prefix="*:") and self.write_read__last_validate("get addr", [f"{self.INDEX}", f"0{self.INDEX}"], prefix="*:")
@@ -40,9 +40,12 @@ if __name__ == "__main__":
     # emu.start()
     # emu.wait()
 
-    # dev = Device()
-    # print(f"{dev.connect()=}")
-    # print(f"{dev.ADDRESS=}")
+    dev = Device(1)
+    print(f"{dev.connect()=}")
+    print(f"{dev.ADDRESS=}")
+
+    dev.write_read__last("ptb:1:get name", prefix="")
+    dev.write_read__last("ptb:01:get name", prefix="")
 
 
 # =====================================================================================================================
