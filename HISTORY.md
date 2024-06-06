@@ -15,6 +15,10 @@
 ********************************************************************************
 ## NEWS
 
+0.3.11 (2024/06/06 15:19:32)
+------------------------------
+- [TC] fix using result in any wrapped method as ResultExpect_Chain without runned before! with run__if_not_finished  
+
 0.3.10 (2024/06/04 16:37:56)
 ------------------------------
 - [TC] DUTs connect on every TP.start()  

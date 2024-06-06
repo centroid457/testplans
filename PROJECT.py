@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: tuple[int, int, int] = (0, 3, 10)
+    VERSION: tuple[int, int, int] = (0, 3, 11)
     TODO: list[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,8 +105,7 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: list[str] = [
-        "[TC] DUTs connect on every TP.start()",
-        "[dev]add DEV_FOUND +mark in gui",
+        "[TC] fix using result in any wrapped method as ResultExpect_Chain without runned before! with run__if_not_finished",
     ]
 
     # FINALIZE -----------------------------------------------
