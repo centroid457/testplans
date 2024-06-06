@@ -257,6 +257,9 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             try:
                 self.LOGGER.debug("run-run_wrapped START")
                 self.result = self.run__wrapped()
+                if isinstance(self.result, ResultExpect_Base):
+                    self.result.run__if_not_finished()
+
                 self.LOGGER.debug(f"run-run_wrapped FINISHED WITH {self.result=}")
             except Exception as exx:
                 self.result = False
@@ -310,6 +313,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
         try:
             result = cls.startup__cls__wrapped()
+            if isinstance(result, ResultExpect_Base):
+                result.run__if_not_finished()
         except Exception as exx:
             result = exx
         print(f"result__cls_startup={result}")
@@ -322,6 +327,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
         try:
             result = self.startup__wrapped()
+            if isinstance(result, ResultExpect_Base):
+                result.run__if_not_finished()
         except Exception as exx:
             result = exx
         return result
@@ -333,6 +340,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
         try:
             result = self.teardown__wrapped()
+            if isinstance(result, ResultExpect_Base):
+                result.run__if_not_finished()
         except Exception as exx:
             result = exx
 
@@ -345,6 +354,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
 
         try:
             result = cls.teardown__cls__wrapped()
+            if isinstance(result, ResultExpect_Base):
+                result.run__if_not_finished()
         except Exception as exx:
             result = exx
 

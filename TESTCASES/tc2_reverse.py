@@ -19,7 +19,6 @@ class TestCase(tc1_direct.TestCase):
                 ResultExpect_Step(value=None, title="NONE"),
             ],
         )
-        result_chain.run()
         return result_chain
 
     def run__wrapped(self) -> bool:

@@ -18,8 +18,6 @@ class TestCase(TestCaseBase):
                 # ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.VALUE, title="DUT.VALUE"),
             ],
         )
-
-        result_chain.run()
         return result_chain
 
 

@@ -1,13 +1,12 @@
 import time
 from testplans import TestCaseBase, TYPE__RESULT_W_NORETURN
-
 from funcs_aux import ResultExpect_Step, ResultExpect_Chain
 
 
 # =====================================================================================================================
 class TestCase(TestCaseBase):
     ASYNC = True
-    DESCRIPTION = "serial"
+    DESCRIPTION = "ptb"
 
     @classmethod
     def startup__cls__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
@@ -19,7 +18,6 @@ class TestCase(TestCaseBase):
         #         ResultExpect_Step(value=cls.DEVICES__BREEDER_CLS.ATC.connect, title="ATC.connect()"),
         #     ],
         # )
-        # result_chain.run()
         # return result_chain
 
     def startup__wrapped(self) -> TYPE__RESULT_W_NORETURN:
@@ -28,7 +26,6 @@ class TestCase(TestCaseBase):
                 ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.connect, title="DUT.connect"),
             ],
         )
-        result_chain.run()
         return result_chain
 
     def run__wrapped(self) -> TYPE__RESULT_W_NORETURN:
@@ -38,7 +35,6 @@ class TestCase(TestCaseBase):
                 ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.connect, title="DUT.connect"),
             ],
         )
-        result_chain.run()
         return result_chain
 
 

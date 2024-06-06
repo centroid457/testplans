@@ -1,6 +1,5 @@
 import time
 from testplans import TestCaseBase, TYPE__RESULT_W_NORETURN
-
 from funcs_aux import ResultExpect_Step, ResultExpect_Chain
 
 
@@ -18,7 +17,6 @@ class TestCase(TestCaseBase):
                 ResultExpect_Step(value=cls.DEVICES__BREEDER_CLS.ATC.connect, title="ATC.connect()"),
             ],
         )
-        result_chain.run()
         return result_chain
 
     def run__wrapped(self) -> TYPE__RESULT_W_NORETURN:
@@ -29,7 +27,6 @@ class TestCase(TestCaseBase):
                 ResultExpect_Step(value=self.DEVICES__BREEDER_INST.ATC.address__answer_validation, title="atc.address__answer_validation"),
             ],
         )
-        result_chain.run()
         return result_chain
 
 
