@@ -11,7 +11,7 @@ class Device(SerialClient_FirstFree_AnswerValid):
     EOL__SEND = b"\r"
 
     def address__answer_validation(self) -> bool:
-        return self.write_read__last_validate("get name", "ATC 03")
+        return self.write_read__last_validate("get name", "ATC 03", prefix=self.PREFIX)
 
 
 # =====================================================================================================================
