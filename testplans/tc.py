@@ -332,7 +332,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         except Exception as exx:
             result = exx
 
-        self.details.update({"_startup": result})
+        self.details_update({"_startup": result})
         return result
 
     def teardown(self) -> TYPE__RESULT_W_EXX:
@@ -348,7 +348,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             result = exx
 
         self.progress = 100
-        self.details.update({"_teardown": result})
+        self.details_update({"_teardown": result})
         return result
 
     @classmethod
