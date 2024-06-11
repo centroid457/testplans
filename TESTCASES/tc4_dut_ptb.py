@@ -23,21 +23,19 @@ class TestCase(TestCaseBase):
     def startup__wrapped(self) -> TYPE__RESULT_W_NORETURN:
         result = ResultExpect_Chain(
             [
-                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.connect, title="DUT.connect"),
+                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved, title="DUT.connect__only_if_address_resolved"),
             ],
         )
         return result
-        return True
 
     def run__wrapped(self) -> TYPE__RESULT_W_NORETURN:
         # time.sleep(0.1)
         result = ResultExpect_Chain(
             [
-                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.connect, title="DUT.connect"),
+                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved, title="DUT.connect__only_if_address_resolved"),
             ],
         )
         return result
-        return True
 
 
 # =====================================================================================================================
