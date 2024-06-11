@@ -93,7 +93,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: tuple[int, int, int] = (0, 3, 12)
+    VERSION: tuple[int, int, int] = (0, 3, 13)
     TODO: list[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,7 +105,7 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: list[str] = [
-        "[TC] add details.update results for tc instance on teardown/startup",
+        "[TC] fix post__tc_results",
     ]
 
     # FINALIZE -----------------------------------------------

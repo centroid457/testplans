@@ -313,10 +313,15 @@ class TpMultyDutBase(Logger, QThread):
             return
 
         # WORK ------------------------------------------
+        try:
+            tc_results = tc_inst.get__results().dict()
+        except:
+            tc_results = {}
+
         body = {
             "STAND_NAME": self.STAND_NAME,
             "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
-            **tc_inst.get__results().dict(),
+            **tc_results,
         }
         self.api_client.send(body=body)
 

@@ -17,7 +17,7 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
 
     @property
     def SN(self) -> str:
-        return f"{self.__sn_start}_{self.INDEX}"
+        return f"{self.__sn_start}_{self.INDEX+1}"
 
     @SN.setter
     def SN(self, value: Any) -> None:
@@ -30,7 +30,7 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
 
     @property
     def PREFIX(self) -> str:
-        return f"PTB:{self.INDEX:02d}:"
+        return f"PTB:{self.INDEX+1:02d}:"
 
     def address__answer_validation(self) -> bool:
         result = self.write_read__last_validate("get name", f"PTB", prefix="*:") and self.write_read__last_validate("get addr", [f"{self.INDEX+1}", f"0{self.INDEX+1}"], prefix="*:")
