@@ -331,6 +331,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
                 result.run__if_not_finished()
         except Exception as exx:
             result = exx
+
+        self.details.update({"_startup": result})
         return result
 
     def teardown(self) -> TYPE__RESULT_W_EXX:
@@ -346,6 +348,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             result = exx
 
         self.progress = 100
+        self.details.update({"_teardown": result})
         return result
 
     @classmethod
@@ -398,7 +401,7 @@ class _Info(_TestCaseBase):
     """
     # =================================================================================================================
     def get__info_pretty(self) -> str:
-        # fixme: ref from info_get
+        # FIXME: GET FROM INFO_GET????
         result = ""
 
         result += f"DUT_INDEX={self.INDEX}\n"
@@ -443,9 +446,14 @@ class _Info(_TestCaseBase):
     def get__results(self) -> ModelTcResultFull:
         self.LOGGER.debug("")
 
+        try:
+            dut_info = self.DEVICES__BREEDER_INST.DUT.get__info().dict()
+        except:
+            dut_info = {}
+
         result = {
             **self.get__info().dict(),
-            **self.DEVICES__BREEDER_INST.DUT.get__info().dict(),
+            **dut_info,
 
             # RESULTS
             "tc_timestamp": self.timestamp_last,

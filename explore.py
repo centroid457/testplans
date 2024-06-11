@@ -37,8 +37,8 @@ class Client_RequestsStack_Tp(Client_RequestsStack):
 # =====================================================================================================================
 class Tp_Example(TpMultyDutBase):
     LOG_ENABLE = True
-    api_client: Client_RequestsStack = Client_RequestsStack_Tp()
-    # api_client: Client_RequestsStack = None
+    # api_client: Client_RequestsStack = Client_RequestsStack_Tp()  # FIXME: need fix post__results!!!!
+    api_client: Client_RequestsStack = None
 
     DEVICES__BREEDER_CLS = DevicesBreeder__Tp
 

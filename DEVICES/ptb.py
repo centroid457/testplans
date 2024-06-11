@@ -10,6 +10,20 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
     BAUDRATE = 115200
     EOL__SEND = b"\n"
 
+    # MODEL INFO --------------------------------
+    __sn_start: str = "SN"
+    NAME: str = "PSU"
+    DESCRIPTION: str = "Power Supply Unit"
+
+    @property
+    def SN(self) -> str:
+        return f"{self.__sn_start}_{self.INDEX}"
+
+    @SN.setter
+    def SN(self, value: Any) -> None:
+        self.__sn_start = str(value).upper()
+    # MODEL INFO --------------------------------
+
     @property
     def DEV_FOUND(self) -> bool:
         return self.address_check__resolved()
@@ -19,7 +33,7 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
         return f"PTB:{self.INDEX:02d}:"
 
     def address__answer_validation(self) -> bool:
-        result = self.write_read__last_validate("get name", f"PTB", prefix="*:") and self.write_read__last_validate("get addr", [f"{self.INDEX}", f"0{self.INDEX}"], prefix="*:")
+        result = self.write_read__last_validate("get name", f"PTB", prefix="*:") and self.write_read__last_validate("get addr", [f"{self.INDEX+1}", f"0{self.INDEX+1}"], prefix="*:")
         return result
 
     def __init__(self, index: int, **kwargs):
