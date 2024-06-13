@@ -45,8 +45,8 @@ class Test__TC:
         assert self.Victim.TCS__LIST == []
         assert self.Victim.DEVICES__BREEDER_CLS is None
 
-        assert self.Victim.result__cls_startup is None
-        assert self.Victim.result__cls_teardown is None
+        assert self.Victim.result__startup_cls is None
+        assert self.Victim.result__teardown_cls is None
 
         # EXISTS IN INSTANCE --------------
         assert not hasattr(self.Victim, "INDEX")
@@ -66,8 +66,8 @@ class Test__TC:
         assert self.Victim.TCS__LIST == []
         assert self.Victim.DEVICES__BREEDER_CLS is None
 
-        assert self.Victim.result__cls_startup is None
-        assert self.Victim.result__cls_teardown is None
+        assert self.Victim.result__startup_cls is None
+        assert self.Victim.result__teardown_cls is None
 
         # EXISTS IN INSTANCE --------------
         assert not hasattr(self.Victim, "INDEX")
@@ -87,8 +87,8 @@ class Test__TC:
         assert self.Victim.TCS__LIST != []
         assert self.Victim.DEVICES__BREEDER_CLS is not None
 
-        assert self.Victim.result__cls_startup is None
-        assert self.Victim.result__cls_teardown is None
+        assert self.Victim.result__startup_cls is None
+        assert self.Victim.result__teardown_cls is None
 
         # EXISTS IN INSTANCE --------------
         assert not hasattr(self.Victim, "INDEX")

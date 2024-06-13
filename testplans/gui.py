@@ -160,14 +160,14 @@ class TpGuiBase(Gui):
         tc = list(self.DATA.TCS__CLS)[row]
 
         if col == self.TM.HEADERS.STARTUP:
-            self.PTE.setPlainText(str(tc.result__cls_startup))
+            self.PTE.setPlainText(str(tc.result__startup_cls))
 
         if col in self.TM.HEADERS.DUTS:
             dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[col - self.TM.HEADERS.DUTS.START_OUTER]
             self.PTE.setPlainText(tc.TCS__LIST[dut.INDEX].get__info_pretty())
 
         if col == self.TM.HEADERS.TEARDOWN:
-            self.PTE.setPlainText(str(tc.result__cls_teardown))
+            self.PTE.setPlainText(str(tc.result__teardown_cls))
 
 
 # =====================================================================================================================

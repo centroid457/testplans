@@ -55,8 +55,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
     _INSTS_DICT_CLS: dict[Type[Any], dict[Any, Any]]
 
-    result__cls_startup: Optional[bool] = None
-    result__cls_teardown: Optional[bool] = None
+    result__startup_cls: Optional[bool] = None
+    result__teardown_cls: Optional[bool] = None
 
     # INSTANCE ------------------------------------
     _inst_inited: Optional[bool] = None
@@ -65,7 +65,10 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     SETTINGS: PrivateJson
     DEVICES__BREEDER_INST: 'DevicesBreeder'
 
-    _result: Optional[bool] = None
+    result__startup: TYPE__RESULT_W_EXX = None
+    result__teardown: TYPE__RESULT_W_EXX = None
+
+    _result: TYPE__RESULT_W_EXX = None
     _timestamp_last: Optional[float]
     timestamp_start: Optional[float]
     details: dict[str, Any]
@@ -146,6 +149,10 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         if self.isRunning():
             return time.time()
 
+    @timestamp_last.setter
+    def timestamp_last(self, value: float | None) -> None:
+        self._timestamp_last = value
+
     # =================================================================================================================
     @classmethod
     def settings_read(cls, files: Union[None, pathlib.Path, List[pathlib.Path]] = None) -> dict:
@@ -164,17 +171,21 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         return result
 
     def clear(self) -> None:
+        self.result__startup = None
+        self.result__teardown = None
         self.result = None
-        self._timestamp_last = None
+
+        self.timestamp_last = None
         self.timestamp_start = None
+
         self.details = {}
         self.exx = None
         self.progress = 0
 
     @classmethod
     def clear__cls(cls):
-        cls.result__cls_startup = None
-        cls.result__cls_teardown = None
+        cls.result__startup_cls = None
+        cls.result__teardown_cls = None
         for tc in cls.TCS__LIST:
             tc.clear()
 
@@ -197,12 +208,12 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     # # ---------------------------------------------------------
     # @classmethod
     # @property
-    # def result__cls_startup(cls) -> Optional[bool]:
+    # def result__startup_cls(cls) -> Optional[bool]:
     #     return cls.__result__cls_startup
     #
     # @classmethod
-    # @result__cls_startup.setter
-    # def result__cls_startup(cls, value: Optional[bool]) -> None:
+    # @result__startup_cls.setter
+    # def result__startup_cls(cls, value: Optional[bool]) -> None:
     #     cls.__result__cls_startup = value
     #     # cls.signals.signal__tc_state_changed.emit(cls)
 
@@ -317,8 +328,8 @@ class _TestCaseBase(_TestCaseBase0, QThread):
                 result.run__if_not_finished()
         except Exception as exx:
             result = exx
-        print(f"result__cls_startup={result}")
-        cls.result__cls_startup = result
+        print(f"result__startup_cls={result}")
+        cls.result__startup_cls = result
         return result
 
     def startup(self) -> TYPE__RESULT_W_EXX:
@@ -332,12 +343,12 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         except Exception as exx:
             result = exx
 
-        self.details_update({"_startup": result})
+        self.result__startup = result
         return result
 
     def teardown(self) -> TYPE__RESULT_W_EXX:
         self.LOGGER.debug("")
-        self._timestamp_last = time.time()
+        self.timestamp_last = time.time()
         self.progress = 99
 
         try:
@@ -348,7 +359,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             result = exx
 
         self.progress = 100
-        self.details_update({"_teardown": result})
+        self.result__teardown = result
         return result
 
     @classmethod
@@ -365,7 +376,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         if not result:
             print(f"[FAIL] teardown__cls {cls.NAME}")
 
-        cls.result__cls_teardown = result
+        cls.result__teardown_cls = result
         return result
 
     # REDEFINE ========================================================================================================
@@ -408,21 +419,25 @@ class _Info(_TestCaseBase):
         result += f"DUT_SN={self.DEVICES__BREEDER_INST.DUT.SN}\n"
         result += f"TC_NAME={self.NAME}\n"
         result += f"TC_DESCRIPTION={self.DESCRIPTION}\n"
+        result += f"TC_ASYNC={self.ASYNC}\n"
         result += f"TC_SKIP={self.SKIP}\n"
         result += f"tc_skip_dut={self.skip_tc_dut}\n"
-        result += f"TC_ASYNC={self.ASYNC}\n"
-        result += f"tc_result={self.result}\n"
-        result += f"tc_progress={self.progress}\n"
-        result += f"tc_exx={self.exx}\n"
-        result += f"tc_timestamp_start={self.timestamp_start}\n"
-        result += f"tc_timestamp_last={self.timestamp_last}\n"
 
         result += f"SETTINGS=====================\n"
         if self.SETTINGS:
             for name, value in self.SETTINGS.dict.items():
                 result += f"{name}: {value}\n"
 
-        result += f"details=====================\n"
+        result += f"PROGRESS=====================\n"
+        result += f"timestamp_start={self.timestamp_start}\n"
+        result += f"result__startup={self.result__startup}\n"
+        result += f"progress={self.progress}\n"
+        result += f"result={self.result}\n"
+        result += f"exx={self.exx}\n"
+        result += f"result__teardown={self.result__teardown}\n"
+        result += f"timestamp_last={self.timestamp_last}\n"
+
+        result += f"DETAILS=====================\n"
         for name, value in self.details.items():
             result += f"{name}: {value}\n"
         return result
@@ -439,7 +454,6 @@ class _Info(_TestCaseBase):
             "TC_SKIP": cls.SKIP,
             "TC_SETTINGS": cls.settings_read(),
         }
-
         return ModelTcInfo(**result)
 
     # =================================================================================================================

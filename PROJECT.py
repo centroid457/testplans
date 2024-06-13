@@ -105,7 +105,11 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: list[str] = [
-        "[TC] fix post__tc_results",
+
+
+
+
+        "[TC]ref get__info_pretty + add result__startup/teardown in instance!",
     ]
 
     # FINALIZE -----------------------------------------------
