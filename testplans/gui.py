@@ -132,10 +132,10 @@ class TpGuiBase(Gui):
         self.TM._data_reread()
 
     def TV_hh_sectionClicked(self, index: int) -> None:
-        if index == self.TM.HEADERS.STARTUP:
+        if index == self.TM.HEADERS.STARTUP_CLS:
             pass
 
-        if index == self.TM.HEADERS.TEARDOWN:
+        if index == self.TM.HEADERS.TEARDOWN_CLS:
             pass
 
         if index in self.TM.HEADERS.DUTS:
@@ -159,14 +159,14 @@ class TpGuiBase(Gui):
 
         tc = list(self.DATA.TCS__CLS)[row]
 
-        if col == self.TM.HEADERS.STARTUP:
+        if col == self.TM.HEADERS.STARTUP_CLS:
             self.PTE.setPlainText(str(tc.result__startup_cls))
 
         if col in self.TM.HEADERS.DUTS:
             dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[col - self.TM.HEADERS.DUTS.START_OUTER]
             self.PTE.setPlainText(tc.TCS__LIST[dut.INDEX].get__info_pretty())
 
-        if col == self.TM.HEADERS.TEARDOWN:
+        if col == self.TM.HEADERS.TEARDOWN_CLS:
             self.PTE.setPlainText(str(tc.result__teardown_cls))
 
 
