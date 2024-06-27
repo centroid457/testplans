@@ -15,6 +15,10 @@
 ********************************************************************************
 ## NEWS
 
+0.3.16 (2024/06/27 14:32:04)
+------------------------------
+- [TCS] fix execution STOP if only resultStartupCls=True and resultTeardownCls=False  
+
 0.3.15 (2024/06/13 11:58:12)
 ------------------------------
 - [GUI] zero rename headers to STARTUP_CLS/TD*  

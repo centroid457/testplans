@@ -1,9 +1,7 @@
-import os
 import time
 
 import pytest
 import pathlib
-import shutil
 from typing import *
 
 from testplans import *
