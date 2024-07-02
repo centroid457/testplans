@@ -58,6 +58,9 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     result__startup_cls: Optional[bool] = None
     result__teardown_cls: Optional[bool] = None
 
+    result__startup_group: Optional[bool] = None
+    result__teardown_group: Optional[bool] = None
+
     # INSTANCE ------------------------------------
     _inst_inited: Optional[bool] = None
 

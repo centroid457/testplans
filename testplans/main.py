@@ -21,6 +21,7 @@ from pydantic import BaseModel
 
 from pyqt_templates import *
 from logger_aux import *
+from classes_aux import *
 from server_templates import *
 from object_info import ObjectInfo
 from private_values import PrivateJson
@@ -246,16 +247,69 @@ class TpMultyDutBase(Logger, QThread):
             return
 
         if self.tp__startup():
-            for step, tc in enumerate(self.TCS__CLS, start=1):
-                self.progress = int(step / len(self.TCS__CLS) * 100) - 1
-                self.tc_active = tc
-                tc.run__cls()
-                if tc.result__startup_cls and not tc.result__teardown_cls:
+            tcs_groups = self._tcs_groups__get_separated()
+            for group in tcs_groups:
+                if isinstance(group, list):
+                    group_result = self._run__group(group)
+                else:
+                    group_result = self._run__tc_cls(group)
+
+                if not group_result:
                     break
 
         # FINISH TP ---------------------------------------------------
         self.tp__teardown()
         self.LOGGER.debug("TP FINISH")
+
+    def _run__tc_cls(self, tc_cls: type[TestCaseBase]) -> bool:
+        """
+        :return: True - if TP could continue! else need stop!
+        """
+        self.tc_active = tc_cls
+        self.tc_active.run__cls()
+        if self.tc_active.result__startup_cls and not self.tc_active.result__teardown_cls:
+            return False
+        else:
+            return True
+
+    def _run__group(self, tcs_group: list[type[TestCaseBase]]) -> bool:
+        """
+        :return: True - if TP could continue! else need stop!
+        """
+        self.tc_active = tcs_group[0]
+
+        result__startup_group = self.tc_active.startup__group()
+
+        if result__startup_group:
+            for tc_cls in tcs_group:
+                if not self._run__tc_cls(tc_cls):
+                    break
+
+        result__teardown_group = self.tc_active.teartdown__group()
+        if result__startup_group and not result__teardown_group:
+            result = False
+        else:
+            result = True
+
+        return result
+
+    def _tcs_groups__get_separated(self) -> list[type[TestCaseBase], list[type[TestCaseBase]]]:
+        result: list[type[TestCaseBase], list[type[TestCaseBase]]] = []
+        tc_cls_prev = None
+        for tc_cls in self.TCS__CLS:
+            if not ClsMiddleGroup.middle_group_name__check_exists(tc_cls):
+                result.append(tc_cls)
+
+            else:
+                # ClsMiddleGroup.middle_group_name__check_equal()
+                if tc_cls.middle_group_name__check_equal(tc_cls_prev):
+                    result[-1].append(tc_cls)
+                else:
+                    result.append([tc_cls, ])
+
+            tc_cls_prev = tc_cls
+
+        return result
 
     # =================================================================================================================
     def get__info__stand(self) -> ModelStandInfo:
