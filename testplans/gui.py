@@ -5,6 +5,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
 from pyqt_templates import *
+from classes_aux import *
 
 from .tc import TestCaseBase
 from .tm import TpTableModel
@@ -160,7 +161,14 @@ class TpGuiBase(Gui):
         tc = list(self.DATA.TCS__CLS)[row]
 
         if col == self.TM.HEADERS.STARTUP_GR:
-            self.PTE.setPlainText(str(tc.result__startup_group))
+            result = str(tc.result__startup_group)
+            try:
+                group_name = tc.middle_group_name__get()
+            except:
+                group_name = None
+
+            result = f"{group_name=}/{result=}"
+            self.PTE.setPlainText(result)
 
         if col == self.TM.HEADERS.STARTUP_CLS:
             self.PTE.setPlainText(str(tc.result__startup_cls))
