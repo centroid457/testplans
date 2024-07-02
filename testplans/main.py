@@ -221,6 +221,10 @@ class TpMultyDutBase(Logger, QThread):
         """
         if self.tc_active:
             self.tc_active.terminate__cls()
+            try:
+                self.tc_active.teardown__group__wrapped()
+            except:
+                pass
         self.tc_active = None
 
         if progress is None:
