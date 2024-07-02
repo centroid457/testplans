@@ -85,12 +85,17 @@ class TpTableModel(TableModelTemplate):
             if col == self.HEADERS.ASYNC:
                 return '+' if tc_cls.ASYNC else '-'
             if col == self.HEADERS.STARTUP_GR:
+                try:
+                    group_name = tc_cls.middle_group_name__get()
+                except:
+                    group_name = ""
+
                 if tc_cls.result__startup_group is None:
-                    return
+                    return f"{group_name}"
                 elif bool(tc_cls.result__startup_group) is True:
-                    return '+'
+                    return f'{group_name}(+)'
                 elif bool(tc_cls.result__startup_group) is False:
-                    return '-'
+                    return f'{group_name}(-)'
             if col == self.HEADERS.STARTUP_CLS:
                 if tc_cls.result__startup_cls is None:
                     return

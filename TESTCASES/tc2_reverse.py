@@ -3,10 +3,11 @@ from testplans import *
 from funcs_aux import *
 
 from . import tc1_direct
+from .tc0_groups import *
 
 
 # =====================================================================================================================
-class TestCase(tc1_direct.TestCase):
+class TestCase(ClsMiddleGroup_ATC220220, tc1_direct.TestCase):
     ASYNC = True
     DESCRIPTION = "reverse1"
 

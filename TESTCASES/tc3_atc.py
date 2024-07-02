@@ -2,9 +2,10 @@ import time
 from testplans import *
 from funcs_aux import *
 
+from .tc0_groups import *
 
 # =====================================================================================================================
-class TestCase(TestCaseBase):
+class TestCase(ClsMiddleGroup_ATC220220, TestCaseBase):
     ASYNC = True
     DESCRIPTION = "atc"
 

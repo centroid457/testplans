@@ -181,7 +181,14 @@ class TpGuiBase(Gui):
             self.PTE.setPlainText(str(tc.result__teardown_cls))
 
         if col == self.TM.HEADERS.TEARDOWN_GR:
-            self.PTE.setPlainText(str(tc.result__teardown_group))
+            result = str(tc.result__teardown_group)
+            try:
+                group_name = tc.middle_group_name__get()
+            except:
+                group_name = None
+
+            result = f"{group_name=}/{result=}"
+            self.PTE.setPlainText(result)
 
 
 # =====================================================================================================================
