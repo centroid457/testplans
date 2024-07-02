@@ -267,7 +267,7 @@ class TpMultyDutBase(Logger, QThread):
         """
         self.tc_active = tc_cls
         self.tc_active.run__cls()
-        if self.tc_active.result__startup_cls and not self.tc_active.result__teardown_cls:
+        if self.tc_active.result__startup_cls and not self.tc_active.result__teardown_cls:     # FIXME: seems need to compare as direct True/Bool
             return False
         else:
             return True
@@ -286,7 +286,7 @@ class TpMultyDutBase(Logger, QThread):
                     break
 
         result__teardown_group = self.tc_active.teartdown__group()
-        if result__startup_group and not result__teardown_group:
+        if result__startup_group and not result__teardown_group:    # FIXME: seems need to compare as direct True/Bool
             result = False
         else:
             result = True

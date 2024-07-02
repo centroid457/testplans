@@ -1,7 +1,6 @@
 import time
-from testplans import TestCaseBase
-
-from funcs_aux import ResultExpect_Step, ResultExpect_Chain
+from testplans import *
+from funcs_aux import *
 
 
 # =====================================================================================================================

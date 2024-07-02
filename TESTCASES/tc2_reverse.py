@@ -1,8 +1,8 @@
 import time
-from testplans import TestCaseBase, TYPE__RESULT_W_NORETURN
-from . import tc1_direct
+from testplans import *
+from funcs_aux import *
 
-from funcs_aux import ResultExpect_Step, ResultExpect_Chain
+from . import tc1_direct
 
 
 # =====================================================================================================================

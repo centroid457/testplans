@@ -1,6 +1,6 @@
 import time
-from testplans import TestCaseBase, TYPE__RESULT_W_NORETURN
-from funcs_aux import ResultExpect_Step, ResultExpect_Chain
+from testplans import *
+from funcs_aux import *
 
 
 # =====================================================================================================================
