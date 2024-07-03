@@ -33,7 +33,13 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
         return f"PTB:{self.INDEX+1:02d}:"
 
     def address__answer_validation(self) -> bool:
-        result = self.write_read__last_validate("get name", f"PTB", prefix="*:") and self.write_read__last_validate("get addr", [f"{self.INDEX+1}", f"0{self.INDEX+1}"], prefix="*:")
+        result = (
+                self.write_read__last_validate("get name", f"PTB", prefix="*:")
+                and
+                self.write_read__last_validate("get addr", [f"{self.INDEX+1}", f"0{self.INDEX+1}"], prefix="*:")
+                and
+                self.write_read__last_validate("get prsnt", "0")
+        )
         return result
 
     def __init__(self, index: int, **kwargs):
