@@ -86,7 +86,7 @@ class TpTableModel(TableModelTemplate):
                 return '+' if tc_cls.ASYNC else '-'
             if col == self.HEADERS.STARTUP_GR:
                 try:
-                    group_name = tc_cls.middle_group_name__get()
+                    group_name = tc_cls.middle_group__get()
                 except:
                     group_name = ""
 

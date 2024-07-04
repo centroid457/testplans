@@ -212,7 +212,7 @@ class TpMultyDutBase(Logger, QThread):
         Overwrite with super! super first!
         """
         self.progress = 1
-        self.DEVICES__BREEDER_CLS.group_call__("connect", "DUT")      # dont connect all here! only in exact TC!!!!
+        self.DEVICES__BREEDER_CLS.group_call__("connect", "DUT")   # group="DUT"   # dont connect all here! only in exact TC!!!!????
         return True
 
     def tp__teardown(self, progress: int = 100) -> None:
@@ -301,12 +301,12 @@ class TpMultyDutBase(Logger, QThread):
         result: list[type[TestCaseBase], list[type[TestCaseBase]]] = []
         tc_cls_prev = None
         for tc_cls in self.TCS__CLS:
-            if not ClsMiddleGroup.middle_group_name__check_exists(tc_cls):
+            if not ClsMiddleGroup.middle_group__check_exists(tc_cls):
                 result.append(tc_cls)
 
             else:
-                # ClsMiddleGroup.middle_group_name__check_equal()
-                if tc_cls.middle_group_name__check_equal(tc_cls_prev):
+                # ClsMiddleGroup.middle_group__check_equal()
+                if tc_cls.middle_group__check_equal(tc_cls_prev):
                     result[-1].append(tc_cls)
                 else:
                     result.append([tc_cls, ])
