@@ -27,6 +27,7 @@ numpy
 singleton-meta
 pyqt-templates
 server-templates
+private-values
 
 PyQt5
 requests
