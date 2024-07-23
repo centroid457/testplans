@@ -3,16 +3,42 @@ from _aux__release_files import release_files_update
 
 
 # =====================================================================================================================
-VERSION = (0, 0, 3)   # 1/deprecate _VERSION_TEMPLATE from PRJ object +2/place update_prj here in __main__ +3/separate finalize attrs
+# VERSION = (0, 0, 3)   # 1/deprecate _VERSION_TEMPLATE from PRJ object +2/place update_prj here in __main__ +3/separate finalize attrs
+# VERSION = (0, 0, 4)   # add AUTHOR_NICKNAME_GITHUB for badges
+VERSION = (0, 0, 5)     # separate PROJECT_BASE #TODO: need to separate into module!
 
 
 # =====================================================================================================================
-class PROJECT:
-    # AUTHOR -----------------------------------------------
+class PROJECT_BASE:
+    NAME_IMPORT: str
+    VERSION: tuple[int, int, int]
+
+    # AUTHOR ------------------------------------------------
     AUTHOR_NAME: str = "Andrei Starichenko"
     AUTHOR_EMAIL: str = "centroid@mail.ru"
     AUTHOR_HOMEPAGE: str = "https://github.com/centroid457/"
+    AUTHOR_NICKNAME_GITHUB: str = "centroid457"
 
+    # AUX ----------------------------------------------------
+    CLASSIFIERS_TOPICS_ADD: list[str] = [
+        # "Topic :: Communications",
+        # "Topic :: Communications :: Email",
+    ]
+
+    # FINALIZE -----------------------------------------------
+    @classmethod
+    @property
+    def VERSION_STR(cls) -> str:
+        return ".".join(map(str, cls.VERSION))
+
+    @classmethod
+    @property
+    def NAME_INSTALL(cls) -> str:
+        return cls.NAME_IMPORT.replace("_", "-")
+
+
+# =====================================================================================================================
+class PROJECT(PROJECT_BASE):
     # PROJECT ----------------------------------------------
     NAME_IMPORT: str = "testplans"
     KEYWORDS: list[str] = [
@@ -21,10 +47,6 @@ class PROJECT:
         "testplan gui",
         "testplan multy dut",
         "testplan several dut",
-    ]
-    CLASSIFIERS_TOPICS_ADD: List[str] = [
-        # "Topic :: Communications",
-        # "Topic :: Communications :: Email",
     ]
 
     # README -----------------------------------------------
@@ -93,7 +115,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: tuple[int, int, int] = (0, 3, 19)
+    VERSION: tuple[int, int, int] = (0, 3, 20)
     TODO: list[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -105,12 +127,9 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: list[str] = [
-        "[TP.startUp] use connect all groups",
+        "[all results] apply ResultCum +get_result_or_exx",
+        "[PRJ] apply new",
     ]
-
-    # FINALIZE -----------------------------------------------
-    VERSION_STR: str = ".".join(map(str, VERSION))
-    NAME_INSTALL: str = NAME_IMPORT.replace("_", "-")
 
 
 # =====================================================================================================================
