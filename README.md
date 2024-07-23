@@ -1,4 +1,15 @@
-# testplans (v0.3.19)
+![Ver/TestedPython](https://img.shields.io/pypi/pyversions/testplans)
+![Ver/Os](https://img.shields.io/badge/os_development-Windows-blue)  
+![repo/Created](https://img.shields.io/github/created-at/centroid457/testplans)
+![Commit/Last](https://img.shields.io/github/last-commit/centroid457/testplans)
+![Tests/GitHubWorkflowStatus](https://github.com/centroid457/testplans/actions/workflows/test_linux.yml/badge.svg)
+![Tests/GitHubWorkflowStatus](https://github.com/centroid457/testplans/actions/workflows/test_windows.yml/badge.svg)  
+![repo/Size](https://img.shields.io/github/repo-size/centroid457/testplans)
+![Commit/Count/t](https://img.shields.io/github/commit-activity/t/centroid457/testplans)
+![Commit/Count/y](https://img.shields.io/github/commit-activity/y/centroid457/testplans)
+![Commit/Count/m](https://img.shields.io/github/commit-activity/m/centroid457/testplans)
+
+# testplans (current v0.3.20/![Ver/Pypi Latest](https://img.shields.io/pypi/v/testplans?label=pypi%20latest))
 
 ## DESCRIPTION_SHORT
 simple testplan framework for several DUTs
@@ -84,6 +95,6 @@ from testplans import *
 
 ********************************************************************************
 ## USAGE EXAMPLES
-See tests and sourcecode for other examples.
+See tests, sourcecode and docstrings for other examples.  
 
 ********************************************************************************
