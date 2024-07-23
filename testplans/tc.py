@@ -8,13 +8,12 @@ from pyqt_templates import *
 from private_values import PrivateJson
 
 from logger_aux import Logger
-from funcs_aux import ResultExpect_Base
-
+from funcs_aux import *
 from .models import *
 
 
 # =====================================================================================================================
-TYPE__RESULT_BASE = Union[None, bool, ResultExpect_Base]
+TYPE__RESULT_BASE = Union[bool, ResultCum, ResultExpect_Base] | None    # ResultExpect_Base is in doubt
 TYPE__RESULT_W_NORETURN = Union[TYPE__RESULT_BASE, NoReturn]
 TYPE__RESULT_W_EXX = Union[TYPE__RESULT_BASE, Type[Exception]]
 
@@ -271,7 +270,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             try:
                 self.LOGGER.debug("run-run_wrapped START")
                 self.result = self.run__wrapped()
-                if isinstance(self.result, ResultExpect_Base):
+                if isinstance(self.result, ResultExpect_Base):      # TODO: NEED TO DEPRECATE! for using ResultCum!!!
                     self.result.run__if_not_finished()
 
                 self.LOGGER.debug(f"run-run_wrapped FINISHED WITH {self.result=}")
@@ -325,62 +324,38 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         print(f"startup__cls")
         cls.clear__cls()
 
-        try:
-            result = cls.startup__cls__wrapped()
-            if isinstance(result, ResultExpect_Base):
-                result.run__if_not_finished()
-        except Exception as exx:
-            result = exx
-        print(f"result__startup_cls={result}")
-        cls.result__startup_cls = result
-        return result
+        cls.result__startup_cls = ResultFunc.get_result_or_exx(cls.startup__cls__wrapped)
+
+        print(f"{cls.result__startup_cls=}")
+        return cls.result__startup_cls
 
     def startup(self) -> TYPE__RESULT_W_EXX:
         self.LOGGER.debug("")
         self.progress = 1
 
-        try:
-            result = self.startup__wrapped()
-            if isinstance(result, ResultExpect_Base):
-                result.run__if_not_finished()
-        except Exception as exx:
-            result = exx
+        self.result__startup = ResultFunc.get_result_or_exx(self.startup__wrapped)
 
-        self.result__startup = result
-        return result
+        return self.result__startup
 
     def teardown(self) -> TYPE__RESULT_W_EXX:
         self.LOGGER.debug("")
         self.timestamp_last = time.time()
         self.progress = 99
 
-        try:
-            result = self.teardown__wrapped()
-            if isinstance(result, ResultExpect_Base):
-                result.run__if_not_finished()
-        except Exception as exx:
-            result = exx
+        self.result__teardown = ResultFunc.get_result_or_exx(self.teardown__wrapped)
 
         self.progress = 100
-        self.result__teardown = result
-        return result
+        return self.result__teardown
 
     @classmethod
     def teardown__cls(cls) -> TYPE__RESULT_W_EXX:
         print(f"run__cls=teardown__cls")
 
-        try:
-            result = cls.teardown__cls__wrapped()
-            if isinstance(result, ResultExpect_Base):
-                result.run__if_not_finished()
-        except Exception as exx:
-            result = exx
+        cls.result__teardown_cls = ResultFunc.get_result_or_exx(cls.teardown__cls__wrapped)
 
-        if not result:
-            print(f"[FAIL] teardown__cls {cls.NAME}")
-
-        cls.result__teardown_cls = result
-        return result
+        if not cls.result__teardown_cls:
+            print(f"[FAIL]{cls.result__teardown_cls=}//{cls.NAME}")
+        return cls.result__teardown_cls
 
     # REDEFINE ========================================================================================================
     pass
