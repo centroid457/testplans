@@ -1,6 +1,5 @@
 from typing import *
 import pytest
-
 from testplans import *
 from bus_user import *
 

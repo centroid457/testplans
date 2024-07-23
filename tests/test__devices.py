@@ -1,11 +1,5 @@
-import os
-import time
-
-import pytest
-import pathlib
-import shutil
 from typing import *
-
+import pytest
 from testplans import *
 from bus_user import *
 
