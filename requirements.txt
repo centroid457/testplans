@@ -28,6 +28,7 @@ singleton-meta
 pyqt-templates
 server-templates
 private-values
+pydantic
 
 PyQt5
 requests
