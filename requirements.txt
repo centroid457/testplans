@@ -29,12 +29,18 @@ pyqt-templates
 server-templates
 private-values
 pydantic
+bus-user
 
 PyQt5
 requests
 
 # NESTED ---------------------------------
 aiohttp
-yaml
+FastAPI
+PyYAML
+
+pyserial
+smbus2
+cli-user
 
 # ========================================
