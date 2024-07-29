@@ -270,7 +270,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             try:
                 self.LOGGER.debug("run-run_wrapped START")
                 self.result = self.run__wrapped()
-                if isinstance(self.result, (Valid, ValidChains)):
+                if isinstance(self.result, Valid):
                     self.result.run__if_not_finished()
 
                 self.LOGGER.debug(f"run-run_wrapped FINISHED WITH {self.result=}")
@@ -323,42 +323,52 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         """
         print(f"startup__cls")
         cls.clear__cls()
-        print(111)
-        cls.result__startup_cls = Valid.get_result_or_exx(cls.startup__cls__wrapped)
-        print(222)
-        print(f"{cls.result__startup_cls!r}")
-        print(333)
+
+        result = cls.startup__cls__wrapped
+        result = Valid.get_result_or_exx(result)
+        if isinstance(result, Valid):
+            result.run__if_not_finished()
         print(f"{cls.result__startup_cls=}")
-        print(444)
-        return cls.result__startup_cls
+        cls.result__startup_cls = result
+        return result
 
     def startup(self) -> TYPE__RESULT_W_EXX:
         self.LOGGER.debug("")
         self.progress = 1
 
-        self.result__startup = Valid.get_result_or_exx(self.startup__wrapped)
-
-        return self.result__startup
+        result = self.startup__wrapped
+        result = Valid.get_result_or_exx(result)
+        if isinstance(result, Valid):
+            result.run__if_not_finished()
+        self.result__startup = result
+        return result
 
     def teardown(self) -> TYPE__RESULT_W_EXX:
         self.LOGGER.debug("")
         self.timestamp_last = time.time()
         self.progress = 99
 
-        self.result__teardown = Valid.get_result_or_exx(self.teardown__wrapped)
+        result = self.teardown__wrapped
+        result = Valid.get_result_or_exx(result)
+        if isinstance(result, Valid):
+            result.run__if_not_finished()
 
         self.progress = 100
-        return self.result__teardown
+        self.result__teardown = result
+        return result
 
     @classmethod
     def teardown__cls(cls) -> TYPE__RESULT_W_EXX:
         print(f"run__cls=teardown__cls")
 
-        cls.result__teardown_cls = Valid.get_result_or_exx(cls.teardown__cls__wrapped)
-
-        if not cls.result__teardown_cls:
+        result = cls.teardown__cls__wrapped
+        result = Valid.get_result_or_exx(result)
+        if isinstance(result, Valid):
+            result.run__if_not_finished()
+        cls.result__teardown_cls = result
+        if not result:
             print(f"[FAIL]{cls.result__teardown_cls=}//{cls.NAME}")
-        return cls.result__teardown_cls
+        return result
 
     # REDEFINE ========================================================================================================
     pass
