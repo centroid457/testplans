@@ -10,7 +10,7 @@ class ClsMiddleGroup_TpBase(ClsMiddleGroup):
     def startup__group(cls) -> TYPE__RESULT_W_EXX:
         try:
             result = cls.startup__group__wrapped()
-            if isinstance(result, ResultExpect_Base):
+            if isinstance(result, Valid):
                 result.run__if_not_finished()
         except Exception as exx:
             result = exx
@@ -22,7 +22,7 @@ class ClsMiddleGroup_TpBase(ClsMiddleGroup):
     def teardown__group(cls) -> TYPE__RESULT_W_EXX:
         try:
             result = cls.teardown__group__wrapped()
-            if isinstance(result, ResultExpect_Base):
+            if isinstance(result, Valid):
                 result.run__if_not_finished()
         except Exception as exx:
             result = exx

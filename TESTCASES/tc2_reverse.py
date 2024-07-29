@@ -14,21 +14,14 @@ class TestCase(ClsMiddleGroup_ATC220220, tc1_direct.TestCase):
 
     @classmethod
     def startup__cls__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
-        # result_chain = ResultExpect_Chain(
-        #     [
-        #         ResultExpect_Step(value=True, title="TRUE"),
-        #         ResultExpect_Step(value=False, title="FALSE"),
-        #         ResultExpect_Step(value=None, title="NONE"),
-        #     ],
-        # )
-
-        result = ResultCum()
-        result.result__apply_step(True)
-        result.result__apply_step(True, msg="TRUE")
-        result.result__apply_step(False, False, msg="FALSE")
-        result.result__apply_step(ValueValidate(True))
-        result.result__apply_step(ValueValidate(LAMBDA_TRUE), msg="extraLine")
-        return result
+        result_chain = ValidChains(
+            [
+                Valid(value_link=True, title="TRUE"),
+                Valid(value_link=False, title="FALSE"),
+                Valid(value_link=None, title="NONE"),
+            ],
+        )
+        return result_chain
 
     def run__wrapped(self) -> bool:
         time.sleep(0.1)

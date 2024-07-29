@@ -4,7 +4,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
 from pyqt_templates import TableModelTemplate
-from funcs_aux import BreederStrSeries, BreederStrStack, ResultExpect_Base
+from funcs_aux import BreederStrSeries, BreederStrStack
 
 
 # =====================================================================================================================

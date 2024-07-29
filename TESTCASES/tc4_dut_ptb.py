@@ -10,29 +10,29 @@ class TestCase(TestCaseBase):
 
     @classmethod
     def startup__cls__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
-        return True
-        # result_chain = ResultExpect_Chain(
-        #     [
-        #         ResultExpect_Step(value=hasattr(cls, "DEVICES__BREEDER_CLS"), value_under_func=bool, title="hasattr DEVICES__CLS"),
-        #         ResultExpect_Step(value=hasattr(cls.DEVICES__BREEDER_CLS, "ATC"), value_under_func=bool, title="hasattr ATC"),
-        #         ResultExpect_Step(value=cls.DEVICES__BREEDER_CLS.ATC.connect, title="ATC.connect()"),
-        #     ],
-        # )
-        # return result_chain
+        # return True
+        result_chain = ValidChains(
+            [
+                Valid(value_link=hasattr(cls, "DEVICES__BREEDER_CLS"), title="hasattr DEVICES__CLS"),
+                Valid(value_link=hasattr(cls.DEVICES__BREEDER_CLS, "ATC"), title="hasattr ATC"),
+                Valid(value_link=cls.DEVICES__BREEDER_CLS.ATC.connect, title="ATC.connect()"),
+            ],
+        )
+        return result_chain
 
     def startup__wrapped(self) -> TYPE__RESULT_W_NORETURN:
-        result = ResultExpect_Chain(
+        result = ValidChains(
             [
-                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved, title="DUT.connect__only_if_address_resolved"),
+                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved, title="DUT.connect__only_if_address_resolved"),
             ],
         )
         return result
 
     def run__wrapped(self) -> TYPE__RESULT_W_NORETURN:
         # time.sleep(0.1)
-        result = ResultExpect_Chain(
+        result = ValidChains(
             [
-                ResultExpect_Step(value=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved, title="DUT.connect__only_if_address_resolved"),
+                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved, title="DUT.connect__only_if_address_resolved"),
             ],
         )
         return result

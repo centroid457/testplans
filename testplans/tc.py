@@ -13,7 +13,7 @@ from .models import *
 
 
 # =====================================================================================================================
-TYPE__RESULT_BASE = Union[bool, ResultCum, ResultExpect_Base] | None    # ResultExpect_Base is in doubt
+TYPE__RESULT_BASE = Union[bool, Valid] | None
 TYPE__RESULT_W_NORETURN = Union[TYPE__RESULT_BASE, NoReturn]
 TYPE__RESULT_W_EXX = Union[TYPE__RESULT_BASE, Type[Exception]]
 
@@ -270,7 +270,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             try:
                 self.LOGGER.debug("run-run_wrapped START")
                 self.result = self.run__wrapped()
-                if isinstance(self.result, ResultExpect_Base):      # TODO: NEED TO DEPRECATE! for using ResultCum!!!
+                if isinstance(self.result, Valid):
                     self.result.run__if_not_finished()
 
                 self.LOGGER.debug(f"run-run_wrapped FINISHED WITH {self.result=}")
@@ -324,7 +324,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         print(f"startup__cls")
         cls.clear__cls()
 
-        cls.result__startup_cls = ResultFunc.get_result_or_exx(cls.startup__cls__wrapped)
+        cls.result__startup_cls = Valid.get_result_or_exx(cls.startup__cls__wrapped)
 
         print(f"{cls.result__startup_cls=}")
         return cls.result__startup_cls
@@ -333,7 +333,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         self.LOGGER.debug("")
         self.progress = 1
 
-        self.result__startup = ResultFunc.get_result_or_exx(self.startup__wrapped)
+        self.result__startup = Valid.get_result_or_exx(self.startup__wrapped)
 
         return self.result__startup
 
@@ -342,7 +342,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         self.timestamp_last = time.time()
         self.progress = 99
 
-        self.result__teardown = ResultFunc.get_result_or_exx(self.teardown__wrapped)
+        self.result__teardown = Valid.get_result_or_exx(self.teardown__wrapped)
 
         self.progress = 100
         return self.result__teardown
@@ -351,7 +351,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     def teardown__cls(cls) -> TYPE__RESULT_W_EXX:
         print(f"run__cls=teardown__cls")
 
-        cls.result__teardown_cls = ResultFunc.get_result_or_exx(cls.teardown__cls__wrapped)
+        cls.result__teardown_cls = Valid.get_result_or_exx(cls.teardown__cls__wrapped)
 
         if not cls.result__teardown_cls:
             print(f"[FAIL]{cls.result__teardown_cls=}//{cls.NAME}")
