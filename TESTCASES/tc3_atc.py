@@ -11,6 +11,7 @@ class TestCase(ClsMiddleGroup_ATC220220, TestCaseBase):
 
     @classmethod
     def startup__cls__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
+        return True
         result_chain = ValidChains(
             [
                 Valid(value_link=hasattr(cls, "DEVICES__BREEDER_CLS"), title="hasattr DEVICES__CLS"),

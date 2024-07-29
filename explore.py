@@ -9,7 +9,7 @@ from DEVICES import dut, atc, ptb
 
 # =====================================================================================================================
 class DevicesBreeder__Tp(DevicesBreeder_WithDut):
-    COUNT = 2
+    COUNT = 5
     CLS_SINGLE__ATC = atc.Device
     CLS_LIST__DUT = ptb.Device
     # CLS_LIST__DUT = dut.Device
@@ -37,8 +37,8 @@ class Client_RequestsStack_Tp(Client_RequestsStack):
 # =====================================================================================================================
 class Tp_Example(TpMultyDutBase):
     LOG_ENABLE = True
-    api_client: Client_RequestsStack = Client_RequestsStack_Tp()  # FIXME: need fix post__results!!!!
-    # api_client: Client_RequestsStack = None
+    # api_client: Client_RequestsStack = Client_RequestsStack_Tp()  # FIXME: need fix post__results!!!!
+    api_client: Client_RequestsStack = None
 
     DEVICES__BREEDER_CLS = DevicesBreeder__Tp
 

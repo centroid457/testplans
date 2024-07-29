@@ -13,7 +13,7 @@ from .models import *
 
 
 # =====================================================================================================================
-TYPE__RESULT_BASE = Union[bool, Valid] | None
+TYPE__RESULT_BASE = Union[bool, Valid, ValidChains] | None
 TYPE__RESULT_W_NORETURN = Union[TYPE__RESULT_BASE, NoReturn]
 TYPE__RESULT_W_EXX = Union[TYPE__RESULT_BASE, Type[Exception]]
 
@@ -54,11 +54,11 @@ class _TestCaseBase(_TestCaseBase0, QThread):
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
     _INSTS_DICT_CLS: dict[Type[Any], dict[Any, Any]]
 
-    result__startup_cls: Optional[bool] = None
-    result__teardown_cls: Optional[bool] = None
+    result__startup_cls: TYPE__RESULT_BASE = None
+    result__teardown_cls: TYPE__RESULT_BASE = None
 
-    result__startup_group: Optional[bool] = None
-    result__teardown_group: Optional[bool] = None
+    result__startup_group: TYPE__RESULT_BASE = None
+    result__teardown_group: TYPE__RESULT_BASE = None
 
     # INSTANCE ------------------------------------
     _inst_inited: Optional[bool] = None
@@ -270,7 +270,7 @@ class _TestCaseBase(_TestCaseBase0, QThread):
             try:
                 self.LOGGER.debug("run-run_wrapped START")
                 self.result = self.run__wrapped()
-                if isinstance(self.result, Valid):
+                if isinstance(self.result, (Valid, ValidChains)):
                     self.result.run__if_not_finished()
 
                 self.LOGGER.debug(f"run-run_wrapped FINISHED WITH {self.result=}")
@@ -323,10 +323,13 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         """
         print(f"startup__cls")
         cls.clear__cls()
-
+        print(111)
         cls.result__startup_cls = Valid.get_result_or_exx(cls.startup__cls__wrapped)
-
+        print(222)
+        print(f"{cls.result__startup_cls!r}")
+        print(333)
         print(f"{cls.result__startup_cls=}")
+        print(444)
         return cls.result__startup_cls
 
     def startup(self) -> TYPE__RESULT_W_EXX:
