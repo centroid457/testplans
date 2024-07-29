@@ -15,6 +15,11 @@
 ********************************************************************************
 ## NEWS
 
+0.4.0 (2024/07/29 17:00:22)
+------------------------------
+- [CICD] fix requirements  
+- [results] ref to apply Valid over deprecated ValueExpect*  
+
 0.3.21 (2024/07/23 10:50:40)
 ------------------------------
 - [CICD] zero add GitHubActions directory  
