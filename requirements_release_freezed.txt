@@ -94,7 +94,7 @@ soupsieve==2.5
 SQLAlchemy==2.0.25
 starlette==0.36.3
 telebot==0.0.5
-testplans==0.3.21
+testplans==0.4.0
 threading_manager==0.0.8
 tomli==2.0.1
 twine==5.1.1
