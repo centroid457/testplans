@@ -162,12 +162,6 @@ class TpGuiBase(Gui):
 
         if col == self.TM.HEADERS.STARTUP_GR:
             result = str(tc.result__startup_group)
-            try:
-                group_name = tc.middle_group__get()
-            except:
-                group_name = None
-
-            result = f"{group_name=}/{result=}"
             self.PTE.setPlainText(result)
 
         if col == self.TM.HEADERS.STARTUP_CLS:
@@ -182,12 +176,6 @@ class TpGuiBase(Gui):
 
         if col == self.TM.HEADERS.TEARDOWN_GR:
             result = str(tc.result__teardown_group)
-            try:
-                group_name = tc.middle_group__get()
-            except:
-                group_name = None
-
-            result = f"{group_name=}/{result=}"
             self.PTE.setPlainText(result)
 
 
