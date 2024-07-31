@@ -127,7 +127,7 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: list[str] = [
-        "[GROUPS.result] apply correct in PTE",
+        "[Valid] apply renamed name from title",
     ]
 
 

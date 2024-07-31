@@ -14,8 +14,8 @@ class TestCase(TestCaseBase):
         self.details_update({"detail_value": self.DEVICES__BREEDER_INST.DUT.VALUE})
         result_chain = ValidChains(
             [
-                Valid(value_link=True, title="TRUE"),
-                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.VALUE, title="DUT.VALUE"),
+                Valid(value_link=True, name="TRUE"),
+                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.VALUE, name="DUT.VALUE"),
             ],
         )
         return result_chain

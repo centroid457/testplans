@@ -13,9 +13,9 @@ class TestCase(TestCaseBase):
         # return True
         result_chain = ValidChains(
             [
-                Valid(value_link=hasattr(cls, "DEVICES__BREEDER_CLS"), title="hasattr DEVICES__CLS"),
-                Valid(value_link=hasattr(cls.DEVICES__BREEDER_CLS, "ATC"), title="hasattr ATC"),
-                Valid(value_link=cls.DEVICES__BREEDER_CLS.ATC.connect, title="ATC.connect()"),
+                Valid(value_link=hasattr(cls, "DEVICES__BREEDER_CLS"), name="hasattr DEVICES__CLS"),
+                Valid(value_link=hasattr(cls.DEVICES__BREEDER_CLS, "ATC"), name="hasattr ATC"),
+                Valid(value_link=cls.DEVICES__BREEDER_CLS.ATC.connect, name="ATC.connect()"),
             ],
         )
         return result_chain
@@ -23,7 +23,7 @@ class TestCase(TestCaseBase):
     def startup__wrapped(self) -> TYPE__RESULT_W_NORETURN:
         result = ValidChains(
             [
-                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved, title="DUT.connect__only_if_address_resolved"),
+                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved, name="DUT.connect__only_if_address_resolved"),
             ],
         )
         return result
@@ -32,7 +32,7 @@ class TestCase(TestCaseBase):
         # time.sleep(0.1)
         result = ValidChains(
             [
-                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved, title="DUT.connect__only_if_address_resolved"),
+                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved, name="DUT.connect__only_if_address_resolved"),
             ],
         )
         return result

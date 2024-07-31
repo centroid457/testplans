@@ -16,9 +16,9 @@ class TestCase(ClsMiddleGroup_ATC220220, tc1_direct.TestCase):
     def startup__cls__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
         result_chain = ValidChains(
             [
-                Valid(value_link=True, title="TRUE"),
-                Valid(value_link=False, title="FALSE"),
-                Valid(value_link=None, title="NONE"),
+                Valid(value_link=True, name="TRUE"),
+                Valid(value_link=False, name="FALSE"),
+                Valid(value_link=None, name="NONE"),
             ],
         )
         return result_chain

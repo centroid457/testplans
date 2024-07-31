@@ -14,9 +14,9 @@ class TestCase(ClsMiddleGroup_ATC220220, TestCaseBase):
         return True
         result_chain = ValidChains(
             [
-                Valid(value_link=hasattr(cls, "DEVICES__BREEDER_CLS"), title="hasattr DEVICES__CLS"),
-                Valid(value_link=hasattr(cls.DEVICES__BREEDER_CLS, "ATC"), title="hasattr ATC"),
-                Valid(value_link=cls.DEVICES__BREEDER_CLS.ATC.connect, title="ATC.connect()"),
+                Valid(value_link=hasattr(cls, "DEVICES__BREEDER_CLS"), name="hasattr DEVICES__CLS"),
+                Valid(value_link=hasattr(cls.DEVICES__BREEDER_CLS, "ATC"), name="hasattr ATC"),
+                Valid(value_link=cls.DEVICES__BREEDER_CLS.ATC.connect, name="ATC.connect()"),
             ],
         )
         return result_chain
@@ -26,8 +26,8 @@ class TestCase(ClsMiddleGroup_ATC220220, TestCaseBase):
         time.sleep(0.1)
         result_chain = ValidChains(
             [
-                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.VALUE, title="DUT.VALUE"),
-                Valid(value_link=self.DEVICES__BREEDER_INST.ATC.address__answer_validation, title="atc.address__answer_validation"),
+                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.VALUE, name="DUT.VALUE"),
+                Valid(value_link=self.DEVICES__BREEDER_INST.ATC.address__answer_validation, name="atc.address__answer_validation"),
             ],
         )
         return result_chain
