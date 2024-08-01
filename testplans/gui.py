@@ -36,7 +36,8 @@ class TpGuiBase(Gui):
 
         # layout_details ----------------------------------------------------------------------------------------------
         layout_details = QVBoxLayout()
-        layout_details.addWidget(self.BTN)
+        layout_details.addWidget(self.BTN_devs_detect)
+        layout_details.addWidget(self.BTN_start)
         layout_details.addWidget(self.BTN_settings)
         layout_details.addWidget(self.PTE)
 
@@ -48,8 +49,11 @@ class TpGuiBase(Gui):
 
     # WGTS ============================================================================================================
     def BTN_create(self) -> None:
-        self.BTN = QPushButton("START")
-        self.BTN.setCheckable(True)
+        self.BTN_devs_detect = QPushButton("devs_detect")
+        self.BTN_devs_detect.setCheckable(False)
+
+        self.BTN_start = QPushButton("START")
+        self.BTN_start.setCheckable(True)
 
         self.BTN_settings = QPushButton("settings")
         self.BTN_settings.setCheckable(True)
@@ -102,9 +106,10 @@ class TpGuiBase(Gui):
 
     # SLOTS ===========================================================================================================
     def slots_connect(self):
-        self.BTN.toggled.connect(self.BTN__toggled)
+        self.BTN_start.toggled.connect(self.BTN__toggled)
         self.BTN_settings.toggled.connect(self.BTN_settings__toggled)
-        self.DATA.signal__tp_finished.connect(lambda: self.BTN.setChecked(False))
+        self.BTN_devs_detect.clicked.connect(self.BTN_devs_detect__clicked)
+        self.DATA.signal__tp_finished.connect(lambda: self.BTN_start.setChecked(False))
         self.DATA.signal__tp_finished.connect(self.TM._data_reread)
 
         TestCaseBase.signals.signal__tc_state_changed.connect(lambda _: self.TM._data_reread())
@@ -130,6 +135,13 @@ class TpGuiBase(Gui):
         # self.TV.horizontalHeader().setSectionHidden(self.TM.ADDITIONAL_COLUMNS - 1, not state)
         self.TV.horizontalHeader().setSectionsClickable(state)
         self.TM.open__settings = state
+        self.TM._data_reread()
+
+    def BTN_devs_detect__clicked(self) -> None:
+        self.DATA.DEVICES__BREEDER_CLS.group_call__("address_forget")
+        self.DATA.DEVICES__BREEDER_CLS.CLS_LIST__DUT.ADDRESSES__SYSTEM.clear()
+        self.TM._data_reread()
+        self.DATA.DEVICES__BREEDER_CLS.group_call__("connect")
         self.TM._data_reread()
 
     def TV_hh_sectionClicked(self, index: int) -> None:
