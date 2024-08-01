@@ -191,6 +191,12 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         for tc in cls.TCS__LIST:
             tc.clear()
 
+    @classmethod
+    def clear__group(cls):
+        # FIXME: need correct exit/terminate group
+        cls.result__startup_group = None
+        cls.result__teardown_group = None
+
     # @classmethod
     # @property
     # def NAME(cls):
