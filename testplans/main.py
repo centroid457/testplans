@@ -12,6 +12,7 @@ from .gui import TpGuiBase
 from .api import TpApi_FastApi
 from .models import *
 
+import time
 from typing import *
 import json
 from pathlib import Path
@@ -53,6 +54,9 @@ class TpMultyDutBase(Logger, QThread):
     _signal__tp_reset_duts_sn = pyqtSignal()
 
     # SETTINGS ------------------------------------------------------
+    INFINIT_RUN: bool | None = None     # True - when run() started - dont stop!
+    INFINIT_RUN__TIMEOUT: int = 1
+
     START__GUI_AND_API: bool = True
 
     STAND_NAME: Optional[str] = "stand_id__1"
@@ -233,7 +237,7 @@ class TpMultyDutBase(Logger, QThread):
 
         self.DEVICES__BREEDER_CLS.disconnect__cls()
 
-        self.signal__tp_finished.emit()
+        # self.signal__tp_finished.emit()   # dont place here!!!
 
     # =================================================================================================================
     def terminate(self) -> None:
@@ -244,26 +248,40 @@ class TpMultyDutBase(Logger, QThread):
 
         # finish current ----------------------------
         self.tp__teardown(0)
+        self.signal__tp_finished.emit()
 
     def run(self) -> None:
         self.LOGGER.debug("TP START")
         if self.tp__check_active():
             return
 
-        if self.tp__startup():
-            tcs_groups = self._tcs_groups__get_separated()
-            for group in tcs_groups:
-                if isinstance(group, list):
-                    group_result = self._run__group(group)
-                else:
-                    group_result = self._run__tc_cls(group)
+        cycle_count = 0
+        while True:
+            cycle_count += 1
 
-                if not group_result:
-                    break
+            if self.tp__startup():
+                tcs_groups = self._tcs_groups__get_separated()
+                for group in tcs_groups:
+                    if isinstance(group, list):
+                        group_result = self._run__group(group)
+                    else:
+                        group_result = self._run__tc_cls(group)
 
-        # FINISH TP ---------------------------------------------------
-        self.tp__teardown()
-        self.LOGGER.debug("TP FINISH")
+                    if not group_result:
+                        break
+
+            # FINISH TP CYCLE ---------------------------------------------------
+            self.tp__teardown()
+            self.LOGGER.debug("TP FINISH")
+
+            # RESTART -----------------------------------------------------
+            if not self.INFINIT_RUN:
+                break
+
+            time.sleep(self.INFINIT_RUN__TIMEOUT)
+
+        # FINISH TP TOTAL ---------------------------------------------------
+        self.signal__tp_finished.emit()
 
     def _run__tc_cls(self, tc_cls: type[TestCaseBase]) -> bool:
         """
