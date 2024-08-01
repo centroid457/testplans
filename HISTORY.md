@@ -15,6 +15,13 @@
 ********************************************************************************
 ## NEWS
 
+0.4.4 (2024/08/01 12:56:50)
+------------------------------
+- [TP] add INFINIT_RUN/*TIMEOUT  
+- [TP.GUI]:  
+	- add CheckBox for INFINIT_RUN  
+	- add BTN_devs_detect  
+
 0.4.3 (2024/07/31 10:54:44)
 ------------------------------
 - [Valid] apply renamed name from title  
