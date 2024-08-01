@@ -65,7 +65,7 @@ class TpGuiBase(Gui):
 
         # SETTINGS -------------------------
         # self.CB.setText("CB_text")
-        self.CB.setText("CB_text")
+        # self.CB.setText("CB_text")
 
     def PTE_create(self) -> None:
         self.PTE = QPlainTextEdit()
