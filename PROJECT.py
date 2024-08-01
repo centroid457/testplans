@@ -127,7 +127,13 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: list[str] = [
-        "[Valid] apply renamed name from title",
+
+
+        "[TP] add INFINIT_RUN/*TIMEOUT",
+        ["[TP.GUI]",
+            "add CheckBox for INFINIT_RUN",
+            "add BTN_devs_detect"
+         ],
     ]
 
 
