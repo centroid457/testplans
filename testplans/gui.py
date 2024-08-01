@@ -31,6 +31,7 @@ class TpGuiBase(Gui):
         self.TV_create()
         self.PTE_create()
         self.BTN_create()
+        self.CB_create()
 
         # DETAILS -----------------------------------------------------------------------------------------------------
 
@@ -38,6 +39,7 @@ class TpGuiBase(Gui):
         layout_details = QVBoxLayout()
         layout_details.addWidget(self.BTN_devs_detect)
         layout_details.addWidget(self.BTN_start)
+        layout_details.addWidget(self.CB)
         layout_details.addWidget(self.BTN_settings)
         layout_details.addWidget(self.PTE)
 
@@ -57,6 +59,13 @@ class TpGuiBase(Gui):
 
         self.BTN_settings = QPushButton("settings")
         self.BTN_settings.setCheckable(True)
+
+    def CB_create(self) -> None:
+        self.CB = QCheckBox("INFINIT_RUN")
+
+        # SETTINGS -------------------------
+        # self.CB.setText("CB_text")
+        self.CB.setText("CB_text")
 
     def PTE_create(self) -> None:
         self.PTE = QPlainTextEdit()
@@ -106,9 +115,12 @@ class TpGuiBase(Gui):
 
     # SLOTS ===========================================================================================================
     def slots_connect(self):
+        self.CB.stateChanged.connect(self.CB__changed)
+
         self.BTN_start.toggled.connect(self.BTN__toggled)
         self.BTN_settings.toggled.connect(self.BTN_settings__toggled)
         self.BTN_devs_detect.clicked.connect(self.BTN_devs_detect__clicked)
+
         self.DATA.signal__tp_finished.connect(lambda: self.BTN_start.setChecked(False))
         self.DATA.signal__tp_finished.connect(self.TM._data_reread)
 
@@ -116,6 +128,18 @@ class TpGuiBase(Gui):
 
         self.TV.selectionModel().selectionChanged.connect(self.TV_selectionChanged)
         self.TV.horizontalHeader().sectionClicked.connect(self.TV_hh_sectionClicked)
+
+    def CB__changed(self, state: Optional[int] = None) -> None:
+        """
+        :param state:
+            0 - unchecked
+            1 - halfCHecked (only if isTristate)
+            2 - checked (even if not isTristate)
+        """
+        if state:
+            self.DATA.INFINIT_RUN = True
+        else:
+            self.DATA.INFINIT_RUN = False
 
     def BTN__toggled(self, state: Optional[bool] = None) -> None:
         # print(f"btn {state=}")
