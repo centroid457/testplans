@@ -43,14 +43,13 @@ PyQt5
 requests
 pydantic
 
-uvicorn
-
 # TESTS ----------------------------------
 
 # NESTED ---------------------------------
 aiohttp
 FastAPI
 PyYAML
+uvicorn
 
 pyserial
 smbus2
