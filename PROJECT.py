@@ -127,7 +127,9 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: list[str] = [
-        "[requirements] fix"
+
+        
+        "[GUI] add Pink color for TC_inst startup Fail"
     ]
 
 

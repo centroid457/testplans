@@ -164,6 +164,8 @@ class TpTableModel(TableModelTemplate):
         if role == Qt.BackgroundColorRole:
             if tc_cls.SKIP:
                 return QColor('#e2e2e2')
+
+            # STARTUP -------------------
             if col == self.HEADERS.STARTUP_GR:
                 if tc_cls.result__startup_group is None:
                     return
@@ -178,9 +180,13 @@ class TpTableModel(TableModelTemplate):
                     return QColor("#50FF50")
                 elif bool(tc_cls.result__startup_cls) is False:
                     return QColor("#FF5050")
+
+            # DUTS -------------------
             if col in self.HEADERS.DUTS:
                 if tc_inst.skip_tc_dut or dut.SKIP or not dut.DEV_FOUND:
                     return QColor('#e2e2e2')
+                elif tc_inst.result__startup is not None and not bool(tc_inst.result__startup):
+                    return QColor("#FF9090")
                 elif tc_inst.isRunning():
                     return QColor("#FFFF50")
                 elif bool(tc_inst.result) is True:
@@ -191,6 +197,8 @@ class TpTableModel(TableModelTemplate):
                     else:
                         return QColor("#FF5050")
                 # elif
+
+            # TEARDOWN -------------------
             if col == self.HEADERS.TEARDOWN_CLS:
                 if tc_cls.result__teardown_cls is None:
                     return
