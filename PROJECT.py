@@ -115,7 +115,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: tuple[int, int, int] = (0, 4, 6)
+    VERSION: tuple[int, int, int] = (0, 4, 7)
     TODO: list[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -127,7 +127,7 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: list[str] = [
-        "[GUI] add Pink color for TC_inst startup Fail"
+        "[TCS] add test TC_inst startup fail"
     ]
 
 
