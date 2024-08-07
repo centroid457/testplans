@@ -81,9 +81,18 @@ class TpTableModel(TableModelTemplate):
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.DisplayRole:
             if col == self.HEADERS.TESTCASE:
-                return f'{tc_cls.NAME}\n{tc_cls.DESCRIPTION}'
+                result = ""
+                if tc_cls.NAME:
+                    result += f"{tc_cls.NAME}"
+                if tc_cls.DESCRIPTION:
+                    if result:
+                        result += "\n"
+                    result += f"{tc_cls.DESCRIPTION}"
+                    return result
             if col == self.HEADERS.ASYNC:
                 return '+' if tc_cls.ASYNC else '-'
+
+            # STARTUP -------------------
             if col == self.HEADERS.STARTUP_GR:
                 try:
                     group_name = tc_cls.MIDDLE_GROUP_NAME or tc_cls.middle_group__get()
@@ -103,12 +112,16 @@ class TpTableModel(TableModelTemplate):
                     return '+'
                 elif bool(tc_cls.result__startup_cls) is False:
                     return '-'
+
+            # DUTS -------------------
             if col in self.HEADERS.DUTS:
                 if tc_inst:
                     if tc_inst.result is None:
                         return ""
                     else:
                         return f'{tc_inst.result}'
+
+            # TEARDOWN -------------------
             if col == self.HEADERS.TEARDOWN_CLS:
                 if tc_cls.result__teardown_cls is None:
                     return
@@ -186,7 +199,7 @@ class TpTableModel(TableModelTemplate):
                 if tc_inst.skip_tc_dut or dut.SKIP or not dut.DEV_FOUND:
                     return QColor('#e2e2e2')
                 elif tc_inst.result__startup is not None and not bool(tc_inst.result__startup):
-                    return QColor("#FF9090")
+                    return QColor("#FFa0a0")
                 elif tc_inst.isRunning():
                     return QColor("#FFFF50")
                 elif bool(tc_inst.result) is True:
