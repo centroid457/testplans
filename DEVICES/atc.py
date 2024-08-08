@@ -10,7 +10,7 @@ class Device(SerialClient_FirstFree_AnswerValid):
     PREFIX = "ATC:03:"
     EOL__SEND = b"\r"
 
-    def address__answer_validation(self) -> bool:
+    def address__validate(self) -> bool:
         for _ in range(2):
             if self.write_read__last_validate("get name", "ATC 03", prefix=self.PREFIX):
                 return True
@@ -29,9 +29,9 @@ if __name__ == "__main__":
     # print(f"{dev.addresses_system__detect()=}")
     print(f"{dev.ADDRESS=}")
     #
-    # print(f"{dev.address__answer_validation()=}")
-    # print(f"{dev.address__answer_validation()=}")
-    # print(f"{dev.address__answer_validation()=}")
+    # print(f"{dev.address__validate()=}")
+    # print(f"{dev.address__validate()=}")
+    # print(f"{dev.address__validate()=}")
     #
     # print(f"{dev.write_read_line_last('get name')=}")
     # print(f"{dev.write_read_line_last('get name')=}")

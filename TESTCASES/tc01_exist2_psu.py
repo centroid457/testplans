@@ -6,13 +6,13 @@ from funcs_aux import *
 # =====================================================================================================================
 class TestCase(TestCaseBase):
     ASYNC = True
-    DESCRIPTION = "PTB exist"
+    DESCRIPTION = "PSU exist"
 
     # RUN -------------------------------------------------------------------------------------------------------------
     def run__wrapped(self) -> TYPE__RESULT_W_EXX:
         result = Valid(
-            value_link=self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved,
-            name="DUT.connect__only_if_address_resolved"
+            value_link=self.DEVICES__BREEDER_INST.DUT.connect,
+            name="DUT.connect"
         )
         return result
 

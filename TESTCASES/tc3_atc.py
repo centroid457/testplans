@@ -27,7 +27,7 @@ class TestCase(ClsMiddleGroup_ATC220220, TestCaseBase):
         result_chain = ValidChains(
             [
                 Valid(value_link=self.DEVICES__BREEDER_INST.DUT.VALUE, name="DUT.VALUE"),
-                Valid(value_link=self.DEVICES__BREEDER_INST.ATC.address__answer_validation, name="atc.address__answer_validation"),
+                Valid(value_link=self.DEVICES__BREEDER_INST.ATC.address__validate),
             ],
         )
         return result_chain
