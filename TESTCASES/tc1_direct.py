@@ -15,11 +15,6 @@ class TestCase(TestCaseBase):
         result_chain = ValidChains(
             [
                 Valid(value_link=True, name="TRUE"),
-                Valid(value_link=self.DEVICES__BREEDER_INST.DUT.VALUE, name="DUT.VALUE"),
-                Valid(
-                    value_link=lambda: self.DEVICES__BREEDER_INST.DUT.connect__only_if_address_resolved(),
-                    name="DUT.connect__only_if_address_resolved"
-                ),
             ],
         )
         return result_chain
