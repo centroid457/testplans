@@ -46,6 +46,12 @@ from .tc import (
     # AUX
     Signals,
     # TYPES
+    # EXX
+)
+from .types import (
+    # BASE
+    # AUX
+    # TYPES
     TYPE__RESULT_BASE,
     TYPE__RESULT_W_NORETURN,
     TYPE__RESULT_W_EXX,

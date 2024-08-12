@@ -1,7 +1,6 @@
-import time
 from testplans import *
-from funcs_aux import *
-from classes_aux import *
+
+from testplans import TYPE__RESULT_W_NORETURN
 
 
 # =====================================================================================================================

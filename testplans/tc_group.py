@@ -1,16 +1,30 @@
-import time
-from testplans import *
+from typing import *
 from funcs_aux import *
 from classes_aux import *
+
+from .types import TYPE__RESULT_BASE, TYPE__RESULT_W_NORETURN, TYPE__RESULT_W_EXX
 
 
 # =====================================================================================================================
 class ClsMiddleGroup_TpBase(ClsMiddleGroup):
+    MIDDLE_GROUP__CMP_METH = ["startup__group__wrapped", "teardown__group__wrapped"]
+
+    result__startup_group: TYPE__RESULT_BASE = None
+    result__teardown_group: TYPE__RESULT_BASE = None
+
+    # -----------------------------------------------------------------------------------------------------------------
+    @classmethod
+    def clear__group(cls):
+        # FIXME: need correct exit/terminate group
+        cls.result__startup_group = None
+        cls.result__teardown_group = None
+
+    # -----------------------------------------------------------------------------------------------------------------
     @classmethod
     def startup__group(cls) -> TYPE__RESULT_W_EXX:
-        result = cls.startup__group__wrapped
+        result_link = cls.startup__group__wrapped
 
-        result = Valid.get_result_or_exx(result)
+        result = Valid.get_result_or_exx(result_link)
         if isinstance(result, Valid):
             result.run__if_not_finished()
 
@@ -20,9 +34,9 @@ class ClsMiddleGroup_TpBase(ClsMiddleGroup):
 
     @classmethod
     def teardown__group(cls) -> TYPE__RESULT_W_EXX:
-        result = cls.teardown__group__wrapped
+        result_link = cls.teardown__group__wrapped
 
-        result = Valid.get_result_or_exx(result)
+        result = Valid.get_result_or_exx(result_link)
         if isinstance(result, Valid):
             result.run__if_not_finished()
 

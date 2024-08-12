@@ -1,5 +1,4 @@
 import pathlib
-from typing import *
 import json
 import time
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -9,13 +8,10 @@ from private_values import PrivateJson
 
 from logger_aux import Logger
 from funcs_aux import *
+
+from .types import TYPE__RESULT_BASE, TYPE__RESULT_W_NORETURN, TYPE__RESULT_W_EXX
 from .models import *
-
-
-# =====================================================================================================================
-TYPE__RESULT_BASE = Union[bool, Valid, ValidChains] | None
-TYPE__RESULT_W_NORETURN = Union[TYPE__RESULT_BASE, NoReturn]
-TYPE__RESULT_W_EXX = Union[TYPE__RESULT_BASE, Type[Exception]]
+from .tc_group import ClsMiddleGroup_TpBase
 
 
 # =====================================================================================================================
@@ -35,7 +31,7 @@ class Signals(SignalsTemplate):
 
 
 # =====================================================================================================================
-class _TestCaseBase(_TestCaseBase0, QThread):
+class _TestCaseBase(ClsMiddleGroup_TpBase, _TestCaseBase0, QThread):
     LOG_ENABLE = False
     LOG_USE_FILE = False
 
@@ -190,12 +186,6 @@ class _TestCaseBase(_TestCaseBase0, QThread):
         cls.result__teardown_cls = None
         for tc in cls.TCS__LIST:
             tc.clear()
-
-    @classmethod
-    def clear__group(cls):
-        # FIXME: need correct exit/terminate group
-        cls.result__startup_group = None
-        cls.result__teardown_group = None
 
     # @classmethod
     # @property

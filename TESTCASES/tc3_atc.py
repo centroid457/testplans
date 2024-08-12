@@ -1,5 +1,4 @@
 import time
-from testplans import *
 from funcs_aux import *
 
 from .tc0_groups import *
