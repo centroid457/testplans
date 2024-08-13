@@ -95,7 +95,7 @@ class TpTableModel(TableModelTemplate):
             # STARTUP -------------------
             if col == self.HEADERS.STARTUP_GR:
                 try:
-                    group_name = tc_cls.MIDDLE_GROUP_NAME or tc_cls.middle_group__get()
+                    group_name = tc_cls.MIDDLE_GROUP_NAME
                 except:
                     group_name = ""
 

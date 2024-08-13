@@ -1,5 +1,4 @@
 from testplans import *
-
 from testplans import TYPE__RESULT_W_NORETURN
 
 

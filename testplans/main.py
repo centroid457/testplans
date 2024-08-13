@@ -25,6 +25,7 @@ from classes_aux import *
 from server_templates import *
 from object_info import ObjectInfo
 from private_values import PrivateJson
+from funcs_aux import *
 
 
 # =====================================================================================================================
@@ -310,7 +311,7 @@ class TpMultyDutBase(Logger, QThread):
         """
         self.tc_active = tc_cls
         self.tc_active.run__cls()
-        if self.tc_active.result__startup_cls and not self.tc_active.result__teardown_cls:     # FIXME: seems need to compare as direct True/Bool
+        if self.tc_active.result__startup_cls is not None and bool(self.tc_active.result__startup_cls) and not bool(self.tc_active.result__teardown_cls):     # FIXME: seems need to compare as direct True/Bool
             return False
         else:
             return True
