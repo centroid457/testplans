@@ -14,7 +14,6 @@ from .models import *
 
 import time
 from typing import *
-import json
 from pathlib import Path
 from PyQt5.QtCore import QThread, pyqtSignal
 from importlib import import_module
@@ -260,15 +259,37 @@ class TpMultyDutBase(Logger, QThread):
             cycle_count += 1
 
             if self.tp__startup():
-                tcs_groups = self._tcs_groups__get_separated()
-                for group in tcs_groups:
-                    if isinstance(group, list):
-                        group_result = self._run__group(group)
-                    else:
-                        group_result = self._run__tc_cls(group)
+                tc_cls = None
+                tc_cls__prev = None
+                for tc_cls in self.TCS__CLS:
+                    # GROUP-start init -------------------------------
+                    if tc_cls__prev is None:
+                        tc_cls.startup__group()
+                        tc_cls__prev = tc_cls
 
-                    if not group_result:
+                    # switch new --------------------------------
+                    if not tc_cls.middle_group__check_equal(tc_cls__prev):
+                        # GROUP-close last ----------------------------
+                        tc_cls__prev.teardown__group()
+                        # GROUP-break -------------------------------------
+                        if tc_cls__prev.result__startup_group and not tc_cls__prev.result__teardown_group:
+                            break
+
+                        # GROUP-start new
+                        tc_cls.startup__group()
+
+                    # TC-run
+                    if tc_cls.result__startup_group:
+                        if not self._run__tc_cls(tc_cls):
+                            break
+                    else:
                         break
+
+                    tc_cls__prev = tc_cls
+
+                # GROUP-close finish -----------------------
+                if tc_cls:
+                    tc_cls.teardown__group()
 
             # FINISH TP CYCLE ---------------------------------------------------
             self.tp__teardown()
@@ -293,45 +314,6 @@ class TpMultyDutBase(Logger, QThread):
             return False
         else:
             return True
-
-    def _run__group(self, tcs_group: list[type[TestCaseBase]]) -> bool:
-        """
-        :return: True - if TP could continue! else need stop!
-        """
-        self.tc_active = tcs_group[0]
-
-        result__startup_group = self.tc_active.startup__group()
-
-        if result__startup_group:
-            for tc_cls in tcs_group:
-                if not self._run__tc_cls(tc_cls):
-                    break
-
-        result__teardown_group = self.tc_active.teardown__group()
-        if result__startup_group and not result__teardown_group:    # FIXME: seems need to compare as direct True/Bool
-            result = False
-        else:
-            result = True
-
-        return result
-
-    def _tcs_groups__get_separated(self) -> list[type[TestCaseBase], list[type[TestCaseBase]]]:
-        result: list[type[TestCaseBase], list[type[TestCaseBase]]] = []
-        tc_cls_prev = None
-        for tc_cls in self.TCS__CLS:
-            if not ClsMiddleGroup.middle_group__check_exists(tc_cls):
-                result.append(tc_cls)
-
-            else:
-                # ClsMiddleGroup.middle_group__check_equal()
-                if tc_cls.middle_group__check_equal(tc_cls_prev):
-                    result[-1].append(tc_cls)
-                else:
-                    result.append([tc_cls, ])
-
-            tc_cls_prev = tc_cls
-
-        return result
 
     # =================================================================================================================
     def get__info__stand(self) -> ModelStandInfo:
