@@ -280,7 +280,7 @@ class TpMultyDutBase(Logger, QThread):
                         tc_cls.startup__group()
 
                     # TC-run
-                    if tc_cls.result__startup_group:
+                    if tc_cls.result__startup_group is None or bool(tc_cls.result__startup_group):
                         if not self._run__tc_cls(tc_cls):
                             break
                     else:
