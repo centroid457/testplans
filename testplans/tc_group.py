@@ -47,11 +47,11 @@ class ClsMiddleGroup_TpBase(ClsMiddleGroup):
     # -----------------------------------------------------------------------------------------------------------------
     @classmethod
     def startup__group__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
-        return True
+        pass
 
     @classmethod
     def teardown__group__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
-        return True
+        pass
 
 
 # =====================================================================================================================
