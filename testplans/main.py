@@ -260,37 +260,13 @@ class TpMultyDutBase(Logger, QThread):
             cycle_count += 1
 
             if self.tp__startup():
-                tc_cls = None
                 tc_cls__prev = None
-                for tc_cls in self.TCS__CLS:
-                    # GROUP-start init -------------------------------
-                    if tc_cls__prev is None:
-                        tc_cls.startup__group()
-                        tc_cls__prev = tc_cls
-
-                    # switch new --------------------------------
-                    if not tc_cls.middle_group__check_equal(tc_cls__prev):
-                        # GROUP-close last ----------------------------
-                        tc_cls__prev.teardown__group()
-                        # GROUP-break -------------------------------------
-                        if tc_cls__prev.result__startup_group and not tc_cls__prev.result__teardown_group:
-                            break
-
-                        # GROUP-start new
-                        tc_cls.startup__group()
-
-                    # TC-run
-                    if tc_cls.result__startup_group is None or bool(tc_cls.result__startup_group):
-                        if not self._run__tc_cls(tc_cls):
-                            break
-                    else:
+                for self.tc_active in self.TCS__CLS:
+                    tc_executed__result = self.tc_active.run__cls(cls_prev=tc_cls__prev)
+                    if tc_executed__result is False:
                         break
-
-                    tc_cls__prev = tc_cls
-
-                # GROUP-close finish -----------------------
-                if tc_cls:
-                    tc_cls.teardown__group()
+                    if tc_executed__result is True:
+                        tc_cls__prev = self.tc_active
 
             # FINISH TP CYCLE ---------------------------------------------------
             self.tp__teardown()
@@ -304,17 +280,6 @@ class TpMultyDutBase(Logger, QThread):
 
         # FINISH TP TOTAL ---------------------------------------------------
         self.signal__tp_finished.emit()
-
-    def _run__tc_cls(self, tc_cls: type[TestCaseBase]) -> bool:
-        """
-        :return: True - if TP could continue! else need stop!
-        """
-        self.tc_active = tc_cls
-        self.tc_active.run__cls()
-        if self.tc_active.result__startup_cls is not None and bool(self.tc_active.result__startup_cls) and not bool(self.tc_active.result__teardown_cls):     # FIXME: seems need to compare as direct True/Bool
-            return False
-        else:
-            return True
 
     # =================================================================================================================
     def get__info__stand(self) -> ModelStandInfo:
