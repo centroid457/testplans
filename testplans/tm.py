@@ -20,6 +20,7 @@ class TpTableModel(TableModelTemplate):
 
         class Headers(BreederStrStack):
             TESTCASE: int = 0
+            SKIP: None = None
             ASYNC: None = None
             STARTUP_CLS: None = None
             DUTS: BreederStrSeries = BreederStrSeries(None, self.DATA.DEVICES__BREEDER_CLS.COUNT)
@@ -52,7 +53,7 @@ class TpTableModel(TableModelTemplate):
         # -------------------------------------------------------------------------------------------------------------
         flags = super().flags(index)
 
-        if col in [self.HEADERS.TESTCASE, self.HEADERS.ASYNC] or col in self.HEADERS.DUTS:
+        if col in [self.HEADERS.SKIP, self.HEADERS.ASYNC] or col in self.HEADERS.DUTS:
             flags |= Qt.ItemIsUserCheckable
             # flags |= Qt.ItemIsSelectable
         else:
@@ -87,6 +88,8 @@ class TpTableModel(TableModelTemplate):
                         result += "\n"
                     result += f"{tc_cls.DESCRIPTION}"
                     return result
+            if col == self.HEADERS.SKIP:
+                return '+' if tc_cls.SKIP else '-'
             if col == self.HEADERS.ASYNC:
                 return '+' if tc_cls.ASYNC else '-'
 
@@ -195,17 +198,17 @@ class TpTableModel(TableModelTemplate):
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
             if self.open__settings:
-                if col == self.HEADERS.TESTCASE:
+                if col == self.HEADERS.SKIP:
                     if tc_cls.SKIP:
-                        return Qt.Unchecked
-                    else:
                         return Qt.Checked
-                elif col == self.HEADERS.ASYNC:
+                    else:
+                        return Qt.Unchecked
+                if col == self.HEADERS.ASYNC:
                     if tc_cls.ASYNC:
                         return Qt.Checked
                     else:
                         return Qt.Unchecked
-                elif col in self.HEADERS.DUTS:
+                if col in self.HEADERS.DUTS:
                     if not tc_inst.SKIP and not dut.SKIP:
                         if tc_inst.skip_tc_dut:
                             return Qt.Unchecked
@@ -246,8 +249,8 @@ class TpTableModel(TableModelTemplate):
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.CheckStateRole:
-            if col == self.HEADERS.TESTCASE:
-                tc_cls.SKIP = value == Qt.Unchecked
+            if col == self.HEADERS.SKIP:
+                tc_cls.SKIP = value == Qt.Checked
 
             if col == self.HEADERS.ASYNC:
                 tc_cls.ASYNC = value == Qt.Checked
