@@ -196,10 +196,6 @@ class TpGuiBase(Gui):
 
         tc = list(self.DATA.TCS__CLS)[row]
 
-        if col == self.TM.HEADERS.STARTUP_GR:
-            result = str(tc.result__startup_group)
-            self.PTE.setPlainText(result)
-
         if col == self.TM.HEADERS.STARTUP_CLS:
             self.PTE.setPlainText(str(tc.result__startup_cls))
 
@@ -209,10 +205,6 @@ class TpGuiBase(Gui):
 
         if col == self.TM.HEADERS.TEARDOWN_CLS:
             self.PTE.setPlainText(str(tc.result__teardown_cls))
-
-        if col == self.TM.HEADERS.TEARDOWN_GR:
-            result = str(tc.result__teardown_group)
-            self.PTE.setPlainText(result)
 
 
 # =====================================================================================================================

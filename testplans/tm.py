@@ -21,11 +21,9 @@ class TpTableModel(TableModelTemplate):
         class Headers(BreederStrStack):
             TESTCASE: int = 0
             ASYNC: None = None
-            STARTUP_GR: None = None
             STARTUP_CLS: None = None
             DUTS: BreederStrSeries = BreederStrSeries(None, self.DATA.DEVICES__BREEDER_CLS.COUNT)
             TEARDOWN_CLS: None = None
-            TEARDOWN_GR: None = None
             # FIXME: need resolve COUNT over DevicesIndexed!!!
 
         self.HEADERS = Headers()
@@ -93,18 +91,6 @@ class TpTableModel(TableModelTemplate):
                 return '+' if tc_cls.ASYNC else '-'
 
             # STARTUP -------------------
-            if col == self.HEADERS.STARTUP_GR:
-                try:
-                    group_name = tc_cls.MIDDLE_GROUP_NAME
-                except:
-                    group_name = ""
-
-                if tc_cls.result__startup_group is None:
-                    return f"{group_name}"
-                elif bool(tc_cls.result__startup_group) is True:
-                    return f'{group_name}(+)'
-                elif bool(tc_cls.result__startup_group) is False:
-                    return f'{group_name}(-)'
             if col == self.HEADERS.STARTUP_CLS:
                 if tc_cls.result__startup_cls is None:
                     return
@@ -128,13 +114,6 @@ class TpTableModel(TableModelTemplate):
                 elif bool(tc_cls.result__teardown_cls) is True:
                     return '+'
                 elif bool(tc_cls.result__teardown_cls) is False:
-                    return '-'
-            if col == self.HEADERS.TEARDOWN_GR:
-                if tc_cls.result__teardown_group is None:
-                    return
-                elif bool(tc_cls.result__teardown_group) is True:
-                    return '+'
-                elif bool(tc_cls.result__teardown_group) is False:
                     return '-'
 
         # -------------------------------------------------------------------------------------------------------------
@@ -179,13 +158,6 @@ class TpTableModel(TableModelTemplate):
                 return QColor('#e2e2e2')
 
             # STARTUP -------------------
-            if col == self.HEADERS.STARTUP_GR:
-                if tc_cls.result__startup_group is None:
-                    return
-                elif bool(tc_cls.result__startup_group) is True:
-                    return QColor("#50FF50")
-                elif bool(tc_cls.result__startup_group) is False:
-                    return QColor("#FF5050")
             if col == self.HEADERS.STARTUP_CLS:
                 if tc_cls.result__startup_cls is None:
                     return
@@ -218,13 +190,6 @@ class TpTableModel(TableModelTemplate):
                 elif bool(tc_cls.result__teardown_cls) is True:
                     return QColor("#50FF50")
                 elif bool(tc_cls.result__teardown_cls) is False:
-                    return QColor("#FF5050")
-            if col == self.HEADERS.TEARDOWN_GR:
-                if tc_cls.result__teardown_group is None:
-                    return
-                elif bool(tc_cls.result__teardown_group) is True:
-                    return QColor("#50FF50")
-                elif bool(tc_cls.result__teardown_group) is False:
                     return QColor("#FF5050")
 
         # -------------------------------------------------------------------------------------------------------------
