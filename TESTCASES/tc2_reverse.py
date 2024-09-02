@@ -6,7 +6,7 @@ from .tc0_groups import *
 
 
 # =====================================================================================================================
-class TestCase(ClsMiddleGroup_ATC220220, tc1_direct.TestCase):
+class TestCase(TcGroup_ATC220220, tc1_direct.TestCase):
     ASYNC = True
     DESCRIPTION = "reverse1"
 

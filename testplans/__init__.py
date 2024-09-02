@@ -8,12 +8,8 @@
 # TEMPLATE
 # from .main import (
 #     # BASE
-#     EXACT_OBJECTS,
-#
 #     # AUX
-#
 #     # TYPES
-#
 #     # EXX
 # )
 # ---------------------------------------------------------------------------------------------------------------------
@@ -48,6 +44,13 @@ from .tc import (
     # TYPES
     # EXX
 )
+from .tc_groups import (
+    # BASE
+    TcGroup_Base,
+    # AUX
+    # TYPES
+    # EXX
+)
 from .types import (
     # BASE
     # AUX
@@ -55,13 +58,6 @@ from .types import (
     TYPE__RESULT_BASE,
     TYPE__RESULT_W_NORETURN,
     TYPE__RESULT_W_EXX,
-    # EXX
-)
-from .tc_group import (
-    # BASE
-    ClsMiddleGroup_TpBase,
-    # AUX
-    # TYPES
     # EXX
 )
 from .gui import (

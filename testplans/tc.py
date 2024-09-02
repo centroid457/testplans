@@ -11,7 +11,7 @@ from funcs_aux import *
 
 from .types import TYPE__RESULT_BASE, TYPE__RESULT_W_NORETURN, TYPE__RESULT_W_EXX
 from .models import *
-from .tc_group import ClsMiddleGroup_TpBase
+from .tc_groups import *
 
 
 # =====================================================================================================================
@@ -31,7 +31,7 @@ class Signals(SignalsTemplate):
 
 
 # =====================================================================================================================
-class _TestCaseBase(ClsMiddleGroup_TpBase, _TestCaseBase0, QThread):
+class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
     LOG_ENABLE = False
     LOG_USE_FILE = False
 
@@ -52,9 +52,6 @@ class _TestCaseBase(ClsMiddleGroup_TpBase, _TestCaseBase0, QThread):
 
     result__startup_cls: TYPE__RESULT_BASE = None
     result__teardown_cls: TYPE__RESULT_BASE = None
-
-    result__startup_group: TYPE__RESULT_BASE = None
-    result__teardown_group: TYPE__RESULT_BASE = None
 
     # INSTANCE ------------------------------------
     _inst_inited: Optional[bool] = None
@@ -292,7 +289,7 @@ class _TestCaseBase(ClsMiddleGroup_TpBase, _TestCaseBase0, QThread):
         print(f"run__cls=START={cls.NAME=}={'='*50}")
 
         # GROUP cmp ----------------------------------------------
-        if cls_prev is not None and cls.startup__cls is cls_prev.startup__cls:
+        if cls_prev is not None and cls.group__check_equel(cls_prev):
             cls_prev__equel = True
         else:
             cls_prev__equel = False

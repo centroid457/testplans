@@ -4,7 +4,7 @@ from funcs_aux import *
 from .tc0_groups import *
 
 # =====================================================================================================================
-class TestCase(ClsMiddleGroup_ATC220220, TestCaseBase):
+class TestCase(TcGroup_ATC220220, TestCaseBase):
     ASYNC = True
     DESCRIPTION = "atc"
 
