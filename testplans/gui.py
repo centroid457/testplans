@@ -213,20 +213,20 @@ class TpGuiBase(Gui):
         row = index.row()
         col = index.column()
 
-        tc = list(self.DATA.TCS__CLS)[row]
+        tc_cls = list(self.DATA.TCS__CLS)[row]
 
         if self.DATA._TC_RUN_SINGLE:
-            self.DATA.tc_active = tc
+            self.DATA.tc_active = tc_cls
 
         if col == self.TM.HEADERS.STARTUP_CLS:
-            self.PTE.setPlainText(str(tc.result__startup_cls))
+            self.PTE.setPlainText(str(tc_cls.result__startup_cls))
 
         if col in self.TM.HEADERS.DUTS:
             dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[col - self.TM.HEADERS.DUTS.START_OUTER]
-            self.PTE.setPlainText(tc.TCS__LIST[dut.INDEX].get__info_pretty())
+            self.PTE.setPlainText(tc_cls.TCS__LIST[dut.INDEX].get__info_pretty())
 
         if col == self.TM.HEADERS.TEARDOWN_CLS:
-            self.PTE.setPlainText(str(tc.result__teardown_cls))
+            self.PTE.setPlainText(str(tc_cls.result__teardown_cls))
 
 
 # =====================================================================================================================

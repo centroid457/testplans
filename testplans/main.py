@@ -148,10 +148,17 @@ class TpMultyDutBase(Logger, QThread):
     # =================================================================================================================
     def tcs__reinit(self) -> None:
         if not self.TCS__CLS:
-            self._tcs__load_from_files()
+            self._tcs__load()
         self._tcs__apply_classes()
         self._tcs__apply_settings()
         self._tcs__apply_devices()
+
+    def _tcs__load(self) -> None:
+        """
+        for tests just overwrite
+        :return:
+        """
+        self._tcs__load_from_files()
 
     def _tcs__load_from_files(self) -> None:
         self.TCS__CLS = {}
