@@ -15,6 +15,12 @@
 ********************************************************************************
 ## NEWS
 
+0.4.12 (2024/09/03 15:12:43)
+------------------------------
+- [GROUPS] full ref to direct compare with methods! stop using MiddleGroup as bad idea  
+- [GUI] add separated column SKIP  
+- [TC+GUI] add TC_RUN_SINGLE  
+
 0.4.11 (2024/08/13 14:36:53)
 ------------------------------
 - [groups] fix tc run if group is None(not exists)  

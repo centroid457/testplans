@@ -115,7 +115,7 @@ designed to apply testplan for several DUTs
     ]
 
     # HISTORY -----------------------------------------------
-    VERSION: tuple[int, int, int] = (0, 4, 11)
+    VERSION: tuple[int, int, int] = (0, 4, 12)
     TODO: list[str] = [
         "add meta for settings in tcs, it is better then applying in manually in TP!",
         "close all (api_server+tpThreads) on GUI close!",
@@ -127,7 +127,9 @@ designed to apply testplan for several DUTs
         "NEED TESTS!!! TC+TP"
     ]
     NEWS: list[str] = [
-        "[groups] fix tc run if group is None(not exists)",
+        "[GROUPS] full ref to direct compare with methods! stop using MiddleGroup as bad idea",
+        "[GUI] add separated column SKIP",
+        "[TC+GUI] add TC_RUN_SINGLE",
     ]
 
 

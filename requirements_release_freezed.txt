@@ -19,7 +19,7 @@ docutils==0.21.2
 dummy_module==0.0.2
 fastapi==0.112.0
 frozenlist==1.4.1
-funcs_aux==0.4.18
+funcs_aux==0.4.19
 h11==0.14.0
 idna==3.7
 importlib_metadata==8.2.0
