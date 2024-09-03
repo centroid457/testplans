@@ -15,6 +15,10 @@
 ********************************************************************************
 ## NEWS
 
+0.4.13 (2024/09/03 16:57:37)
+------------------------------
+- [GUI] apply on selection TV_reread  
+
 0.4.12 (2024/09/03 15:12:43)
 ------------------------------
 - [GROUPS] full ref to direct compare with methods! stop using MiddleGroup as bad idea  

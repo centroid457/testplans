@@ -228,5 +228,7 @@ class TpGuiBase(Gui):
         if col == self.TM.HEADERS.TEARDOWN_CLS:
             self.PTE.setPlainText(str(tc_cls.result__teardown_cls))
 
+        self.TM._data_reread()
+
 
 # =====================================================================================================================
