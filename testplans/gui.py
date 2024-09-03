@@ -39,7 +39,8 @@ class TpGuiBase(Gui):
         layout_details = QVBoxLayout()
         layout_details.addWidget(self.BTN_devs_detect)
         layout_details.addWidget(self.BTN_start)
-        layout_details.addWidget(self.CB)
+        layout_details.addWidget(self.CB_tp_run_infinit)
+        layout_details.addWidget(self.CB_tc_run_single)
         layout_details.addWidget(self.BTN_settings)
         layout_details.addWidget(self.PTE)
 
@@ -61,11 +62,12 @@ class TpGuiBase(Gui):
         self.BTN_settings.setCheckable(True)
 
     def CB_create(self) -> None:
-        self.CB = QCheckBox("INFINIT_RUN")
+        self.CB_tp_run_infinit = QCheckBox("TP_RUN_INFINIT")
+        self.CB_tc_run_single = QCheckBox("_TC_RUN_SINGLE")
 
         # SETTINGS -------------------------
-        # self.CB.setText("CB_text")
-        # self.CB.setText("CB_text")
+        # self.CB_tp_run_infinit.setText("CB_text")
+        # self.CB_tp_run_infinit.setText("CB_text")
 
     def PTE_create(self) -> None:
         self.PTE = QPlainTextEdit()
@@ -115,9 +117,10 @@ class TpGuiBase(Gui):
 
     # SLOTS ===========================================================================================================
     def slots_connect(self):
-        self.CB.stateChanged.connect(self.CB__changed)
+        self.CB_tp_run_infinit.stateChanged.connect(self.CB_tp_run_infinit__changed)
+        self.CB_tc_run_single.stateChanged.connect(self.CB_tc_run_single__changed)
 
-        self.BTN_start.toggled.connect(self.BTN__toggled)
+        self.BTN_start.toggled.connect(self.BTN_start__toggled)
         self.BTN_settings.toggled.connect(self.BTN_settings__toggled)
         self.BTN_devs_detect.clicked.connect(self.BTN_devs_detect__clicked)
 
@@ -129,7 +132,7 @@ class TpGuiBase(Gui):
         self.TV.selectionModel().selectionChanged.connect(self.TV_selectionChanged)
         self.TV.horizontalHeader().sectionClicked.connect(self.TV_hh_sectionClicked)
 
-    def CB__changed(self, state: Optional[int] = None) -> None:
+    def CB_tp_run_infinit__changed(self, state: Optional[int] = None) -> None:
         """
         :param state:
             0 - unchecked
@@ -137,11 +140,23 @@ class TpGuiBase(Gui):
             2 - checked (even if not isTristate)
         """
         if state:
-            self.DATA.INFINIT_RUN = True
+            self.DATA.TP_RUN_INFINIT = True
         else:
-            self.DATA.INFINIT_RUN = False
+            self.DATA.TP_RUN_INFINIT = False
 
-    def BTN__toggled(self, state: Optional[bool] = None) -> None:
+    def CB_tc_run_single__changed(self, state: Optional[int] = None) -> None:
+        """
+        :param state:
+            0 - unchecked
+            1 - halfCHecked (only if isTristate)
+            2 - checked (even if not isTristate)
+        """
+        if state:
+            self.DATA._TC_RUN_SINGLE = True
+        else:
+            self.DATA._TC_RUN_SINGLE = False
+
+    def BTN_start__toggled(self, state: Optional[bool] = None) -> None:
         # print(f"btn {state=}")
         if self.DATA.isRunning():
             state = False
@@ -195,6 +210,9 @@ class TpGuiBase(Gui):
         col = index.column()
 
         tc = list(self.DATA.TCS__CLS)[row]
+
+        if self.DATA._TC_RUN_SINGLE:
+            self.DATA.tc_active = tc
 
         if col == self.TM.HEADERS.STARTUP_CLS:
             self.PTE.setPlainText(str(tc.result__startup_cls))

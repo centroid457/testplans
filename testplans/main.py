@@ -54,8 +54,10 @@ class TpMultyDutBase(Logger, QThread):
     _signal__tp_reset_duts_sn = pyqtSignal()
 
     # SETTINGS ------------------------------------------------------
-    INFINIT_RUN: bool | None = None     # True - when run() started - dont stop!
-    INFINIT_RUN__TIMEOUT: int = 1
+    TP_RUN_INFINIT: bool | None = None     # True - when run() started - dont stop!
+    TP_RUN_INFINIT__TIMEOUT: int = 1
+
+    _TC_RUN_SINGLE: bool | None = None
 
     START__GUI_AND_API: bool = True
 
@@ -256,23 +258,27 @@ class TpMultyDutBase(Logger, QThread):
             cycle_count += 1
 
             if self.tp__startup():
-                tc_cls__prev = None
-                for self.tc_active in self.TCS__CLS:
-                    tc_executed__result = self.tc_active.run__cls(cls_prev=tc_cls__prev)
-                    if tc_executed__result is False:
-                        break
-                    if tc_executed__result is True:
-                        tc_cls__prev = self.tc_active
+                if self._TC_RUN_SINGLE:
+                    if self.tc_active:
+                        self.tc_active.run__cls(single=True)
+                else:
+                    tc_cls__prev = None
+                    for self.tc_active in self.TCS__CLS:
+                        tc_executed__result = self.tc_active.run__cls(cls_prev=tc_cls__prev)
+                        if tc_executed__result is False:
+                            break
+                        if tc_executed__result is True:
+                            tc_cls__prev = self.tc_active
 
             # FINISH TP CYCLE ---------------------------------------------------
             self.tp__teardown()
             self.LOGGER.debug("TP FINISH")
 
             # RESTART -----------------------------------------------------
-            if not self.INFINIT_RUN:
+            if not self.TP_RUN_INFINIT:
                 break
 
-            time.sleep(self.INFINIT_RUN__TIMEOUT)
+            time.sleep(self.TP_RUN_INFINIT__TIMEOUT)
 
         # FINISH TP TOTAL ---------------------------------------------------
         self.signal__tp_finished.emit()
