@@ -160,6 +160,11 @@ class TpTableModel(TableModelTemplate):
             if tc_cls.SKIP:
                 return QColor('#e2e2e2')
 
+            # ACTIVE ---------------------
+            if col == self.HEADERS.TESTCASE:
+                if self.DATA.tc_active == tc_cls:
+                    return QColor("#FFFF50")
+
             # STARTUP -------------------
             if col == self.HEADERS.STARTUP_CLS:
                 if tc_cls.result__startup_cls is None:

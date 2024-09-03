@@ -227,7 +227,8 @@ class TpMultyDutBase(Logger, QThread):
         """
         if self.tc_active:
             self.tc_active.terminate__cls()
-        self.tc_active = None
+        if not self._TC_RUN_SINGLE:
+            self.tc_active = None
 
         if progress is None:
             progress = 100

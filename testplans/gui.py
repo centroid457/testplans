@@ -155,6 +155,10 @@ class TpGuiBase(Gui):
             self.DATA._TC_RUN_SINGLE = True
         else:
             self.DATA._TC_RUN_SINGLE = False
+            if not self.DATA.isRunning():
+                self.DATA.tc_active = None
+
+        self.TM._data_reread()
 
     def BTN_start__toggled(self, state: Optional[bool] = None) -> None:
         # print(f"btn {state=}")
