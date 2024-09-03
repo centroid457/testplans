@@ -274,12 +274,14 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         self.teardown()
 
     @classmethod
-    def run__cls(cls, cls_prev: Type[Self] | None = None) -> None | bool:
+    def run__cls(cls, cls_prev: Type[Self] | None = None, single: bool | None = None) -> None | bool:
         """run TC on batch duts(??? may be INDEXES???)
         prefered using in thread on upper level!
 
-        :return None:
-            NONE - if SKIP
+        :param cls_prev: use for apply group in sequence
+        :param single: if start TC as direct ONE (usually by button)
+        :return:
+            NONE - if SKIP for any reason
             True - need continue TP
             False - cant continue! need stop TP
         """
@@ -289,7 +291,7 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         print(f"run__cls=START={cls.NAME=}={'='*50}")
 
         # GROUP cmp ----------------------------------------------
-        if cls_prev is not None and cls.group__check_equel(cls_prev):
+        if not single and (cls_prev is not None and cls.group__check_equel(cls_prev)):
             cls_prev__equel = True
         else:
             cls_prev__equel = False
@@ -305,7 +307,7 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         if cls_prev__equel:
             cls.result__startup_cls = cls_prev.result__startup_cls
         else:
-            if cls_prev:    # and not cls_prev.SKIP:
+            if not single and cls_prev:    # and not cls_prev.SKIP:
                 cls_prev.teardown__cls()
                 if (
                         cls_prev.result__startup_cls is not None
@@ -335,10 +337,10 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
                 for tc_inst in cls.TCS__LIST:
                     print(f"run__cls=tc_inst.wait({tc_inst.INDEX=})inPARALLEL")
                     tc_inst.wait()
-        else:
-            cls.teardown__cls()
 
         # FINISH -------------------------------------------------
+        if single or not cls.result__startup_cls:
+            cls.teardown__cls()
         print(f"[TC]FINISH={cls.NAME=}={'='*50}")
         return True
 
