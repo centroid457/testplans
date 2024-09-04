@@ -232,8 +232,8 @@ class TpMultyDutBase(Logger, QThread):
         """
         Overwrite with super! super last!
         """
-        if self.tc_active:
-            self.tc_active.terminate__cls()
+        # if self.tc_active:
+        #     self.tc_active.terminate__cls()
         if not self._TC_RUN_SINGLE:
             self.tc_active = None
 
@@ -252,7 +252,11 @@ class TpMultyDutBase(Logger, QThread):
         # TERMINATE CHILDS!!! ---------------------
         # ObjectInfo(self.currentThread()).print()    # cant find childs!!!
 
-        # finish current ----------------------------
+        # finish active ----------------------------
+        if self.tc_active:
+            self.tc_active.terminate__cls()
+
+        # finish ----------------------------
         self.tp__teardown(0)
         self.signal__tp_finished.emit()
 

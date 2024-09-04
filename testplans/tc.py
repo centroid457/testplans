@@ -47,6 +47,8 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
     DEVICES__BREEDER_CLS: Type['DevicesBreeder'] = None
 
     # AUXILIARY -----------------------------------
+    IsRunning__Cls: bool | None = None
+
     signals: Signals = Signals()  # FIXME: need signal ON BASE CLASS! need only one SlotConnection! need Singleton?
     _INSTS_DICT_CLS: dict[Type[Any], dict[Any, Any]]
 
@@ -219,15 +221,6 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         # self.signals.signal__tc_state_changed.emit(self)
 
     # =================================================================================================================
-    def terminate(self) -> None:
-        self.LOGGER.debug("")
-
-        super().terminate()
-
-        progress = self.progress
-        self.teardown()
-        self.progress = progress
-
     @classmethod
     def terminate__cls(cls) -> None:
         for tc_inst in cls.TCS__LIST:
@@ -238,41 +231,18 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
                 pass
 
         cls.teardown__cls()
+        cls.IsRunning__Cls = False
+
+    def terminate(self) -> None:
+        self.LOGGER.debug("")
+
+        super().terminate()
+
+        progress = self.progress
+        self.teardown()
+        self.progress = progress
 
     # =================================================================================================================
-    def run(self) -> None:
-        self.LOGGER.debug("run")
-
-        # PREPARE --------
-        self.clear()
-        self.timestamp_start = time.time()
-        if (
-                not hasattr(self.DEVICES__BREEDER_INST, "DUT")
-                or
-                self.DEVICES__BREEDER_INST.DUT.SKIP
-                or
-                not self.DEVICES__BREEDER_INST.DUT.DEV_FOUND
-                or
-                not self.DEVICES__BREEDER_INST.DUT.connect()
-        ):
-            return
-
-        # WORK --------
-        self.LOGGER.debug("run-startup")
-        if self.startup():
-            try:
-                self.LOGGER.debug("run-run_wrapped START")
-                self.result = self.run__wrapped()
-                if isinstance(self.result, Valid):
-                    self.result.run__if_not_finished()
-
-                self.LOGGER.debug(f"run-run_wrapped FINISHED WITH {self.result=}")
-            except Exception as exx:
-                self.result = False
-                self.exx = exx
-        self.LOGGER.debug("run-teardown")
-        self.teardown()
-
     @classmethod
     def run__cls(cls, cls_prev: Type[Self] | None = None, single: bool | None = None) -> None | bool:
         """run TC on batch duts(??? may be INDEXES???)
@@ -285,10 +255,12 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
             True - need continue TP
             False - cant continue! need stop TP
         """
+        cls.IsRunning__Cls = True
+
         # if not cls.DEVICES__BREEDER_CLS.LIST__DUT:
         #     return
 
-        print(f"run__cls=START={cls.NAME=}={'='*50}")
+        print(f"run__cls=START={cls.NAME=}={'=' * 50}")
 
         # GROUP cmp ----------------------------------------------
         if not single and (cls_prev is not None and cls.group__check_equel(cls_prev)):
@@ -298,7 +270,7 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
 
         # SKIP ---------------------------------------------------
         if cls.SKIP:
-            print(f"run__cls=SKIP={cls.NAME=}={'='*50}")
+            print(f"run__cls=SKIP={cls.NAME=}={'=' * 50}")
             return
         if cls_prev__equel and not bool(cls_prev.result__startup_cls):
             return
@@ -307,7 +279,7 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         if cls_prev__equel:
             cls.result__startup_cls = cls_prev.result__startup_cls
         else:
-            if not single and cls_prev:    # and not cls_prev.SKIP:
+            if not single and cls_prev:  # and not cls_prev.SKIP:
                 cls_prev.teardown__cls()
                 if (
                         cls_prev.result__startup_cls is not None
@@ -341,8 +313,43 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         # FINISH -------------------------------------------------
         if single or not cls.result__startup_cls:
             cls.teardown__cls()
-        print(f"[TC]FINISH={cls.NAME=}={'='*50}")
+        print(f"[TC]FINISH={cls.NAME=}={'=' * 50}")
+
+        cls.IsRunning__Cls = False
         return True
+
+    def run(self) -> None:
+        self.LOGGER.debug("run")
+
+        # PREPARE --------
+        self.clear()
+        self.timestamp_start = time.time()
+        if (
+                not hasattr(self.DEVICES__BREEDER_INST, "DUT")
+                or
+                self.DEVICES__BREEDER_INST.DUT.SKIP
+                or
+                not self.DEVICES__BREEDER_INST.DUT.DEV_FOUND
+                or
+                not self.DEVICES__BREEDER_INST.DUT.connect()
+        ):
+            return
+
+        # WORK --------
+        self.LOGGER.debug("run-startup")
+        if self.startup():
+            try:
+                self.LOGGER.debug("run-run_wrapped START")
+                self.result = self.run__wrapped()
+                if isinstance(self.result, Valid):
+                    self.result.run__if_not_finished()
+
+                self.LOGGER.debug(f"run-run_wrapped FINISHED WITH {self.result=}")
+            except Exception as exx:
+                self.result = False
+                self.exx = exx
+        self.LOGGER.debug("run-teardown")
+        self.teardown()
 
     # STARTUP/TEARDOWN ------------------------------------------------------------------------------------------------
     @classmethod
@@ -421,6 +428,7 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
 
     @classmethod
     def teardown__cls__wrapped(cls) -> TYPE__RESULT_W_NORETURN:
+        print("HELLO")
         return True
 
 
