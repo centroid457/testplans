@@ -222,29 +222,6 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
 
     # =================================================================================================================
     @classmethod
-    def terminate__cls(cls) -> None:
-        for tc_inst in cls.TCS__LIST:
-            try:
-                if tc_inst.isRunning() and not tc_inst.isFinished():
-                    tc_inst.terminate()
-            except:
-                pass
-
-        if cls.IsRunning__Cls:
-            cls.teardown__cls()
-        cls.IsRunning__Cls = False
-
-    def terminate(self) -> None:
-        self.LOGGER.debug("")
-
-        super().terminate()
-
-        progress = self.progress
-        self.teardown()
-        self.progress = progress
-
-    # =================================================================================================================
-    @classmethod
     def run__cls(cls, cls_prev: Type[Self] | None = None, single: bool | None = None) -> None | bool:
         """run TC on batch duts(??? may be INDEXES???)
         prefered using in thread on upper level!
@@ -256,8 +233,6 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
             True - need continue TP
             False - cant continue! need stop TP
         """
-        cls.IsRunning__Cls = True
-
         # if not cls.DEVICES__BREEDER_CLS.LIST__DUT:
         #     return
 
@@ -315,8 +290,6 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         if single or not cls.result__startup_cls:
             cls.teardown__cls()
         print(f"[TC]FINISH={cls.NAME=}={'=' * 50}")
-
-        cls.IsRunning__Cls = False
         return True
 
     def run(self) -> None:
@@ -358,6 +331,7 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         """before batch work
         """
         print(f"startup__cls")
+        cls.IsRunning__Cls = True
         cls.clear__cls()
 
         result = cls.startup__cls__wrapped
@@ -397,14 +371,42 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
     def teardown__cls(cls) -> TYPE__RESULT_W_EXX:
         print(f"run__cls=teardown__cls")
 
-        result = cls.teardown__cls__wrapped
-        result = Valid.get_result_or_exx(result)
-        if isinstance(result, Valid):
-            result.run__if_not_finished()
-        cls.result__teardown_cls = result
-        if not result:
-            print(f"[FAIL]{cls.result__teardown_cls=}//{cls.NAME}")
+        if cls.IsRunning__Cls:
+            result = cls.teardown__cls__wrapped
+            result = Valid.get_result_or_exx(result)
+            if isinstance(result, Valid):
+                result.run__if_not_finished()
+            cls.result__teardown_cls = result
+
+            if not result:
+                print(f"[FAIL]{cls.result__teardown_cls=}//{cls.NAME}")
+
+        else:
+            result = cls.result__teardown_cls
+
+        cls.IsRunning__Cls = False
         return result
+
+    # =================================================================================================================
+    @classmethod
+    def terminate__cls(cls) -> None:
+        for tc_inst in cls.TCS__LIST:
+            try:
+                if tc_inst.isRunning() and not tc_inst.isFinished():
+                    tc_inst.terminate()
+            except:
+                pass
+
+        cls.teardown__cls()
+
+    def terminate(self) -> None:
+        self.LOGGER.debug("")
+
+        super().terminate()
+
+        progress = self.progress
+        self.teardown()
+        self.progress = progress
 
     # REDEFINE ========================================================================================================
     pass
