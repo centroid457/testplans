@@ -15,6 +15,10 @@
 ********************************************************************************
 ## NEWS
 
+0.4.16 (2024/09/04 14:12:37)
+------------------------------
+- [TP] fix TCS run sequence on exit last tc (not started teardownCls)  
+
 0.4.15 (2024/09/04 12:39:46)
 ------------------------------
 - [TC] fix faulty double start tcTeardownCls=continue  

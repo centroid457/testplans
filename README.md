@@ -9,7 +9,7 @@
 ![Commit/Count/y](https://img.shields.io/github/commit-activity/y/centroid457/testplans)
 ![Commit/Count/m](https://img.shields.io/github/commit-activity/m/centroid457/testplans)
 
-# testplans (current v0.4.15/![Ver/Pypi Latest](https://img.shields.io/pypi/v/testplans?label=pypi%20latest))
+# testplans (current v0.4.16/![Ver/Pypi Latest](https://img.shields.io/pypi/v/testplans?label=pypi%20latest))
 
 ## DESCRIPTION_SHORT
 simple testplan framework for several DUTs
