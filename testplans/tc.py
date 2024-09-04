@@ -230,7 +230,8 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
             except:
                 pass
 
-        cls.teardown__cls()
+        if cls.IsRunning__Cls:
+            cls.teardown__cls()
         cls.IsRunning__Cls = False
 
     def terminate(self) -> None:
