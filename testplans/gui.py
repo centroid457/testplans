@@ -12,12 +12,45 @@ from .tm import TpTableModel
 
 
 # =====================================================================================================================
+class TpHlStyles(HlStyles):
+    RESULT: HlStyle = HlStyle(
+        FORMAT=format_make("", "", "lightGrey"),
+        P_ITEMS=[
+            "Valid", "result",
+        ],
+        P_TEMPLATES=[
+            r'.*%s.*',
+        ],
+    )
+    RESULT_TRUE: HlStyle = HlStyle(
+        FORMAT=format_make("", "", "lightGreen"),
+        P_ITEMS=[
+            "Valid", "result",
+        ],
+        P_TEMPLATES=[
+            r'.*%s.*=\s*True.*',
+        ],
+    )
+    RESULT_FALSE: HlStyle = HlStyle(
+        FORMAT=format_make("", "", "pink"),
+        P_ITEMS=[
+            "Valid", "result",
+        ],
+        P_TEMPLATES=[
+            r'.*%s.*=\s*False.*',
+        ],
+    )
+
+
+# =====================================================================================================================
 class TpGuiBase(Gui):
     # OVERWRITTEN -----------------------------------
     START = False
 
     TITLE = "[TestPlan] Title"
     SIZE = (600, 300)
+
+    HL_STYLES = TpHlStyles()
 
     # NEW -------------------------------------------
     DATA: "TpMultyDutBase"
@@ -32,6 +65,7 @@ class TpGuiBase(Gui):
         self.PTE_create()
         self.BTN_create()
         self.CB_create()
+        self.HL_create()
 
         # DETAILS -----------------------------------------------------------------------------------------------------
 
@@ -81,6 +115,9 @@ class TpGuiBase(Gui):
         # self.PTE.clear()
         self.PTE.setPlainText("setPlainText")
         self.PTE.appendPlainText("appendPlainText")
+        self.PTE.appendPlainText("Valid=123")
+        self.PTE.appendPlainText("Valid=True")
+        self.PTE.appendPlainText("Valid=False")
         # self.PTE.appendHtml("")
         # self.PTE.anchorAt(#)
         # self.PTE.setSizeAdjustPolicy(#)
