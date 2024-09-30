@@ -40,6 +40,15 @@ class TpHlStyles(HlStyles):
             r'.*%s.*=\s*False.*',
         ],
     )
+    RESULT_FALSE_NOCUM: HlStyle = HlStyle(
+        FORMAT=format_make("", "", "yellow"),
+        P_ITEMS=[
+            "ValidNoCum",
+        ],
+        P_TEMPLATES=[
+            r'.*%s.*=\s*False.*',
+        ],
+    )
 
 
 # =====================================================================================================================
@@ -118,6 +127,8 @@ class TpGuiBase(Gui):
         self.PTE.appendPlainText("Valid=123")
         self.PTE.appendPlainText("Valid=True")
         self.PTE.appendPlainText("Valid=False")
+        self.PTE.appendPlainText("ValidNoCum=True")
+        self.PTE.appendPlainText("ValidNoCum=False")
         # self.PTE.appendHtml("")
         # self.PTE.anchorAt(#)
         # self.PTE.setSizeAdjustPolicy(#)
