@@ -239,7 +239,7 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         print(f"run__cls=START={cls.NAME=}={'=' * 50}")
 
         # GROUP cmp ----------------------------------------------
-        if not single and (cls_prev is not None and cls.group__check_equel(cls_prev)):
+        if not single and (cls_prev is not None and cls.middle_group__check_equal__cls(cls_prev)):
             cls_prev__equel = True
         else:
             cls_prev__equel = False
