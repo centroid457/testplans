@@ -247,7 +247,6 @@ class TpMultyDutBase(Logger, QThread):
 
     # =================================================================================================================
     def terminate(self) -> None:
-        super().terminate()
 
         # TERMINATE CHILDS!!! ---------------------
         # ObjectInfo(self.currentThread()).print()    # cant find childs!!!
@@ -259,6 +258,8 @@ class TpMultyDutBase(Logger, QThread):
         # finish ----------------------------
         self.tp__teardown(0)
         self.signal__tp_finished.emit()
+
+        super().terminate()
 
     def run(self) -> None:
         self.LOGGER.debug("TP START")
