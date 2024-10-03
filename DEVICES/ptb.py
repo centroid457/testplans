@@ -10,6 +10,9 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
     BAUDRATE = 115200
     EOL__SEND = b"\n"
 
+    REWRITEIF_READNOANSWER = 0
+    REWRITEIF_NOVALID = 0
+
     # MODEL INFO --------------------------------
     __sn_start: str = "SN"
     NAME: str = "PSU"

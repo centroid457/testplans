@@ -8,13 +8,15 @@ class Device(SerialClient_FirstFree_AnswerValid):
     RAISE_CONNECT = False
     BAUDRATE = 115200
     PREFIX = "ATC:03:"
-    EOL__SEND = b"\r"
+    EOL__SEND = b"\n"
+
+    REWRITEIF_READNOANSWER = 0
+    REWRITEIF_NOVALID = 0
 
     def address__validate(self) -> bool:
         for _ in range(2):
-            if self.write_read__last_validate("get name", "ATC 03", prefix=self.PREFIX):
+            if self.write_read__last_validate("get name", "ATC", prefix=self.PREFIX):
                 return True
-
 
 # =====================================================================================================================
 if __name__ == "__main__":
