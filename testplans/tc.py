@@ -251,6 +251,8 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         if cls_prev__equel and not bool(cls_prev.result__startup_cls):
             return
 
+        cls.clear__cls()
+
         # STARTUP/TERDOWN ----------------------------------------
         if cls_prev__equel:
             cls.result__startup_cls = cls_prev.result__startup_cls
@@ -332,7 +334,7 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
         """
         print(f"startup__cls")
         cls.IsRunning__Cls = True
-        cls.clear__cls()
+        # cls.clear__cls()
 
         result = cls.startup__cls__wrapped
         result = Valid.get_result_or_exx(result)

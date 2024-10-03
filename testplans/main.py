@@ -232,8 +232,8 @@ class TpMultyDutBase(Logger, QThread):
         """
         Overwrite with super! super last!
         """
-        # if self.tc_active:
-        #     self.tc_active.terminate__cls()
+        if self.tc_active and self.tc_active.result__teardown_cls is None:
+            self.tc_active.terminate__cls()
         if not self._TC_RUN_SINGLE:
             self.tc_active = None
 
