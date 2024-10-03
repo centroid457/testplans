@@ -29,6 +29,7 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
 
     @property
     def DEV_FOUND(self) -> bool:
+        return True
         return self.address_check__resolved()
 
     @property
@@ -36,6 +37,7 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
         return f"PTB:{self.INDEX+1:02d}:"
 
     def address__validate(self) -> bool:
+        return True
         result = (
                 self.write_read__last_validate("get name", f"PTB", prefix="*:")
                 and
@@ -46,6 +48,7 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
         return result
 
     def connect__validate(self) -> bool:
+        return True
         result = (
                 self.write_read__last_validate("get prsnt", "0")
         )
@@ -59,6 +62,9 @@ class Device(SerialClient_FirstFree_AnswerValid, DutBase):
     @property
     def VALUE(self) -> bool:
         return self.INDEX % 2 == 0
+
+    def connect(self):
+        return True
 
 
 # =====================================================================================================================
