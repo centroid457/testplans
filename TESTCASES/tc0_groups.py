@@ -5,7 +5,7 @@ from funcs_aux import *
 
 # =====================================================================================================================
 class TcGroup_ATC220220(TcGroup_Base):
-    MIDDLE_GROUP__NAME = "TcGroup_ATC220220"
+    MIDDLE_GROUP__NAME = "ATC230220"
 
     # HERE ARE PLACE CLSMETHs
     @classmethod

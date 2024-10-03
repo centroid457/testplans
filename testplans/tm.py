@@ -95,12 +95,13 @@ class TpTableModel(TableModelTemplate):
 
             # STARTUP -------------------
             if col == self.HEADERS.STARTUP_CLS:
+                group_name = tc_cls.MIDDLE_GROUP__NAME or ""
                 if tc_cls.result__startup_cls is None:
-                    return
+                    return group_name
                 elif bool(tc_cls.result__startup_cls) is True:
-                    return '+'
+                    return f'+{group_name}'
                 elif bool(tc_cls.result__startup_cls) is False:
-                    return '-'
+                    return f'-{group_name}'
 
             # DUTS -------------------
             if col in self.HEADERS.DUTS:
