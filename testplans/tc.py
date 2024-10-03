@@ -451,6 +451,7 @@ class _Info(_TestCaseBase):
         result += f"DUT_SN={self.DEVICES__BREEDER_INST.DUT.SN}\n"
         result += f"DUT_ADDRESS={self.DEVICES__BREEDER_INST.DUT.ADDRESS}\n"
         result += f"TC_NAME={self.NAME}\n"
+        result += f"TC_GROUP={self.MIDDLE_GROUP__NAME}\n"
         result += f"TC_DESCRIPTION={self.DESCRIPTION}\n"
         result += f"TC_ASYNC={self.ASYNC}\n"
         result += f"TC_SKIP={self.SKIP}\n"
