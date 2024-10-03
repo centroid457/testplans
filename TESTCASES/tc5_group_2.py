@@ -7,7 +7,7 @@ from testplans import TYPE__RESULT_W_NORETURN
 
 # =====================================================================================================================
 class TestCase(TcGroup_ATC220220, TestCaseBase):
-    ASYNC = False
+    ASYNC = True
     DESCRIPTION = "TcGroup_ATC220220 2"
     def startup__wrapped(self) -> TYPE__RESULT_W_NORETURN:
         return ValidSleep(1)

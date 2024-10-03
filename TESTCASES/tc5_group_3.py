@@ -8,9 +8,9 @@ from testplans import TYPE__RESULT_W_NORETURN
 # =====================================================================================================================
 class TestCase(TcGroup_ATC220220, TestCaseBase):
     ASYNC = True
-    DESCRIPTION = "TcGroup_ATC220220 1"
+    DESCRIPTION = "TcGroup_ATC220220 3"
     def startup__wrapped(self) -> TYPE__RESULT_W_NORETURN:
-        return ValidSleep(0.5)
+        return ValidSleep(1)
 
 
 # =====================================================================================================================

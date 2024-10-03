@@ -373,7 +373,7 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
     def teardown__cls(cls) -> TYPE__RESULT_W_EXX:
         print(f"run__cls=teardown__cls")
 
-        if cls.IsRunning__Cls:
+        if cls.IsRunning__Cls or cls.result__teardown_cls is None:
             result = cls.teardown__cls__wrapped
             result = Valid.get_result_or_exx(result)
             if isinstance(result, Valid):

@@ -95,8 +95,19 @@ class TpMultyDutBase(Logger, QThread):
     #     Dev2
     # ]
 
-    tc_active: Optional[Type[TestCaseBase]] = None      # TODO:FIXME: use as PROPERTY!!!! not attribute!
+    __tc_active: Optional[Type[TestCaseBase]] = None
+    tc_prev: Optional[Type[TestCaseBase]] = None
     progress: int = 0   # todo: use as property? by getting from TCS???
+
+    @property
+    def tc_active(self) -> Type[TestCaseBase] | None:
+        return self.__tc_active
+
+    @tc_active.setter
+    def tc_active(self, value: Type[TestCaseBase] | None) -> None:
+        if self.__tc_active:
+            self.tc_prev = self.__tc_active
+        self.__tc_active = value
 
     def __init__(self):
         super().__init__()
@@ -224,6 +235,7 @@ class TpMultyDutBase(Logger, QThread):
         """
         Overwrite with super! super first!
         """
+        self.tc_prev = None
         self.progress = 1
         self.DEVICES__BREEDER_CLS.group_call__("connect__only_if_address_resolved")  #, group="DUT")   # dont connect all here! only in exact TC!!!!????
         return True
@@ -232,8 +244,10 @@ class TpMultyDutBase(Logger, QThread):
         """
         Overwrite with super! super last!
         """
-        if self.tc_active and self.tc_active.result__teardown_cls is None:
+        if self.tc_active:
             self.tc_active.terminate__cls()
+        elif self.tc_prev:
+            self.tc_prev.teardown__cls()
         if not self._TC_RUN_SINGLE:
             self.tc_active = None
 
@@ -275,17 +289,10 @@ class TpMultyDutBase(Logger, QThread):
                     if self.tc_active:
                         self.tc_active.run__cls(single=True)
                 else:
-                    tc_cls__prev = None
                     for self.tc_active in self.TCS__CLS:
-                        tc_executed__result = self.tc_active.run__cls(cls_prev=tc_cls__prev)
+                        tc_executed__result = self.tc_active.run__cls(cls_prev=self.tc_prev)
                         if tc_executed__result is False:
                             break
-                        if tc_executed__result is True:
-                            tc_cls__prev = self.tc_active
-
-                    # finish cycle
-                    if tc_cls__prev:
-                        tc_cls__prev.teardown__cls()
 
             # FINISH TP CYCLE ---------------------------------------------------
             self.tp__teardown()
