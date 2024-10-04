@@ -362,6 +362,21 @@ class TpMultyDutBase(Logger, QThread):
         return ModelTpResults(**result)
 
     # -----------------------------------------------------------------------------------------------------------------
+    def get__results__dut(self, dut: int | DutBase) -> dict:
+        if isinstance(dut, DutBase):
+            dut = dut.INDEX
+
+        result = {
+            **self.get__info__stand().dict(),
+        }
+
+        for tc_cls in self.TCS__CLS:
+            pass
+            # tc_inst__result = tc_cls.TCS__LIST[dut].      # TODO: FINISH
+
+        return result
+
+    # -----------------------------------------------------------------------------------------------------------------
     def post__tc_results(self, tc_inst: TestCaseBase) -> None:
         # CHECK ------------------------------------------
         if not self.api_client or tc_inst.result is None:
@@ -374,11 +389,13 @@ class TpMultyDutBase(Logger, QThread):
             tc_results = {}
 
         body = {
-            "STAND_NAME": self.STAND_NAME,
-            "STAND_DESCRIPTION": self.STAND_DESCRIPTION,
+            **self.get__info__stand().dict(),
             **tc_results,
         }
         self.api_client.send(body=body)
+
+    # -----------------------------------------------------------------------------------------------------------------
+
 
 
 # =====================================================================================================================

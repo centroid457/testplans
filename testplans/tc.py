@@ -509,6 +509,8 @@ class _Info(_TestCaseBase):
             "tc_progress": self.progress,
             "tc_result": bool(self.result),
             "tc_details": self.details,
+            "tc_settings": self.SETTINGS,
+            "tc_log": None,
         }
         return ModelTcResultFull(**result)
 
