@@ -41,7 +41,7 @@ class DeviceBase:
         except:
             pass
 
-    def get__info(self) -> dict[str, Any]:
+    def get__info__dev(self) -> dict[str, Any]:
         result = {
             "DUT_INDEX": self.INDEX,
 

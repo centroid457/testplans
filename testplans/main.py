@@ -322,13 +322,13 @@ class TpMultyDutBase(Logger, QThread):
         }
         return result
 
-    def get__info(self) -> dict[str, Any]:
+    def get__info__tp(self) -> dict[str, Any]:
         """
         get info/structure about stand/TP
         """
         TP_TCS = []
         for tc in self.TCS__CLS:
-            TP_TCS.append(tc.get__info())
+            TP_TCS.append(tc.get__info__tc())
 
         result = {
             **self.get__info__stand(),

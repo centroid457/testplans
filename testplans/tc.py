@@ -59,7 +59,7 @@ class _TestCaseBase(TcGroup_Base, _TestCaseBase0, QThread):
     _inst_inited: Optional[bool] = None
 
     INDEX: int
-    SETTINGS: PrivateJson
+    SETTINGS: PrivateJson = {}
     DEVICES__BREEDER_INST: 'DevicesBreeder'
 
     result__startup: TYPE__RESULT_W_EXX = None
@@ -443,7 +443,7 @@ class _Info(_TestCaseBase):
     separated class for gen results/info by models!
     """
     @classmethod
-    def get__info(cls) -> dict[str, Any]:
+    def get__info__tc(cls) -> dict[str, Any]:
         """
         get info/structure about TcCls
         """
@@ -496,12 +496,12 @@ class _Info(_TestCaseBase):
         self.LOGGER.debug("")
 
         try:
-            dut_info = self.DEVICES__BREEDER_INST.DUT.get__info()
+            dut_info = self.DEVICES__BREEDER_INST.DUT.get__info__dev()
         except:
             dut_info = {}
 
         result = {
-            **self.get__info(),
+            **self.get__info__tc(),
             **dut_info,
 
             # RESULTS
@@ -509,10 +509,11 @@ class _Info(_TestCaseBase):
             "tc_active": self.isRunning(),
             "tc_progress": self.progress,
             "tc_result_startup": self.result__startup,
-            "tc_result": self.result,
+            "tc_result": bool(self.result),
             "tc_details": self.details,
             "result__teardown": self.result__teardown,
             "timestamp_last": self.timestamp_last,
+            "log": self.get__results_pretty(),
         }
         return result
 
