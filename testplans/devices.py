@@ -41,7 +41,7 @@ class DeviceBase:
         except:
             pass
 
-    def get__info(self) -> ModelDeviceInfo:
+    def get__info(self) -> dict[str, Any]:
         result = {
             "DUT_INDEX": self.INDEX,
 
@@ -49,7 +49,7 @@ class DeviceBase:
             "DUT_DESCRIPTION": self.DESCRIPTION or self.__class__.__name__,
             "DUT_SN": self.SN or "",
         }
-        return ModelDeviceInfo(**result)
+        return result
 
 
 # =====================================================================================================================

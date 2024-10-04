@@ -279,7 +279,7 @@ class TpGuiBase(Gui):
 
         if col in self.TM.HEADERS.DUTS:
             dut = self.DATA.DEVICES__BREEDER_CLS.LIST__DUT[col - self.TM.HEADERS.DUTS.START_OUTER]
-            self.PTE.setPlainText(tc_cls.TCS__LIST[dut.INDEX].get__info_pretty())
+            self.PTE.setPlainText(tc_cls.TCS__LIST[dut.INDEX].get__results_pretty())
 
         if col == self.TM.HEADERS.TEARDOWN_CLS:
             self.PTE.setPlainText(str(tc_cls.result__teardown_cls))

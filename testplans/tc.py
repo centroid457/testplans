@@ -442,20 +442,35 @@ class _Info(_TestCaseBase):
     """
     separated class for gen results/info by models!
     """
+    @classmethod
+    def get__info(cls) -> dict[str, Any]:
+        """
+        get info/structure about TcCls
+        """
+        result = {
+            "TC_NAME": cls.NAME,
+            "TC_DESCRIPTION": cls.DESCRIPTION,
+            "TC_ASYNC": cls.ASYNC,
+            "TC_SKIP": cls.SKIP,
+            "TC_SETTINGS": cls.settings_read(),
+        }
+        return result
+
     # =================================================================================================================
-    def get__info_pretty(self) -> str:
+    def get__results_pretty(self) -> str:
         # FIXME: GET FROM INFO_GET????
         result = ""
 
         result += f"DUT_INDEX={self.INDEX}\n"
         result += f"DUT_SN={self.DEVICES__BREEDER_INST.DUT.SN}\n"
         result += f"DUT_ADDRESS={self.DEVICES__BREEDER_INST.DUT.ADDRESS}\n"
+        result += f"tc_skip_dut={self.skip_tc_dut}\n"
+
         result += f"TC_NAME={self.NAME}\n"
         result += f"TC_GROUP={self.MIDDLE_GROUP__NAME}\n"
         result += f"TC_DESCRIPTION={self.DESCRIPTION}\n"
         result += f"TC_ASYNC={self.ASYNC}\n"
         result += f"TC_SKIP={self.SKIP}\n"
-        result += f"tc_skip_dut={self.skip_tc_dut}\n"
 
         result += f"SETTINGS=====================\n"
         if self.SETTINGS:
@@ -476,49 +491,36 @@ class _Info(_TestCaseBase):
             result += f"{name}: {value}\n"
         return result
 
-    @classmethod
-    def get__info(cls) -> ModelTcInfo:
-        """
-        get info/structure about TcCls
-        """
-        result = {
-            "TC_NAME": cls.NAME,
-            "TC_DESCRIPTION": cls.DESCRIPTION,
-            "TC_ASYNC": cls.ASYNC,
-            "TC_SKIP": cls.SKIP,
-            "TC_SETTINGS": cls.settings_read(),
-        }
-        return ModelTcInfo(**result)
-
     # =================================================================================================================
-    def get__results(self) -> ModelTcResultFull:
+    def get__results(self) -> dict[str, Any]:
         self.LOGGER.debug("")
 
         try:
-            dut_info = self.DEVICES__BREEDER_INST.DUT.get__info().dict()
+            dut_info = self.DEVICES__BREEDER_INST.DUT.get__info()
         except:
             dut_info = {}
 
         result = {
-            **self.get__info().dict(),
+            **self.get__info(),
             **dut_info,
 
             # RESULTS
-            "tc_timestamp": self.timestamp_last,
+            "timestamp_start": self.timestamp_start,
             "tc_active": self.isRunning(),
             "tc_progress": self.progress,
-            "tc_result": bool(self.result),
+            "tc_result_startup": self.result__startup,
+            "tc_result": self.result,
             "tc_details": self.details,
-            "tc_settings": self.SETTINGS,
-            "tc_log": None,
+            "result__teardown": self.result__teardown,
+            "timestamp_last": self.timestamp_last,
         }
-        return ModelTcResultFull(**result)
+        return result
 
     @classmethod
-    def results__get_all(cls) -> List[Dict[str, Any]]:
+    def results__get_all(cls) -> list[Dict[str, Any]]:
         results = []
         for tc_inst in cls.TCS__LIST:
-            results.append(tc_inst.get__results().dict())
+            results.append(tc_inst.get__results())
         return results
 
 
