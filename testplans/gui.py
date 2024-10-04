@@ -85,6 +85,7 @@ class TpGuiBase(Gui):
         layout_details.addWidget(self.CB_tp_run_infinit)
         layout_details.addWidget(self.CB_tc_run_single)
         layout_details.addWidget(self.BTN_settings)
+        layout_details.addWidget(self.BTN_clear_all)
         layout_details.addWidget(self.PTE)
 
         # layout_main -------------------------------------------------------------------------------------------------
@@ -103,6 +104,8 @@ class TpGuiBase(Gui):
 
         self.BTN_settings = QPushButton("settings")
         self.BTN_settings.setCheckable(True)
+
+        self.BTN_clear_all = QPushButton("CLEAR_ALL")
 
     def CB_create(self) -> None:
         self.CB_tp_run_infinit = QCheckBox("TP_RUN_INFINIT")
@@ -171,6 +174,7 @@ class TpGuiBase(Gui):
         self.BTN_start.toggled.connect(self.BTN_start__toggled)
         self.BTN_settings.toggled.connect(self.BTN_settings__toggled)
         self.BTN_devs_detect.clicked.connect(self.BTN_devs_detect__clicked)
+        self.BTN_clear_all.clicked.connect(self.BTN_clear_all__clicked)
 
         self.DATA.signal__tp_finished.connect(lambda: self.BTN_start.setChecked(False))
         self.DATA.signal__tp_finished.connect(self.TM._data_reread)
@@ -233,6 +237,10 @@ class TpGuiBase(Gui):
         self.DATA.DEVICES__BREEDER_CLS.CLS_LIST__DUT.ADDRESSES__SYSTEM.clear()
         self.TM._data_reread()
         self.DATA.DEVICES__BREEDER_CLS.group_call__("address__resolve")    # MOVE TO THREAD??? no! not so need!
+        self.TM._data_reread()
+
+    def BTN_clear_all__clicked(self) -> None:
+        self.DATA.tcs_clear()
         self.TM._data_reread()
 
     def TV_hh_sectionClicked(self, index: int) -> None:

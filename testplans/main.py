@@ -99,6 +99,7 @@ class TpMultyDutBase(Logger, QThread):
     tc_prev: Optional[Type[TestCaseBase]] = None
     progress: int = 0   # todo: use as property? by getting from TCS???
 
+    # =================================================================================================================
     @property
     def tc_active(self) -> Type[TestCaseBase] | None:
         return self.__tc_active
@@ -109,6 +110,11 @@ class TpMultyDutBase(Logger, QThread):
             self.tc_prev = self.__tc_active
         self.__tc_active = value
 
+    def tp__check_active(self) -> bool:
+        result = self.tc_active is not None and self.progress not in [0, 100]
+        return result
+
+    # =================================================================================================================
     def __init__(self):
         super().__init__()
         # self.DIRPATH_TPS: Path = Path(self.DIRPATH_TPS)
@@ -225,10 +231,9 @@ class TpMultyDutBase(Logger, QThread):
         for tc in self.TCS__CLS:
             tc.devices__apply(self.DEVICES__BREEDER_CLS)
 
-    # =================================================================================================================
-    def tp__check_active(self) -> bool:
-        result = self.tc_active is not None and self.progress not in [0, 100]
-        return result
+    def tcs_clear(self) -> None:
+        for tc_cls in self.TCS__CLS:
+            tc_cls.clear__cls()
 
     # =================================================================================================================
     def tp__startup(self) -> bool:
