@@ -108,8 +108,8 @@ class TpGuiBase(Gui):
         self.BTN_clear_all = QPushButton("очистить результаты")
 
     def CB_create(self) -> None:
-        self.CB_tp_run_infinit = QCheckBox("TP_RUN_INFINIT")
-        self.CB_tc_run_single = QCheckBox("_TC_RUN_SINGLE")
+        self.CB_tp_run_infinit = QCheckBox("бесконечный цикл")
+        self.CB_tc_run_single = QCheckBox("запустить только выбранный тесткейс")
 
         # SETTINGS -------------------------
         # self.CB_tp_run_infinit.setText("CB_text")
