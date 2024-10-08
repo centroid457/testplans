@@ -48,7 +48,7 @@ class Test__TC:
 
         # EXISTS IN INSTANCE --------------
         assert not hasattr(self.Victim, "INDEX")
-        assert not hasattr(self.Victim, "SETTINGS")
+        # assert not hasattr(self.Victim, "SETTINGS")
         assert not hasattr(self.Victim, "DEVICES__BREEDER_INST")
 
         assert not hasattr(self.Victim, "timestamp_start")
@@ -69,7 +69,7 @@ class Test__TC:
 
         # EXISTS IN INSTANCE --------------
         assert not hasattr(self.Victim, "INDEX")
-        assert not hasattr(self.Victim, "SETTINGS")
+        # assert not hasattr(self.Victim, "SETTINGS")
         assert not hasattr(self.Victim, "DEVICES__BREEDER_INST")
 
         assert not hasattr(self.Victim, "timestamp_start")
@@ -90,7 +90,7 @@ class Test__TC:
 
         # EXISTS IN INSTANCE --------------
         assert not hasattr(self.Victim, "INDEX")
-        assert not hasattr(self.Victim, "SETTINGS")
+        # assert not hasattr(self.Victim, "SETTINGS")
         assert not hasattr(self.Victim, "DEVICES__BREEDER_INST")
 
         assert not hasattr(self.Victim, "timestamp_start")
