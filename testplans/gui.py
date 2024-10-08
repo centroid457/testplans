@@ -96,16 +96,16 @@ class TpGuiBase(Gui):
 
     # WGTS ============================================================================================================
     def BTN_create(self) -> None:
-        self.BTN_devs_detect = QPushButton("devs_detect")
+        self.BTN_devs_detect = QPushButton("определить устройства")
         self.BTN_devs_detect.setCheckable(False)
 
-        self.BTN_start = QPushButton("START")
+        self.BTN_start = QPushButton("ЗАПУСК ТЕСТОВ")
         self.BTN_start.setCheckable(True)
 
-        self.BTN_settings = QPushButton("settings")
+        self.BTN_settings = QPushButton("настройки")
         self.BTN_settings.setCheckable(True)
 
-        self.BTN_clear_all = QPushButton("CLEAR_ALL")
+        self.BTN_clear_all = QPushButton("очистить результаты")
 
     def CB_create(self) -> None:
         self.CB_tp_run_infinit = QCheckBox("TP_RUN_INFINIT")
@@ -125,13 +125,12 @@ class TpGuiBase(Gui):
         # self.PTE.setMaximumBlockCount(15)
 
         # self.PTE.clear()
-        self.PTE.setPlainText("setPlainText")
-        self.PTE.appendPlainText("appendPlainText")
-        self.PTE.appendPlainText("Valid=123")
-        self.PTE.appendPlainText("Valid=True")
-        self.PTE.appendPlainText("Valid=False")
+        self.PTE.setPlainText("ПРОВЕРКА выделения текста результатов")
+        self.PTE.appendPlainText("Valid=None #без явного bool значения")
+        self.PTE.appendPlainText("Valid=True #явное True")
+        self.PTE.appendPlainText("Valid=False #явное False")
         self.PTE.appendPlainText("ValidNoCum=True")
-        self.PTE.appendPlainText("ValidNoCum=False")
+        self.PTE.appendPlainText("ValidNoCum=False    #неважный/неучтенный False")
         # self.PTE.appendHtml("")
         # self.PTE.anchorAt(#)
         # self.PTE.setSizeAdjustPolicy(#)
