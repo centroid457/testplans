@@ -483,17 +483,17 @@ class _Info(_TestCaseBase):
         result += f"exx={self.exx}\n"
 
         result += "-"*60 + "\n"
-        result += f"RESULT__STARTUP={self.result__startup}\n"
+        result += f"result__startup={self.result__startup}\n"
         result += "-"*60 + "\n"
-        result += f"RESULT={self.result}\n"
+        result += f"result={self.result}\n"
         result += "-"*60 + "\n"
-        result += f"RESULT__TEARDOWN={self.result__teardown}\n"
+        result += f"result__teardown={self.result__teardown}\n"
         result += "-"*60 + "\n"
         result += f"timestamp_last={self.timestamp_last}\n"
 
         result += f"DETAILS=====================\n"
         for name, value in self.details.items():
-            result += f"{name}: {value}\n"
+            result += f"{name}={value}\n"
         return result
 
     # =================================================================================================================
