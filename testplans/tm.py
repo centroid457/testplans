@@ -121,6 +121,11 @@ class TpTableModel(TableModelTemplate):
                     return '-'
 
         # -------------------------------------------------------------------------------------------------------------
+        if role == Qt.ToolTipRole:
+            if col == self.HEADERS.TESTCASE:
+                return f"{tc_cls.DESCRIPTION}"
+
+        # -------------------------------------------------------------------------------------------------------------
         if role == Qt.TextAlignmentRole:
             """
             VARIANTS ALIGN
