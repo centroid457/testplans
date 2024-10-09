@@ -479,6 +479,7 @@ class _Info(_TestCaseBase):
 
         result += f"PROGRESS=====================\n"
         result += f"timestamp_start={self.timestamp_start}\n"
+        result += f"timestamp_last={self.timestamp_last}\n"
         result += f"progress={self.progress}\n"
         result += f"exx={self.exx}\n"
 
@@ -489,7 +490,6 @@ class _Info(_TestCaseBase):
         result += "-"*60 + "\n"
         result += f"result__teardown={self.result__teardown}\n"
         result += "-"*60 + "\n"
-        result += f"timestamp_last={self.timestamp_last}\n"
 
         result += f"DETAILS=====================\n"
         for name, value in self.details.items():
