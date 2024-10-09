@@ -479,11 +479,16 @@ class _Info(_TestCaseBase):
 
         result += f"PROGRESS=====================\n"
         result += f"timestamp_start={self.timestamp_start}\n"
-        result += f"result__startup={self.result__startup}\n"
         result += f"progress={self.progress}\n"
-        result += f"result={self.result}\n"
         result += f"exx={self.exx}\n"
-        result += f"result__teardown={self.result__teardown}\n"
+
+        result += "-"*60 + "\n"
+        result += f"RESULT__STARTUP={self.result__startup}\n"
+        result += "-"*60 + "\n"
+        result += f"RESULT={self.result}\n"
+        result += "-"*60 + "\n"
+        result += f"RESULT__TEARDOWN={self.result__teardown}\n"
+        result += "-"*60 + "\n"
         result += f"timestamp_last={self.timestamp_last}\n"
 
         result += f"DETAILS=====================\n"
