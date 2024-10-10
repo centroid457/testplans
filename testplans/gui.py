@@ -126,9 +126,10 @@ class TpGuiBase(Gui):
 
         # self.PTE.clear()
         self.PTE.setPlainText("ПРОВЕРКА выделения текста результатов")
-        self.PTE.appendPlainText("Valid=None #без явного bool значения")
-        self.PTE.appendPlainText("Valid=True #явное True")
-        self.PTE.appendPlainText("Valid=False #явное False")
+        self.PTE.appendPlainText("Valid=None    #без явного bool значения")
+        self.PTE.appendPlainText("Result=True   #явное True")
+        self.PTE.appendPlainText("Valid=True    #явное True")
+        self.PTE.appendPlainText("Valid=False   #явное False")
         self.PTE.appendPlainText("ValidNoCum=True")
         self.PTE.appendPlainText("ValidNoCum=False    #неважный/неучтенный False")
         # self.PTE.appendHtml("")
