@@ -102,7 +102,10 @@ class TpTableModel(TableModelTemplate):
                     if tc_inst.result is None:
                         return ""
                     else:
-                        return f'{tc_inst.result}'
+                        if bool(tc_inst.result):
+                            return "PASS"
+                        else:
+                            return "FAIL"
 
             # TEARDOWN -------------------
             if col == self.HEADERS.TEARDOWN_CLS:
@@ -117,6 +120,8 @@ class TpTableModel(TableModelTemplate):
         if role == Qt.ToolTipRole:
             if col == self.HEADERS.TESTCASE:
                 return f"{tc_cls.DESCRIPTION}"
+            elif col in self.HEADERS.DUTS and tc_inst:
+                return f"{tc_inst.result}"
 
         # -------------------------------------------------------------------------------------------------------------
         if role == Qt.TextAlignmentRole:
