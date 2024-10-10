@@ -184,6 +184,7 @@ class TpGuiBase(Gui):
         self.TV.selectionModel().selectionChanged.connect(self.TV_selectionChanged)
         self.TV.horizontalHeader().sectionClicked.connect(self.TV_hh_sectionClicked)
 
+    # -----------------------------------------------------------------------------------------------------------------
     def CB_tp_run_infinit__changed(self, state: Optional[int] = None) -> None:
         """
         :param state:
@@ -191,10 +192,7 @@ class TpGuiBase(Gui):
             1 - halfCHecked (only if isTristate)
             2 - checked (even if not isTristate)
         """
-        if state:
-            self.DATA.TP_RUN_INFINIT = True
-        else:
-            self.DATA.TP_RUN_INFINIT = False
+        self.DATA.TP_RUN_INFINIT = bool(state)
 
     def CB_tc_run_single__changed(self, state: Optional[int] = None) -> None:
         """
