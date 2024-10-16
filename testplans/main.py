@@ -10,14 +10,12 @@ from .tc import TestCaseBase
 from .devices import DutBase, DeviceBase, DevicesBreeder_WithDut, DevicesBreeder_Example
 from .gui import TpGuiBase
 from .api import TpApi_FastApi
-from .models import *
 
 import time
 from typing import *
 from pathlib import Path
 from PyQt5.QtCore import QThread, pyqtSignal
 from importlib import import_module
-from pydantic import BaseModel
 
 from pyqt_templates import *
 from logger_aux import *
@@ -398,7 +396,6 @@ class TpMultyDutBase(Logger, QThread):
         self.api_client.send(body=body)
 
     # -----------------------------------------------------------------------------------------------------------------
-
 
 
 # =====================================================================================================================

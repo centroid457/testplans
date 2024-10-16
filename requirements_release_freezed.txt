@@ -68,7 +68,7 @@ singleton_meta==0.1.3
 smbus2==0.4.3
 sniffio==1.3.1
 starlette==0.40.0
-testplans==0.4.32
+testplans==0.4.33
 threading_manager==0.0.8
 twine==5.1.1
 typing_extensions==4.12.2
