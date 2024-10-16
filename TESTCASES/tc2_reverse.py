@@ -1,5 +1,4 @@
 import time
-from funcs_aux import *
 
 from . import tc1_direct
 from .tc0_groups import *

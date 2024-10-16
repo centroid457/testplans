@@ -14,19 +14,19 @@ build
 twine
 setuptools
 
-cli-user
+cli_user
 
 # debug/test ---------------
 pytest
-pytest-aux
-logger-aux
-object-info
+pytest_aux
+logger_aux
+object_info
 
 # common -------------------
-requirements-checker
-classes-aux
-funcs-aux
-singleton-meta
+requirements_checker
+classes_aux
+funcs_aux
+singleton_meta
 
 # nested -------------------
 annot_attrs
@@ -34,10 +34,10 @@ numpy
 
 # ========================================
 # SPECIAL (FOR THIS PROJECT - ROOT) ------
-pyqt-templates
-server-templates
-private-values
-bus-user
+pyqt_templates
+server_templates
+private_values
+bus_user
 
 PyQt5
 requests
@@ -53,6 +53,6 @@ uvicorn
 
 pyserial
 smbus2
-cli-user
+cli_user
 
 # ========================================
